@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>日志到知识图谱 Agent 工作台</title>
+    <link rel="stylesheet" href="/styles.css?v=20260517-integrated" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="side-pane">
+        <div class="brand-row">
+          <div>
+            <h1>日志知识图谱</h1>
+            <p id="sourceCount">正在读取日志源</p>
+          </div>
+          <button id="refreshButton" class="icon-button" title="刷新数据">↻</button>
+        </div>
+        <input id="sourceFilter" class="filter-input" placeholder="筛选日志源，例如 auth 或 dns" />
+        <div id="sourceList" class="source-list"></div>
+
+        <div class="side-block">
+          <div class="side-title">
+            <span>图谱数据集</span>
+            <button id="syncKgButton" class="mini-button" type="button">同步</button>
+          </div>
+          <div class="dataset-tools">
+            <button id="selectAllKgBtn" class="mini-button" type="button">全选</button>
+            <button id="clearAllKgBtn" class="mini-button" type="button">清空</button>
+          </div>
+          <div id="kgDatasetList" class="kg-dataset-list"></div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <section class="overview-panel">
+          <div>
+            <div class="eyebrow">完整 Agent 流程</div>
+            <h2>从原始日志到可查询知识图谱</h2>
+            <p>
+              先把每一行日志解析成事件模板和字段库，再把解析结果转换成知识图谱输入，
+              最后生成节点、关系、融合图，并可选择写入 Neo4j。
+            </p>
+          </div>
+          <div class="flow-strip" id="flowStrip">
+            <div><b>1</b><span>原始日志</span></div>
+            <div><b>2</b><span>模板解析</span></div>
+            <div><b>3</b><span>字段映射</span></div>
+            <div><b>4</b><span>构建图谱</span></div>
+            <div><b>5</b><span>查询分析</span></div>
+          </div>
+        </section>
+
+        <section class="control-grid">
+          <div class="control-panel">
+            <div class="panel-head compact">
+              <div>
+                <h3>解析配置</h3>
+                <p>决定从哪些原始 .log 文件生成 3.csv、分组、POI 和关系库。</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label class="wide">
+                <span>运行范围</span>
+                <input id="projectInput" value="all" />
+              </label>
+              <label>
+                <span>样本数</span>
+                <input id="sampleInput" type="number" value="3" min="1" max="20" />
+              </label>
+              <label>
+                <span>展示行数</span>
+                <input id="limitInput" type="number" value="80" min="10" max="500" />
+              </label>
+              <label class="wide">
+                <span>模型</span>
+                <input id="modelInput" value="deepseek-v4-flash" />
+              </label>
+              <label>
+                <span>相似度策略</span>
+                <select id="similaritySelect">
+                  <option value="jaccard">Jaccard</option>
+                  <option value="cosine">Cosine</option>
+                  <option value="random">Random</option>
+                </select>
+              </label>
+              <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
+              <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
+              <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> DeepSeek 调度</label>
+              <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
+              <label class="check-line"><input id="mockCheckbox" type="checkbox" /> 离线烟测</label>
+            </div>
+            <div class="button-row">
+              <button id="startRunButton" class="primary-button" type="button">只运行日志解析</button>
+              <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
+            </div>
+          </div>
+
+          <div class="control-panel">
+            <div class="panel-head compact">
+              <div>
+                <h3>图谱配置</h3>
+                <p>决定如何复用解析产物、生成 DAG、构建融合图和是否写入 Neo4j。</p>
+              </div>
+              <span id="kgApiState" class="status-pill">检测中</span>
+            </div>
+            <label class="wide">
+              <span>自然语言任务</span>
+              <textarea id="kgTaskText" rows="3">复用当前日志解析结果，构建并融合所有日志知识图谱</textarea>
+            </label>
+            <div class="form-grid">
+              <label>
+                <span>行数限制</span>
+                <input id="kgLimitRows" type="number" min="1" placeholder="空为全部" />
+              </label>
+              <label>
+                <span>DAG 并发数</span>
+                <input id="kgMaxWorkers" type="number" min="1" max="8" value="3" />
+              </label>
+              <label class="wide">
+                <span>DeepSeek API Key</span>
+                <input id="kgApiKey" type="password" autocomplete="off" placeholder="空则使用环境变量" />
+              </label>
+              <label class="wide">
+                <span>融合图谱目录</span>
+                <input id="fusedGraphDir" type="text" />
+              </label>
+              <label class="check-line wide"><input id="kgForceCheckbox" type="checkbox" /> 强制重建图谱中间产物</label>
+            </div>
+            <fieldset class="neo4j-box">
+              <legend>Neo4j 写入确认</legend>
+              <div class="form-grid">
+                <label><span>URI</span><input id="neo4jUri" type="text" placeholder="bolt://localhost:7687" /></label>
+                <label><span>用户</span><input id="neo4jUser" type="text" placeholder="neo4j" /></label>
+                <label><span>密码</span><input id="neo4jPassword" type="password" autocomplete="off" /></label>
+                <label><span>数据库</span><input id="neo4jDatabase" type="text" value="neo4j" /></label>
+              </div>
+              <label class="check-line"><input id="writeNeo4j" type="checkbox" /> 本次完成后写入 Neo4j</label>
+            </fieldset>
+            <div class="button-row">
+              <button id="fullRunButton" class="primary-button" type="button">运行完整流程</button>
+              <button id="preflightBtn" class="secondary-button" type="button">环境分析</button>
+              <button id="planBtn" class="secondary-button" type="button">生成 DAG</button>
+              <button id="kgRunBtn" class="primary-button muted-primary" type="button">只运行图谱构建</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="run-panel">
+          <div class="panel-head">
+            <div>
+              <h3>运行观察</h3>
+              <p>这里展示 Agent 当前做到哪一步，以及每一步产出了什么。</p>
+            </div>
+            <span id="runStatus" class="status-pill">空闲</span>
+          </div>
+          <div class="progress-grid">
+            <div>
+              <div class="progress-label"><span>日志解析</span><b id="parseProgressText">0%</b></div>
+              <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+              <div id="runMessage" class="run-message">等待任务。</div>
+            </div>
+            <div>
+              <div class="progress-label"><span>知识图谱</span><b id="kgProgressText">0 / 0</b></div>
+              <div class="progress-track"><div id="kgProgressBar" class="progress-bar kg"></div></div>
+              <div id="kgRunMessage" class="run-message">等待 DAG 任务。</div>
+            </div>
+          </div>
+          <div id="stageFlow" class="stage-flow"></div>
+          <div class="split-panels">
+            <div>
+              <div class="subhead">解析调度记录</div>
+              <div id="traceList" class="trace-list"></div>
+            </div>
+            <div>
+              <div class="subhead">图谱执行时间线</div>
+              <div id="kgTimeline" class="timeline"></div>
+            </div>
+          </div>
+          <details class="technical-log">
+            <summary>查看解析技术日志</summary>
+            <pre id="runLog" class="run-log"></pre>
+          </details>
+        </section>
+
+        <section class="metric-strip" id="metricStrip"></section>
+
+        <section class="panel-grid">
+          <div class="panel wide">
+            <div class="panel-head">
+              <div>
+                <h3 id="activeSource">未选择日志源</h3>
+                <p>原始日志逐行展示，方便对照后续解析结果。</p>
+              </div>
+              <span id="rawMeta"></span>
+            </div>
+            <div id="rawInput" class="log-preview"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>预处理结果</h3><span id="preMeta"></span></div>
+            <div id="preprocessedTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Agent 输出 3.csv</h3><span id="resultMeta"></span></div>
+            <div id="resultTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>分组结果</h3><span id="groupMeta"></span></div>
+            <div id="groupTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>深度分组树</h3><span id="treeMeta"></span></div>
+            <div id="treeTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>POI 字段库</h3><span id="poiMeta"></span></div>
+            <div id="poiTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Relation 关系库</h3><span id="relationMeta"></span></div>
+            <div id="relationTable" class="table-wrap"></div>
+          </div>
+          <div class="panel wide">
+            <div class="panel-head"><h3>解析运行汇总</h3><span id="summaryMeta"></span></div>
+            <div id="summaryTable" class="table-wrap"></div>
+          </div>
+        </section>
+
+        <section class="kg-grid">
+          <div class="panel">
+            <div class="panel-head"><h3>DAG 计划</h3><span id="planId">未生成</span></div>
+            <div id="planList" class="plan-list"></div>
+            <pre id="analysisOutput" class="output"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>融合图谱概览</h3>
+              <button id="refreshSummaryBtn" class="mini-button" type="button">刷新</button>
+            </div>
+            <div id="kgSummaryGrid" class="summary-grid"></div>
+            <div id="kgResultList" class="result-list"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>图查询</h3><span>本地产物或 Neo4j</span></div>
+            <div class="form-grid">
+              <label><span>节点标签</span><input id="queryLabel" type="text" placeholder="Program" /></label>
+              <label><span>关系类型</span><input id="queryPredicate" type="text" placeholder="INSTANCE_OF" /></label>
+              <label><span>包含文本</span><input id="queryContains" type="text" placeholder="dnsmasq" /></label>
+              <label><span>返回数量</span><input id="queryLimit" type="number" min="1" value="20" /></label>
+              <label class="wide"><span>Neo4j 自然语言问题</span><textarea id="neo4jQuestion" rows="3"></textarea></label>
+            </div>
+            <div class="button-row">
+              <button id="artifactQueryBtn" class="secondary-button" type="button">查询本地图谱</button>
+              <button id="neo4jQueryBtn" class="secondary-button" type="button">查询 Neo4j</button>
+            </div>
+            <pre id="queryOutput" class="output"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Neo4j 清库</h3><span>危险操作</span></div>
+            <p class="danger-note">会删除目标数据库中的节点、关系、约束和普通索引。只有确认要重建库时才执行。</p>
+            <div class="form-grid">
+              <input id="clearNeo4jConfirm" class="wide" type="text" placeholder="输入：清空neo4j" />
+              <button id="clearNeo4jBtn" type="button" class="danger-button">清空 Neo4j</button>
+            </div>
+          </div>
+          <div class="panel wide">
+            <div class="panel-head"><h3>产物查看</h3><span id="artifactPath">未选择文件</span></div>
+            <pre id="artifactOutput" class="output artifact-output"></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/app.js?v=20260517-integrated"></script>
+  </body>
+</html>

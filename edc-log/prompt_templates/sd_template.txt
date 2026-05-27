@@ -1,0 +1,27 @@
+You will be given a piece of text and a list of relational triples in the format [Subject, Relation, Object] extracted from the text.
+For each relation that appears in the triples, write a general description of the relation’s meaning.
+The description should be reusable for other entities as well, and must respect the direction (Subject -> Object).
+
+Here are some examples:
+{few_shot_examples}
+
+Now write relation descriptions for the following.
+
+IMPORTANT OUTPUT RULES (must follow exactly):
+1) You MUST use the EXACT relation strings provided in the "Relations" list below as the left-hand side (case-sensitive).
+   - Copy them exactly; do NOT change capitalization, spelling, or add/remove characters.
+   - Do NOT output the literal word "relation".
+   - Do NOT invent new relation names.
+2) Output one relation per line using exactly this format:
+   <RELATION_FROM_LIST>: <definition>
+3) Output ONLY these lines. Do NOT include any extra text (no "Answer:", no bullets, no numbering, no explanations).
+4) The number of output lines must equal the number of unique relations in the Relations list.
+
+Text:
+{text}
+
+Triples:
+{triples}
+
+Relations (copy these EXACTLY, case-sensitive):
+{relations}

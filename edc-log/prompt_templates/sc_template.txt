@@ -1,0 +1,17 @@
+You are validating FIELD-TO-CANONICAL-SCHEMA mappings for log alignment.
+
+Decide whether '{query_relation}' should be replaced by ONE choice for strict alignment.
+Choose a replacement ONLY if it is strictly equivalent in this context; otherwise choose NONE.
+NONE is the default.
+
+Consistency rule: the same source field in highly similar templates should map the same way unless the text clearly differs.
+
+Answer with ONLY the letter of your choice.
+
+Text: {input_text}
+Triplet: {query_triplet}
+Current relation: {query_relation}
+Definition: {query_relation_definition}
+
+Choices (include a NONE option):
+{choices}

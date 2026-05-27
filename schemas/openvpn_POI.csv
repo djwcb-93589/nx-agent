@@ -1,0 +1,8 @@
+host,"Hostname/device that emitted the log; if not present in the line, populate from collector or deployment metadata."
+log_source,Log channel/type label; set to 'openvpn' for parser routing and source-level alignment.
+event_type,"Canonical OpenVPN event category inferred from the template (e.g., tls_error, peer_info, verify_ok, tls_soft_reset, incoming_data_channel, multi_learn, push_received, push_reply)."
+status,"Derived outcome indicator (success/failure/unknown) based on event type; e.g., TLS Error -> failure, VERIFY EKU OK -> success, push events -> unknown."
+actor,"Primary actor entity; maps the username prefix (e.g., hwarren, dmorgan) from the log line."
+src_ip,"Client/source IP address from the log (e.g., 192.168.129.254); aligns with src_ip in auth, audit, and dns."
+src_port,"Client/source port when present (e.g., 34841); helps distinguish concurrent connections from the same src_ip."
+target,"Primary target entity; for MULTI: Learn events, maps the learned VPN IP (e.g., 10.9.0.6); for other events, may be absent."

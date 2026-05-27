@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>日志知识图谱智能体工作台</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>日志知识图谱智能体工作台</h1>
+        <p id="projectRoot">前后端分离模式：前端静态页面，后端 API 独立运行</p>
+      </div>
+      <div class="top-actions">
+        <input id="apiBase" type="text" value="http://127.0.0.1:8787" />
+        <button id="saveApiBtn" type="button" class="secondary">保存 API</button>
+        <span id="apiState" class="badge neutral">未连接</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>任务与计划</h2>
+          <span id="datasetCount" class="muted">0 个数据集</span>
+        </div>
+        <label>
+          <span>自然语言任务</span>
+          <textarea id="taskText" rows="4">快速复用现有产物，构建并融合所有日志知识图谱</textarea>
+        </label>
+        <div class="dataset-tools">
+          <button id="selectAllBtn" type="button" class="secondary">全选</button>
+          <button id="clearAllBtn" type="button" class="secondary">清空</button>
+        </div>
+        <div id="datasetList" class="dataset-list"></div>
+        <div class="agent-note">
+          agent 会根据已有产物自动决定从哪一步开始；需要强制重跑时，在任务文本中写明“重新生成”或“覆盖”。
+        </div>
+        <div class="grid">
+          <label>
+            <span>行数限制</span>
+            <input id="limitRows" type="number" min="1" placeholder="空为全部" />
+          </label>
+          <label>
+            <span>DAG 并发数</span>
+            <input id="maxWorkers" type="number" min="1" max="8" value="3" />
+          </label>
+          <label>
+            <span>DeepSeek API Key</span>
+            <input id="apiKey" type="password" autocomplete="off" placeholder="默认使用环境变量" />
+          </label>
+          <label class="wide">
+            <span>融合图谱目录</span>
+            <input id="fusedGraphDir" type="text" />
+          </label>
+        </div>
+        <fieldset class="neo4j-run-box">
+          <legend>Neo4j 落库确认</legend>
+          <div class="grid">
+            <label><span>URI</span><input id="neo4jUri" type="text" placeholder="bolt://localhost:7687" /></label>
+            <label><span>用户</span><input id="neo4jUser" type="text" placeholder="neo4j" /></label>
+            <label><span>密码</span><input id="neo4jPassword" type="password" autocomplete="off" /></label>
+            <label><span>数据库</span><input id="neo4jDatabase" type="text" value="neo4j" /></label>
+          </div>
+          <label class="confirm-line"><input id="writeNeo4j" type="checkbox" /> 我确认本次执行完成后写入 Neo4j</label>
+        </fieldset>
+        <div class="actions">
+          <button id="preflightBtn" type="button">环境分析</button>
+          <button id="planBtn" type="button">生成计划</button>
+          <button id="runBtn" type="button" class="strong">执行智能体计划</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>DAG 计划</h2>
+          <span id="planId" class="muted">未生成</span>
+        </div>
+        <div id="planList" class="plan-list"></div>
+        <pre id="analysisOutput" class="output"></pre>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>实时执行</h2>
+          <span id="jobId" class="muted">未启动</span>
+        </div>
+        <div class="progress">
+          <div><span id="progressText">0 / 0</span><span id="progressPercent">0%</span></div>
+          <div class="track"><div id="progressBar"></div></div>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Neo4j</h2>
+          <span class="muted">查询和清库使用上方连接配置</span>
+        </div>
+        <div class="danger">
+          <b>危险操作：清空 Neo4j</b>
+          <p>删除当前数据库中的全部节点、关系、约束和普通索引。必须输入确认文本：清空neo4j</p>
+          <div class="grid">
+            <input id="clearNeo4jConfirm" type="text" placeholder="输入：清空neo4j" />
+            <button id="clearNeo4jBtn" type="button" class="danger-btn">清空 Neo4j</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>结果与产物</h2>
+          <button id="refreshSummaryBtn" type="button" class="secondary">刷新图谱概览</button>
+        </div>
+        <div id="summaryGrid" class="summary-grid"></div>
+        <div id="resultList" class="result-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>图查询</h2>
+          <span class="muted">本地产物或 Neo4j Agent</span>
+        </div>
+        <div class="grid">
+          <label><span>节点标签</span><input id="queryLabel" type="text" placeholder="Program" /></label>
+          <label><span>关系类型</span><input id="queryPredicate" type="text" placeholder="INSTANCE_OF" /></label>
+          <label><span>包含文本</span><input id="queryContains" type="text" placeholder="dnsmasq" /></label>
+          <label><span>返回数量</span><input id="queryLimit" type="number" min="1" value="20" /></label>
+          <label class="wide"><span>Neo4j 自然语言问题</span><textarea id="neo4jQuestion" rows="3"></textarea></label>
+        </div>
+        <div class="actions">
+          <button id="artifactQueryBtn" type="button">查询本地图谱</button>
+          <button id="neo4jQueryBtn" type="button">查询 Neo4j</button>
+        </div>
+        <pre id="queryOutput" class="output"></pre>
+      </section>
+
+      <section class="panel wide-panel">
+        <div class="panel-head">
+          <h2>产物查看</h2>
+          <span id="artifactPath" class="muted">未选择文件</span>
+        </div>
+        <pre id="artifactOutput" class="output artifact-output"></pre>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

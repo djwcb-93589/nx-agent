@@ -1,0 +1,40 @@
+You are a log normalization and knowledge-graph alignment engineer.
+
+Task:
+Given the input text below (a log TEMPLATE plus several raw log SAMPLES from the same template family), extract ALL alignment-relevant fields that are present in the samples, and write a concise, clear definition for each field. The definitions must be reusable for cross-log alignment.
+Additionally, for EACH field, provide an example value taken ONLY from the FIRST sample log line.
+
+Input characteristics:
+- The TEMPLATE contains variable slots like <*>, <*> representing varying parts.
+- The SAMPLES are full raw log lines.
+- Some fields may contain a nested payload, e.g., msg='...' (or message="...", data='...', payload='...') that itself contains key=value pairs. You MUST parse those inner key=value pairs as additional fields.
+
+Field extraction rules (must follow):
+1) Extract explicit key=value fields at the outer level (e.g., pid=..., uid=..., src=..., dst=...).
+2) Recursively parse nested payload fields:
+   - If any field value (commonly msg/message/data/payload) contains inner key=value pairs, extract those inner keys as fields too.
+   - Keep inner keys as independent fields (e.g., op, acct, exe, res), not just as part of the parent payload string.
+3) Do NOT invent fields that do not appear in the samples. Only output fields that can be justified from the provided samples/template.
+
+Example value rules (MUST follow):
+1) For every extracted field, output an example value taken ONLY from the FIRST sample log line.
+2) If a field appears only inside a nested payload (e.g., inside msg='...'), the example value must be taken from that nested payload in the FIRST sample log line.
+3) If the FIRST sample log line does not contain the field, output: example: NONE
+4) Keep the example value as-is (do not normalize, do not change '?', do not remove characters). Strip surrounding quotes only if the log uses quotes around the value (e.g., acct="root" -> root).
+
+Field naming conventions:
+- Use lowercase snake_case field names.
+- Preserve original key names when they are already field-like, but normalize casing and separators (e.g., Src_IP -> src_ip).
+
+Definition requirements:
+- One concise sentence per field (optionally two short clauses).
+- Explain the semantic meaning and how it can help alignment (entity alignment, event correlation, session grouping, process lineage, network linkage, etc.).
+- Definitions must be general for this template family (not overly specific to one sample).
+
+Output format (STRICT):
+- Output one line per field, exactly in the following format:
+  field_name: definition | example: <example_value>
+- No headings, no numbering, no bullet points, no extra text.
+
+INPUT:
+{input_text}

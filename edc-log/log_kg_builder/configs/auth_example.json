@@ -1,0 +1,14 @@
+{
+  "relation_csv": "../../schemas/auth_relation.csv",
+  "params_csv": "../../artifacts/params/intranet_server_auth_3_params_extracted.csv",
+  "dry_run": true,
+  "output_dir": "../../artifacts/graphs/sources/intranet_server_auth",
+  "neo4j": {
+    "uri": "${NEO4J_URI}",
+    "user": "${NEO4J_USER}",
+    "password": "${NEO4J_PASSWORD}",
+    "database": "neo4j",
+    "batch_size": 1000,
+    "create_constraints": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "neo4j": {
+    "uri": "${NEO4J_URI}",
+    "user": "${NEO4J_USER}",
+    "password": "${NEO4J_PASSWORD}",
+    "database": "neo4j"
+  },
+  "llm": {
+    "api_key": "${DEEPSEEK_API_KEY}",
+    "base_url": "https://api.deepseek.com",
+    "cypher_model": "deepseek-chat",
+    "answer_model": "deepseek-chat",
+    "temperature": 0.1,
+    "max_tokens": 2000,
+    "timeout_seconds": 120
+  },
+  "runtime": {
+    "schema_cache_path": "../cache/graph_schema.json",
+    "run_output_dir": "../cache/query_runs",
+    "auto_refresh_schema": true,
+    "max_result_rows": 50,
+    "max_answer_rows": 20,
+    "max_repair_attempts": 1
+  }
+}

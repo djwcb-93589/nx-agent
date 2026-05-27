@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Large generated datasets / pipeline outputs
+result_deepseek/
+edc-log/AIT/
+edc-log/artifacts/
+AIT/
+artifacts/
+log_output/
+output/
+log_pipeline_agent/runs/
+log_kg_query_agent/cache/
+log_kg_builder/runs/

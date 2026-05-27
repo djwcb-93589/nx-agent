@@ -1,0 +1,3 @@
+subject_type,subject_id_source,predicate,object_type,object_id_source,edge_properties,condition
+User,actor,FROM_IP,IP,src_ip,"src_port,event_type,status",actor not null AND src_ip not null
+User,actor,ASSIGNED_VPN_IP,IP,target,"event_type,status",target not null AND event_type == 'multi_learn'

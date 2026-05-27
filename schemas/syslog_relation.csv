@@ -1,0 +1,12 @@
+subject_type,subject_id_source,predicate,object_type,object_id_source,edge_properties,condition
+Program,program,RUNS_ON,Host,host,"event_family,event_action,outcome","program not null AND host not null"
+Process,pid,RUNS_ON,Host,host,"event_family,event_action,outcome","pid not null AND host not null"
+Process,pid,INSTANCE_OF,Program,program,"event_family,event_action","pid not null AND program not null"
+Host,host,HAS_INTERFACE,Interface,iface,"event_family,event_action","iface not null AND host not null"
+Interface,iface,CONNECTS_TO,IP,dst_ip,"event_family,event_action,outcome","iface not null AND dst_ip not null"
+Program,program,AFFECTS,Object,object_name,"event_family,event_action,outcome","object_name not null AND program not null"
+User,user,OPERATES,Object,object_name,"event_family,event_action,outcome","user not null AND object_name not null"
+Host,host,COMMUNICATES_WITH,IP,dst_ip,"event_family,event_action,outcome","dst_ip not null AND host not null"
+User,user,EXECUTES,Command,command,"event_family,event_action,outcome","user not null AND command not null"
+Process,pid,EXECUTES,Command,command,"event_family,event_action,outcome","pid not null AND command not null"
+Program,program,EXECUTES,Command,command,"event_family,event_action,outcome","program not null AND command not null"
