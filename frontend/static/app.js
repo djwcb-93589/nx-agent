@@ -12,6 +12,8 @@ const state = {
   kgCompleted: 0,
   kgTotal: 0,
   defaultFusedGraphDir: "",
+  poiEditorRows: [],
+  poiValidationTimer: null,
 };
 
 const els = {
@@ -57,6 +59,7 @@ const els = {
   treeMeta: document.getElementById("treeMeta"),
   poiTable: document.getElementById("poiTable"),
   poiMeta: document.getElementById("poiMeta"),
+  editPoiButton: document.getElementById("editPoiButton"),
   relationTable: document.getElementById("relationTable"),
   relationMeta: document.getElementById("relationMeta"),
   summaryTable: document.getElementById("summaryTable"),
@@ -98,6 +101,17 @@ const els = {
   clearNeo4jBtn: document.getElementById("clearNeo4jBtn"),
   artifactPath: document.getElementById("artifactPath"),
   artifactOutput: document.getElementById("artifactOutput"),
+  poiEditorModal: document.getElementById("poiEditorModal"),
+  closePoiEditorButton: document.getElementById("closePoiEditorButton"),
+  poiEditorPath: document.getElementById("poiEditorPath"),
+  poiValidationBox: document.getElementById("poiValidationBox"),
+  poiEditorRows: document.getElementById("poiEditorRows"),
+  addPoiRowButton: document.getElementById("addPoiRowButton"),
+  savePoiButton: document.getElementById("savePoiButton"),
+  viewerModal: document.getElementById("viewerModal"),
+  closeViewerButton: document.getElementById("closeViewerButton"),
+  viewerTitle: document.getElementById("viewerTitle"),
+  viewerBody: document.getElementById("viewerBody"),
 };
 
 const PARSE_STAGES = [
@@ -174,13 +188,16 @@ async function postJson(url, payload = {}) {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || data.message || `${response.status} ${response.statusText}`);
+    const err = new Error(data.error || data.message || `${response.status} ${response.statusText}`);
+    err.payload = data;
+    throw err;
   }
   return data;
 }
 
 async function bootstrap() {
   bindEvents();
+  installMaximizeButtons();
   await Promise.allSettled([loadSources(), loadKgDatasets()]);
   await checkKgHealth();
   await refreshKgSummary();
@@ -314,6 +331,7 @@ function renderPayload(payload) {
   renderTree(payload.group_tree);
   renderCsv(els.poiTable, payload.poi_schema);
   els.poiMeta.textContent = schemaMetaText(payload.schema_meta, payload.poi_schema);
+  els.editPoiButton.disabled = !state.activeSource;
   renderCsv(els.relationTable, payload.relation_schema);
   els.relationMeta.textContent = schemaMetaText(payload.schema_meta, payload.relation_schema);
   renderMetrics(payload);
@@ -573,6 +591,183 @@ function buildTraceDetail(trace) {
 
 function stageName(stage) {
   return { plan: "计划", dispatch: "调用工具", observe: "观察结果", complete: "完成" }[stage] || stage || "";
+}
+
+async function openPoiEditor() {
+  if (!state.activeSource) {
+    return;
+  }
+  const payload = await fetchJson(`/api/poi/schema?source=${encodeURIComponent(state.activeSource)}`);
+  state.poiEditorRows = (payload.rows || []).map((row) => ({
+    field: row.field || "",
+    description: row.description || "",
+  }));
+  els.poiEditorPath.textContent = payload.active_path || payload.canonical_path || payload.local_path || "";
+  renderPoiEditorRows();
+  renderPoiValidation(payload.validation);
+  els.poiEditorModal.hidden = false;
+}
+
+function closePoiEditor() {
+  els.poiEditorModal.hidden = true;
+}
+
+function renderPoiEditorRows() {
+  els.poiEditorRows.innerHTML = "";
+  if (!state.poiEditorRows.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "没有 POI 字段";
+    els.poiEditorRows.appendChild(empty);
+    return;
+  }
+  state.poiEditorRows.forEach((row, index) => {
+    const item = document.createElement("div");
+    item.className = "poi-row";
+
+    const fieldInput = document.createElement("input");
+    fieldInput.value = row.field;
+    fieldInput.placeholder = "field_name";
+    fieldInput.addEventListener("input", () => {
+      state.poiEditorRows[index].field = fieldInput.value;
+      schedulePoiValidation();
+    });
+
+    const descInput = document.createElement("textarea");
+    descInput.value = row.description;
+    descInput.placeholder = "description";
+    descInput.rows = 2;
+    descInput.addEventListener("input", () => {
+      state.poiEditorRows[index].description = descInput.value;
+      schedulePoiValidation();
+    });
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "icon-button";
+    removeButton.title = "删除";
+    removeButton.textContent = "×";
+    removeButton.addEventListener("click", () => {
+      state.poiEditorRows.splice(index, 1);
+      renderPoiEditorRows();
+      schedulePoiValidation();
+    });
+
+    item.append(fieldInput, descInput, removeButton);
+    els.poiEditorRows.appendChild(item);
+  });
+}
+
+function addPoiRow() {
+  state.poiEditorRows.push({ field: "", description: "" });
+  renderPoiEditorRows();
+  schedulePoiValidation();
+}
+
+function schedulePoiValidation() {
+  clearTimeout(state.poiValidationTimer);
+  state.poiValidationTimer = setTimeout(() => {
+    validatePoiEditor().catch(showError);
+  }, 250);
+}
+
+async function validatePoiEditor() {
+  const validation = await postJson("/api/poi/validate", {
+    source: state.activeSource,
+    rows: state.poiEditorRows,
+  });
+  renderPoiValidation(validation);
+  return validation;
+}
+
+function renderPoiValidation(validation, message = "") {
+  const payload = validation || { ok: false, errors: ["等待校验"], warnings: [] };
+  const lines = [];
+  if (message) {
+    lines.push({ type: "ok", text: message });
+  }
+  for (const error of payload.errors || []) {
+    lines.push({ type: "error", text: error });
+  }
+  for (const warning of payload.warnings || []) {
+    lines.push({ type: "warning", text: warning });
+  }
+  if (!lines.length) {
+    lines.push({ type: "ok", text: `POI 校验通过，共 ${payload.field_count || 0} 个字段。` });
+  }
+  els.poiValidationBox.innerHTML = lines
+    .map((line) => `<div class="validation-line ${line.type}">${escapeHtml(line.text)}</div>`)
+    .join("");
+  els.savePoiButton.disabled = !payload.ok;
+}
+
+async function savePoiEditor() {
+  try {
+    const result = await postJson("/api/poi/save", {
+      source: state.activeSource,
+      rows: state.poiEditorRows,
+    });
+    renderPoiValidation(result.validation, "POI 已保存。");
+    await loadSources({ reloadActive: true, silent: true });
+    await loadKgDatasets();
+  } catch (err) {
+    if (err.payload && err.payload.validation) {
+      renderPoiValidation(err.payload.validation);
+      return;
+    }
+    throw err;
+  }
+}
+
+function installMaximizeButtons() {
+  document.querySelectorAll(".panel, .run-panel").forEach((panel) => {
+    if (panel.closest(".modal-panel") || panel.dataset.maxInstalled === "1") {
+      return;
+    }
+    const hasDisplayContent = panel.querySelector(
+      ".table-wrap, .log-preview, .output, .trace-list, .timeline, .plan-list, .result-list, .summary-grid",
+    );
+    const head = panel.querySelector(".panel-head");
+    if (!hasDisplayContent || !head) {
+      return;
+    }
+    let actions = head.querySelector(".panel-head-actions");
+    if (!actions) {
+      actions = document.createElement("div");
+      actions.className = "panel-head-actions";
+      head.appendChild(actions);
+    }
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "max-button";
+    button.title = "最大化";
+    button.textContent = "⛶";
+    button.addEventListener("click", () => openViewer(panel));
+    actions.appendChild(button);
+    panel.dataset.maxInstalled = "1";
+  });
+}
+
+function openViewer(panel) {
+  const title = panel.querySelector("h3")?.textContent?.trim() || "查看";
+  const clone = document.createElement("div");
+  clone.className = "viewer-copy";
+  [...panel.children].forEach((child) => {
+    if (child.classList.contains("panel-head")) {
+      return;
+    }
+    clone.appendChild(child.cloneNode(true));
+  });
+  clone.querySelectorAll(".max-button").forEach((button) => button.remove());
+  els.viewerTitle.textContent = title;
+  els.viewerBody.innerHTML = "";
+  els.viewerBody.appendChild(clone);
+  els.viewerModal.hidden = false;
+}
+
+function closeViewer() {
+  els.viewerModal.hidden = true;
+  els.viewerBody.innerHTML = "";
 }
 
 async function syncKgInputs() {
@@ -941,6 +1136,24 @@ function bindEvents() {
   els.startRunButton.addEventListener("click", () => startRun().catch(showError));
   els.stopRunButton.addEventListener("click", () => stopRun().catch(showError));
   els.fullRunButton.addEventListener("click", () => startRun({ full: true }).catch(showError));
+  els.editPoiButton.addEventListener("click", () => openPoiEditor().catch(showError));
+  els.closePoiEditorButton.addEventListener("click", closePoiEditor);
+  els.addPoiRowButton.addEventListener("click", addPoiRow);
+  els.savePoiButton.addEventListener("click", () => savePoiEditor().catch(showError));
+  els.closeViewerButton.addEventListener("click", closeViewer);
+  document.querySelectorAll("[data-close-modal='poi']").forEach((item) =>
+    item.addEventListener("click", closePoiEditor),
+  );
+  document.querySelectorAll("[data-close-modal='viewer']").forEach((item) =>
+    item.addEventListener("click", closeViewer),
+  );
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+    if (!els.viewerModal.hidden) closeViewer();
+    if (!els.poiEditorModal.hidden) closePoiEditor();
+  });
   els.sampleInput.addEventListener("change", () => {
     if (state.activeSource) selectSource(state.activeSource, false).catch(showError);
   });

@@ -77,7 +77,15 @@
                 <input id="modelInput" value="deepseek-v4-flash" />
               </label>
               <label>
-                <span>相似度策略</span>
+                <span class="field-label-with-help">
+                  相似度策略
+                  <button
+                    class="help-dot"
+                    type="button"
+                    title="选择日志分组和代表样本时使用的相似度计算方式。Jaccard 更适合按词集合比较，Cosine 更适合向量化文本比较，Random 只适合快速冒烟测试。"
+                    aria-label="相似度策略说明"
+                  >?</button>
+                </span>
                 <select id="similaritySelect">
                   <option value="jaccard">Jaccard</option>
                   <option value="cosine">Cosine</option>
@@ -214,7 +222,15 @@
             <div id="treeTable" class="table-wrap"></div>
           </div>
           <div class="panel">
-            <div class="panel-head"><h3>POI 字段库</h3><span id="poiMeta"></span></div>
+            <div class="panel-head">
+              <div>
+                <h3>POI 字段库</h3>
+                <span id="poiMeta"></span>
+              </div>
+              <div class="panel-head-actions">
+                <button id="editPoiButton" class="mini-button" type="button">编辑 POI</button>
+              </div>
+            </div>
             <div id="poiTable" class="table-wrap"></div>
           </div>
           <div class="panel">
@@ -271,6 +287,37 @@
         </section>
       </main>
     </div>
+
+    <div id="poiEditorModal" class="modal-shell" hidden>
+      <div class="modal-backdrop" data-close-modal="poi"></div>
+      <section class="modal-panel poi-editor-panel" role="dialog" aria-modal="true" aria-labelledby="poiEditorTitle">
+        <header class="modal-head">
+          <div>
+            <h3 id="poiEditorTitle">POI 在线编辑</h3>
+            <span id="poiEditorPath" class="modal-subtitle"></span>
+          </div>
+          <button id="closePoiEditorButton" class="icon-button" type="button" title="关闭">×</button>
+        </header>
+        <div id="poiValidationBox" class="validation-box"></div>
+        <div id="poiEditorRows" class="poi-editor-rows"></div>
+        <footer class="modal-actions">
+          <button id="addPoiRowButton" class="secondary-button" type="button">添加字段</button>
+          <button id="savePoiButton" class="primary-button" type="button">保存 POI</button>
+        </footer>
+      </section>
+    </div>
+
+    <div id="viewerModal" class="modal-shell" hidden>
+      <div class="modal-backdrop" data-close-modal="viewer"></div>
+      <section class="modal-panel viewer-panel" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+        <header class="modal-head">
+          <h3 id="viewerTitle">查看</h3>
+          <button id="closeViewerButton" class="icon-button" type="button" title="关闭">×</button>
+        </header>
+        <div id="viewerBody" class="viewer-body"></div>
+      </section>
+    </div>
+
     <script src="/app.js?v=20260517-integrated"></script>
   </body>
 </html>

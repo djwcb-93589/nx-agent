@@ -10,6 +10,7 @@ import csv
 import json
 import mimetypes
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -222,6 +223,24 @@ def read_csv_preview(path: Path, limit: int) -> dict:
     }
 
 
+def read_poi_preview(path: Path, limit: int) -> dict:
+    if not path.is_file():
+        return {"available": False, "columns": [], "rows": [], "truncated": False}
+    rows = []
+    truncated = False
+    for index, row in enumerate(read_poi_rows(path), start=1):
+        if index > limit:
+            truncated = True
+            break
+        rows.append(row)
+    return {
+        "available": True,
+        "columns": ["field", "description"],
+        "rows": rows,
+        "truncated": truncated,
+    }
+
+
 def read_summary(output_root: Path) -> dict:
     summaries = sorted(output_root.glob("summary_raw_[sample_size=*].csv"))
     if not summaries:
@@ -266,8 +285,12 @@ def load_source_payload(input_root: Path, output_root: Path, source: str, sample
 def _read_schema_preview(output_dir: Path, filename: str, source: str, kind: str, limit: int) -> dict:
     local_path = output_dir / filename
     if local_path.is_file():
+        if kind == "poi":
+            return read_poi_preview(local_path, limit)
         return read_csv_preview(local_path, limit)
     schema_path = _canonical_schema_path(source, kind)
+    if schema_path and kind == "poi":
+        return read_poi_preview(schema_path, limit)
     return read_csv_preview(schema_path, limit) if schema_path else read_csv_preview(local_path, limit)
 
 
@@ -294,6 +317,217 @@ def _canonical_schema_path(source: str, kind: str) -> Path | None:
         if fallback.is_file():
             return fallback
     return None
+
+
+def poi_schema_payload(input_root: Path, output_root: Path, source: str) -> dict:
+    paths = _poi_schema_paths(input_root, output_root, source)
+    active_path = paths["local_path"] if paths["local_path"].is_file() else paths["canonical_path"]
+    rows = read_poi_rows(active_path) if active_path and active_path.is_file() else []
+    validation = validate_poi_rows(rows, paths["relation_path"])
+    return {
+        "source": paths["source"],
+        "available": bool(active_path and active_path.is_file()),
+        "active_path": str(active_path) if active_path else "",
+        "canonical_path": str(paths["canonical_path"]) if paths["canonical_path"] else "",
+        "local_path": str(paths["local_path"]),
+        "relation_path": str(paths["relation_path"]) if paths["relation_path"] else "",
+        "rows": rows,
+        "validation": validation,
+    }
+
+
+def _poi_schema_paths(input_root: Path, output_root: Path, source: str) -> dict:
+    input_root = Path(input_root).resolve()
+    output_root = Path(output_root).resolve()
+    raw_path = _safe_join(input_root, source)
+    if not raw_path.is_file():
+        raise FileNotFoundError(source)
+    relative = raw_path.relative_to(input_root)
+    output_dir = output_root / relative.with_suffix("")
+    local_path = output_dir / "poi_schema.csv"
+    canonical_path = _canonical_schema_path(source, "poi")
+    relation_path = output_dir / "relation_schema.csv"
+    if not relation_path.is_file():
+        relation_path = _canonical_schema_path(source, "relation")
+    return {
+        "source": relative.as_posix(),
+        "output_dir": output_dir,
+        "local_path": local_path,
+        "canonical_path": canonical_path,
+        "relation_path": relation_path,
+    }
+
+
+def read_poi_rows(path: Path) -> list[dict]:
+    rows = []
+    if not path or not Path(path).is_file():
+        return rows
+    with Path(path).open("r", encoding="utf-8-sig", newline="") as file:
+        reader = csv.reader(file)
+        for index, row in enumerate(reader, start=1):
+            if not row or not any(cell.strip() for cell in row):
+                continue
+            if index == 1 and len(row) >= 2 and row[0].strip().lower() == "field":
+                continue
+            rows.append(
+                {
+                    "field": row[0].strip() if row else "",
+                    "description": row[1].strip() if len(row) > 1 else "",
+                }
+            )
+    return rows
+
+
+def write_poi_rows(path: Path, rows: list[dict]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+        for row in rows:
+            writer.writerow([str(row.get("field", "")).strip(), str(row.get("description", "")).strip()])
+
+
+def validate_poi_rows(rows: list[dict], relation_path: Path | None = None) -> dict:
+    errors = []
+    warnings = []
+    normalized_rows = []
+    seen = {}
+    suspicious_names = {
+        "a",
+        "aa",
+        "aaa",
+        "asdf",
+        "bar",
+        "field",
+        "foo",
+        "null",
+        "none",
+        "test",
+        "tmp",
+        "todo",
+        "unknown",
+        "xxx",
+    }
+
+    if not isinstance(rows, list):
+        return {
+            "ok": False,
+            "errors": ["POI rows must be an array."],
+            "warnings": [],
+            "normalized_rows": [],
+        }
+
+    for index, row in enumerate(rows, start=1):
+        if not isinstance(row, dict):
+            errors.append(f"Row {index}: item must be an object.")
+            continue
+        field = str(row.get("field") or "").strip()
+        description = str(row.get("description") or "").strip()
+        normalized = _normalize_poi_field(field)
+        normalized_rows.append({"field": field, "description": description})
+
+        if not field:
+            errors.append(f"Row {index}: field is required.")
+            continue
+        if field != normalized:
+            errors.append(
+                f"Row {index}: field '{field}' must be lower_snake_case; suggested '{normalized}'."
+            )
+        if not re.fullmatch(r"[a-z][a-z0-9_]{1,63}", field):
+            errors.append(
+                f"Row {index}: field '{field}' must start with a letter and contain 2-64 lowercase letters, numbers, or underscores."
+            )
+        if field in seen:
+            errors.append(f"Row {index}: duplicate field '{field}' also appears on row {seen[field]}.")
+        seen[field] = index
+
+        if not description:
+            warnings.append(f"Row {index}: '{field}' has no description.")
+        elif len(description) < 12:
+            warnings.append(f"Row {index}: '{field}' description is very short.")
+        elif len(description) > 500:
+            errors.append(f"Row {index}: '{field}' description is longer than 500 characters.")
+
+        if field in suspicious_names or re.fullmatch(r"(.)\1{2,}", field):
+            warnings.append(f"Row {index}: '{field}' looks like a placeholder name.")
+
+    field_names = {row["field"] for row in normalized_rows if row.get("field")}
+    if not field_names:
+        errors.append("At least one POI field is required.")
+    elif not (field_names & {"host", "program", "event_type", "event_action", "user", "src_ip", "dst_ip", "outcome", "object", "target"}):
+        warnings.append(
+            "No common graph anchor field was found. Consider including fields such as host, program, event_type, user, src_ip, dst_ip, or outcome when present."
+        )
+    if len(field_names) > 80:
+        warnings.append("POI has more than 80 fields; POI should stay focused on KG-relevant fields.")
+
+    relation_refs = _relation_poi_refs(relation_path)
+    missing_refs = sorted(ref for ref in relation_refs if ref and ref not in field_names)
+    if missing_refs:
+        errors.append(
+            "Relation schema references missing POI fields: " + ", ".join(missing_refs)
+        )
+
+    return {
+        "ok": not errors,
+        "errors": errors,
+        "warnings": warnings,
+        "normalized_rows": normalized_rows,
+        "field_count": len(field_names),
+        "relation_ref_count": len(relation_refs),
+    }
+
+
+def save_poi_schema(input_root: Path, output_root: Path, source: str, rows: list[dict]) -> dict:
+    paths = _poi_schema_paths(input_root, output_root, source)
+    validation = validate_poi_rows(rows, paths["relation_path"])
+    if not validation["ok"]:
+        return {
+            "ok": False,
+            "validation": validation,
+            "saved_paths": [],
+        }
+
+    rows_to_write = validation["normalized_rows"]
+    saved_paths = []
+    if paths["canonical_path"]:
+        write_poi_rows(paths["canonical_path"], rows_to_write)
+        saved_paths.append(str(paths["canonical_path"]))
+    if paths["local_path"].parent.is_dir():
+        write_poi_rows(paths["local_path"], rows_to_write)
+        saved_paths.append(str(paths["local_path"]))
+    if not saved_paths:
+        write_poi_rows(paths["local_path"], rows_to_write)
+        saved_paths.append(str(paths["local_path"]))
+
+    if KG_AVAILABLE:
+        sync_parser_outputs_to_edc(output_root, FrontendHandler.schemas_root)
+
+    return {
+        "ok": True,
+        "source": paths["source"],
+        "saved_paths": saved_paths,
+        "validation": validation,
+    }
+
+
+def _normalize_poi_field(field: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9]+", "_", field.strip()).strip("_").lower()
+
+
+def _relation_poi_refs(path: Path | None) -> set[str]:
+    refs = set()
+    if not path or not Path(path).is_file():
+        return refs
+    with Path(path).open("r", encoding="utf-8-sig", newline="") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            for column in ("subject_id_source", "object_id_source"):
+                refs.add(_normalize_poi_field(row.get(column) or ""))
+            for raw_field in str(row.get("edge_properties") or "").split(","):
+                refs.add(_normalize_poi_field(raw_field))
+    refs.discard("")
+    return refs
 
 
 def read_group_tree_summary(path: Path) -> dict:
@@ -721,6 +955,16 @@ class FrontendHandler(SimpleHTTPRequestHandler):
             if parsed.path == "/api/summary":
                 self._send_json(read_summary(self.output_root))
                 return
+            if parsed.path == "/api/poi/schema":
+                query = parse_qs(parsed.query)
+                self._send_json(
+                    poi_schema_payload(
+                        self.input_root,
+                        self.output_root,
+                        query.get("source", [""])[0],
+                    )
+                )
+                return
             if parsed.path == "/api/run/status":
                 query = parse_qs(parsed.query)
                 self._send_json(self.run_manager.status(tail=int(query.get("tail", ["300"])[0])))
@@ -748,6 +992,29 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                 self._send_json(
                     {"ok": ok, "message": message, "status": self.run_manager.status()},
                     status=HTTPStatus.OK if ok else HTTPStatus.CONFLICT,
+                )
+                return
+            if parsed.path == "/api/poi/validate":
+                payload = self._read_json_body()
+                source = str(payload.get("source") or "").strip()
+                relation_path = None
+                if source:
+                    relation_path = _poi_schema_paths(
+                        self.input_root, self.output_root, source
+                    )["relation_path"]
+                self._send_json(validate_poi_rows(payload.get("rows") or [], relation_path))
+                return
+            if parsed.path == "/api/poi/save":
+                payload = self._read_json_body()
+                result = save_poi_schema(
+                    self.input_root,
+                    self.output_root,
+                    str(payload.get("source") or "").strip(),
+                    payload.get("rows") or [],
+                )
+                self._send_json(
+                    result,
+                    status=HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST,
                 )
                 return
             if parsed.path.startswith("/api/kg/"):
@@ -791,7 +1058,8 @@ class FrontendHandler(SimpleHTTPRequestHandler):
     def _handle_kg_post(self, parsed) -> None:
         self._ensure_kg_available()
         payload = self._read_json_body()
-        if payload.get("sync_inputs", True):
+        sync_paths = {"/api/kg/sync", "/api/kg/preflight", "/api/kg/plan", "/api/kg/runs"}
+        if parsed.path in sync_paths and payload.get("sync_inputs", True):
             sync_parser_outputs_to_edc(self.output_root, self.schemas_root)
 
         if parsed.path == "/api/kg/sync":
