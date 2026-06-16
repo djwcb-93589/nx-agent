@@ -248,23 +248,11 @@ if __name__ == "__main__":
         help="LLM used for schema canonicaliztion verification.",
     )
     parser.add_argument(
-        "--sc_embedder",
-        default="intfloat/e5-mistral-7b-instruct",
-        help="Embedder used for schema canonicalization. Has to be a sentence transformer. Please refer to https://sbert.net/",
-    )
-    parser.add_argument(
         "--sc_prompt_template_file_path",
-        default="./prompt_templates/sc_template noembedding.txt",
+        default="./prompt_templates/sc_template_deepseek_mapping.txt",
         help="Prompt template used for schema canonicalization verification.",
     )
 
-    # Refinement setting
-    parser.add_argument("--sr_adapter_path", default=None, help="Path to adapter of schema retriever.")
-    parser.add_argument(
-        "--sr_embedder",
-        default="intfloat/e5-mistral-7b-instruct",
-        help="Embedding model used for schema retriever. Has to be a sentence transformer. Please refer to https://sbert.net/",
-    )
     parser.add_argument(
         "--oie_refine_prompt_template_file_path",
         default="./prompt_templates/oie_r_template.txt",
@@ -275,9 +263,7 @@ if __name__ == "__main__":
         default="./few_shot_examples/example/oie_few_shot_refine_examples.txt",
         help="Few shot examples used for refined open information extraction.",
     )
-    parser.add_argument(
-        "--ee_llm", default="mistralai/Mistral-7B-Instruct-v0.2", help="LLM used for entity extraction."
-    )
+    parser.add_argument("--ee_llm", default="deepseek-chat", help="LLM used for entity extraction.")
     parser.add_argument(
         "--ee_prompt_template_file_path",
         default="./prompt_templates/ee_template.txt",

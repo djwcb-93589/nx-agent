@@ -16,5 +16,6 @@ artifacts/
 log_output/
 output/
 log_pipeline_agent/runs/
+edc-log/log_pipeline_agent/runs/
 log_kg_query_agent/cache/
 log_kg_builder/runs/

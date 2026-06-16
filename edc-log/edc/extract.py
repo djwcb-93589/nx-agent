@@ -66,9 +66,9 @@ class Extractor:
                 messages, self.model, self.tokenizer, answer_prepend="Triplets: "
             )
         else:
-            # HF Router (OpenAI-compatible) 路径
+            # DeepSeek OpenAI-compatible path.
             response = self.openai_client.chat.completions.create(
-                model="deepseek-chat",
+                model=self.openai_model_id,
                 messages=messages,
                 stream=False
             )
@@ -111,7 +111,7 @@ class Extractor:
         for i in range(self.retry):
             try:
                 resp = self.openai_client.chat.completions.create(
-                    model=self.openai_model_id,  # 例如 "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
+                    model=self.openai_model_id,
                     messages=messages,
                     temperature=self.temperature,
                     max_tokens=self.max_tokens,
@@ -125,4 +125,3 @@ class Extractor:
 
 
     
-

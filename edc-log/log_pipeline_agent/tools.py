@@ -147,7 +147,6 @@ def _build_edc_config(
     oie_model: str = "deepseek-chat",
     schema_model: str = "deepseek-chat",
     canonicalization_model: str = "deepseek-chat",
-    embedder: str = "intfloat/e5-mistral-7b-instruct",
 ) -> dict[str, Any]:
     return {
         "oie_llm": oie_model,
@@ -161,15 +160,12 @@ def _build_edc_config(
             PROJECT_ROOT / "few_shot_examples" / "example" / "sd_few_shot_examples.txt"
         ),
         "sc_llm": canonicalization_model,
-        "sc_embedder": embedder,
-        "sc_prompt_template_file_path": str(PROJECT_ROOT / "prompt_templates" / "sc_template noembedding.txt"),
-        "sr_adapter_path": None,
-        "sr_embedder": embedder,
+        "sc_prompt_template_file_path": str(PROJECT_ROOT / "prompt_templates" / "sc_template_deepseek_mapping.txt"),
         "oie_refine_prompt_template_file_path": str(PROJECT_ROOT / "prompt_templates" / "oie_r_template.txt"),
         "oie_refine_few_shot_example_file_path": str(
             PROJECT_ROOT / "few_shot_examples" / "example" / "oie_few_shot_refine_examples.txt"
         ),
-        "ee_llm": "mistralai/Mistral-7B-Instruct-v0.2",
+        "ee_llm": "deepseek-chat",
         "ee_prompt_template_file_path": str(PROJECT_ROOT / "prompt_templates" / "ee_template.txt"),
         "ee_few_shot_example_file_path": str(
             PROJECT_ROOT / "few_shot_examples" / "example" / "ee_few_shot_examples.txt"

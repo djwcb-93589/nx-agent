@@ -159,13 +159,33 @@ const EVENT_LABELS = {
   job_failed: "任务失败",
 };
 
+const API_BASE = resolveApiBase();
+
+function resolveApiBase() {
+  const explicit = String(window.LOG_AGENT_API_BASE || "").trim();
+  if (explicit) {
+    return explicit.replace(/\/+$/, "");
+  }
+  if (window.location.protocol === "file:") {
+    return "http://127.0.0.1:8765";
+  }
+  return "";
+}
+
+function apiUrl(url) {
+  if (/^https?:\/\//i.test(url)) {
+    return url;
+  }
+  return `${API_BASE}${url}`;
+}
+
 function noCacheUrl(url) {
   const separator = url.includes("?") ? "&" : "?";
   return `${url}${separator}_=${Date.now()}`;
 }
 
 async function fetchJson(url) {
-  const response = await fetch(noCacheUrl(url), {
+  const response = await fetch(noCacheUrl(apiUrl(url)), {
     cache: "no-store",
     headers: { "Cache-Control": "no-cache" },
   });
@@ -177,7 +197,7 @@ async function fetchJson(url) {
 }
 
 async function postJson(url, payload = {}) {
-  const response = await fetch(noCacheUrl(url), {
+  const response = await fetch(noCacheUrl(apiUrl(url)), {
     method: "POST",
     cache: "no-store",
     headers: {
@@ -229,9 +249,9 @@ async function loadSources(options = {}) {
   applyFilter();
   await loadSummary();
   if (state.activeSource && reloadActive) {
-    await selectSource(state.activeSource, false, { silent });
+    await selectSource(state.activeSource, false, { silent }).catch(showSourceError);
   } else if (!state.activeSource && state.sources.length > 0) {
-    await selectSource(state.sources[0].source, false, { silent });
+    await selectSource(state.sources[0].source, false, { silent }).catch(showSourceError);
   }
 }
 
@@ -261,7 +281,7 @@ function renderSources() {
         <span class="badge">${item.result_files.length} 个结果文件</span>
       </div>
     `;
-    button.addEventListener("click", () => selectSource(item.source, true));
+    button.addEventListener("click", () => selectSource(item.source, true).catch(showSourceError));
     els.sourceList.appendChild(button);
   }
 }
@@ -298,6 +318,30 @@ function setLoading() {
   ]) {
     target.innerHTML = '<div class="empty">加载中</div>';
   }
+}
+
+function showSourceError(err) {
+  const message = err.message || String(err);
+  els.rawMeta.textContent = "加载失败";
+  els.preMeta.textContent = "加载失败";
+  els.resultMeta.textContent = "加载失败";
+  els.groupMeta.textContent = "加载失败";
+  els.treeMeta.textContent = "加载失败";
+  els.poiMeta.textContent = "加载失败";
+  els.relationMeta.textContent = "加载失败";
+  const html = `<div class="empty">加载失败：${escapeHtml(message)}</div>`;
+  els.rawInput.innerHTML = html;
+  for (const target of [
+    els.preprocessedTable,
+    els.resultTable,
+    els.groupTable,
+    els.treeTable,
+    els.poiTable,
+    els.relationTable,
+  ]) {
+    target.innerHTML = html;
+  }
+  showError(err);
 }
 
 function renderPayload(payload) {
@@ -867,7 +911,7 @@ function clearKgRunView() {
 }
 
 function connectKgEvents(jobId) {
-  const source = new EventSource(`/api/kg/runs/${jobId}/events`);
+  const source = new EventSource(apiUrl(`/api/kg/runs/${jobId}/events`));
   state.kgEventSource = source;
   for (const eventName of Object.keys(EVENT_LABELS)) {
     source.addEventListener(eventName, (evt) => {
@@ -1155,10 +1199,10 @@ function bindEvents() {
     if (!els.poiEditorModal.hidden) closePoiEditor();
   });
   els.sampleInput.addEventListener("change", () => {
-    if (state.activeSource) selectSource(state.activeSource, false).catch(showError);
+    if (state.activeSource) selectSource(state.activeSource, false).catch(showSourceError);
   });
   els.limitInput.addEventListener("change", () => {
-    if (state.activeSource) selectSource(state.activeSource, false).catch(showError);
+    if (state.activeSource) selectSource(state.activeSource, false).catch(showSourceError);
   });
   els.selectAllKgBtn.addEventListener("click", () =>
     document.querySelectorAll(".kg-dataset-check").forEach((item) => (item.checked = true)),

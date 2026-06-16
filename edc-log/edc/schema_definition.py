@@ -97,7 +97,7 @@ class SchemaDefiner:
         for i in range(self.retry):
             try:
                 resp = self.openai_client.chat.completions.create(
-                    model=self.openai_model_id,     # 例如 "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
+                    model=self.openai_model_id,
                     messages=messages,
                     temperature=self.temperature,
                     max_tokens=self.max_tokens,

@@ -70,27 +70,46 @@ NEO4J_DATABASE=neo4j
 
 ## 启动项目
 
-当前集成版本只需要启动一个服务端口：
+当前版本采用前后端分离启动方式，需要分别启动后端 API 和前端静态页面。
+
+终端 1：启动后端 API 服务：
 
 ```powershell
 cd "E:\6服务器\NINGXXXXIA-main"
-python -m frontend.server --host 127.0.0.1 --port 8765
+python -m backend.server --host 127.0.0.1 --port 8765
 ```
 
-浏览器打开：
+终端 2：启动前端静态页面服务：
+
+```powershell
+cd "E:\6服务器\NINGXXXXIA-main"
+python -m frontend.server --host 127.0.0.1 --port 5173
+```
+
+浏览器打开前端页面：
+
+```text
+http://127.0.0.1:5173
+```
+
+前端页面默认通过自身的 `/api/...` 路径访问接口，`frontend.server` 会把这些请求代理到后端 API：
 
 ```text
 http://127.0.0.1:8765
 ```
 
-该服务同时提供：
+两个服务的职责分别是：
 
-- 前端静态页面
-- 日志解析 API
-- 知识图谱构建 API
-- 图谱产物查看 API
-- 本地图谱查询 API
-- Neo4j 查询和清库 API
+- `frontend.server`：提供 `frontend/static/` 下的前端静态页面，并在开发环境把 `/api/...` 请求代理到后端。
+- `backend.server`：只提供 `/api/...` 后端接口，包括日志解析、知识图谱构建、图谱产物查看、本地图谱查询、Neo4j 查询和清库 API。
+
+如果后端不是默认地址，可在启动前端时指定：
+
+```powershell
+python -m frontend.server --host 127.0.0.1 --port 5173 --api_base http://127.0.0.1:8765
+```
+
+需要让页面直接访问其他 API 地址时，也可在加载 `app.js` 前设置 `window.LOG_AGENT_API_BASE`。
 
 ## 命令行运行日志解析
 
