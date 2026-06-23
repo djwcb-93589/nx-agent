@@ -1,0 +1,28 @@
+[
+    [
+        {},
+        [
+            "field_name"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user",
+            "fwlog": "log_enabled"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "cmd",
+            "dsp_msg"
+        ]
+    ]
+]

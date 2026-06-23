@@ -1,0 +1,571 @@
+[
+   [
+      [
+         "pid",
+         "Process identifier for the Apache child process handling the request, useful for process lineage and debugging.",
+         "28574"
+      ],
+      [
+         "client_ip",
+         "IP address of the client making the request, used for network linkage and access control analysis.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "Source port of the client connection, used for session correlation and network flow tracking.",
+         "59668"
+      ],
+      [
+         "error_code",
+         "HTTP or Apache error code indicating the type of access denial, useful for event correlation and security analysis.",
+         "AH01630"
+      ],
+      [
+         "requested_path",
+         "The filesystem path that was requested and denied by server configuration, used for resource access analysis and vulnerability detection.",
+         "/var/www/intranet.price.fox.org/wp-includes/blocks/quote/.htpasswd_"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the Apache child process handling the request",
+         "28490"
+      ],
+      [
+         "client",
+         "IP address and port of the client making the request",
+         "172.17.130.196:55250"
+      ],
+      [
+         "client_ip",
+         "IP address of the client extracted from the client field",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "Port number of the client extracted from the client field",
+         "55250"
+      ],
+      [
+         "requested_path",
+         "The file system path for which access was denied",
+         "/var/www/intranet.price.fox.org/wp-content/plugins/akismet/error_log"
+      ],
+      [
+         "referer",
+         "HTTP referer header indicating the originating page URL",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier, used for process lineage and grouping related events",
+         "28409"
+      ],
+      [
+         "client_ip",
+         "Client IP address, used for network linkage and identifying the source of the request",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "Client port number, used for network session identification and correlation",
+         "55422"
+      ],
+      [
+         "denied_path",
+         "The file path that was denied access by the server based on server configuration rules",
+         "/usr/share/javascript/.htaccess"
+      ]
+   ],
+   [
+      [
+         "log_level",
+         "The severity level of the log entry as indicated by the syslog-style bracket prefix.",
+         "error"
+      ],
+      [
+         "pid",
+         "The process identifier of the Apache child process that generated the log entry.",
+         "28576"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client making the request.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "The TCP port number of the client connection.",
+         "34174"
+      ],
+      [
+         "error_code",
+         "The Apache-specific error code identifying the type of error.",
+         "AH01276"
+      ],
+      [
+         "directory_path",
+         "The filesystem directory path that the client attempted to access and that triggered the error.",
+         "/var/www/intranet.price.fox.org/wp-includes/js/tinymce/plugins/image/"
+      ]
+   ],
+   [
+      [
+         "autoindex_error",
+         "Indicates the severity and module is autoindex:error.",
+         "autoindex:error"
+      ],
+      [
+         "pid",
+         "Process ID of the Apache worker handling the request, enabling process-level tracking.",
+         "28490"
+      ],
+      [
+         "client_ip",
+         "IP address of the client making the request, used for network-level entity alignment.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "Port number of the client connection, useful for session differentiation.",
+         "55208"
+      ],
+      [
+         "directory",
+         "The requested directory path that could not be served, enabling event grouping by resource.",
+         "/var/www/intranet.price.fox.org/wp-content/uploads/"
+      ],
+      [
+         "referer",
+         "The HTTP referer header value, enabling session and request flow correlation.",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "The process identifier for the process that generated the log entry, used for process lineage and intra-host event correlation.",
+         "28576"
+      ],
+      [
+         "client_ip_port",
+         "The IP address and port of the client making the request, used for network linkage and session grouping.",
+         "172.17.130.196:55532"
+      ],
+      [
+         "request_path",
+         "The file path on the server that was requested and matched, used for resource access tracking and event alignment.",
+         "/var/www/intranet.price.fox.org/wp-admin/customize"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "identifier of the process handling the request, useful for process lineage and event correlation",
+         "28567"
+      ],
+      [
+         "client_ip",
+         "IP address of the client that sent the request, useful for network linkage and session grouping",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "port number used by the client for the connection, useful for network linkage and session tracking",
+         "55314"
+      ],
+      [
+         "request_path",
+         "file path on the server that was matched by the negotiation request, useful for event correlation and resource identification",
+         "/var/www/intranet.price.fox.org/wp-config"
+      ],
+      [
+         "referer",
+         "URL of the referring page that led to the request, useful for session grouping and web traffic analysis",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "log_level",
+         "The severity or type category of the log message.",
+         "php7:error"
+      ],
+      [
+         "pid",
+         "The process identifier for the PHP process that generated the error.",
+         "28239"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client that triggered the error.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "The TCP port number of the client connection.",
+         "56964"
+      ],
+      [
+         "error_message",
+         "The descriptive text of the PHP fatal error, including the failed operation and file path.",
+         "PHP Fatal error: require(): Failed opening required 'ABSPATHWPINC/blocks/archives.php' (include_path='.:/usr/share/php') in /var/www/intranet.price.fox.org/wp-includes/blocks/index.php on line 9"
+      ],
+      [
+         "include_path",
+         "The PHP include path search order as shown in the error message within the parentheses.",
+         ".:/usr/share/php"
+      ],
+      [
+         "file_path",
+         "The absolute filesystem path of the PHP script where the error occurred.",
+         "/var/www/intranet.price.fox.org/wp-includes/blocks/index.php"
+      ],
+      [
+         "line_number",
+         "The line number within the file where the error was triggered.",
+         "9"
+      ]
+   ],
+   [
+      [
+         "php7_level",
+         "The PHP error level from the log category, useful for filtering and classifying error severity.",
+         "error"
+      ],
+      [
+         "pid",
+         "The process ID of the PHP-FPM worker handling the request, used for process lineage and session grouping.",
+         "28408"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client making the request, used for network linkage and source identification.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "The TCP port of the client connection, used for network session correlation.",
+         "55320"
+      ],
+      [
+         "script_path",
+         "The filesystem path of the requested PHP script on the server, used for resource identification and access analysis.",
+         "/var/www/intranet.price.fox.org/wp-config copy.php"
+      ],
+      [
+         "referer",
+         "The HTTP referer URL from which the request originated, used for tracing request source and event correlation.",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "log_type",
+         "The log severity or component identifier, useful for event classification and filtering.",
+         "php7:error"
+      ],
+      [
+         "pid",
+         "The process ID of the PHP process generating the log, useful for process lineage and event correlation.",
+         "28574"
+      ],
+      [
+         "client_ip_port",
+         "The client IP address and port from which the request originated, useful for network linkage and source identification.",
+         "172.17.130.196:55316"
+      ],
+      [
+         "script_path",
+         "The file system path of the requested script that was not found, useful for asset identification and error grouping.",
+         "'/var/www/intranet.price.fox.org/wp-content/themes/!timthumb.php'"
+      ],
+      [
+         "referer",
+         "The HTTP referer URL indicating the page that triggered the request, useful for session grouping and access pattern analysis.",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier for the PHP worker process, useful for process lineage and debugging.",
+         "28575"
+      ],
+      [
+         "client_ip",
+         "IP address of the client making the request, extracted from the client field, useful for network linkage and source identification.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "Port number of the client connection, extracted from the client field, useful for network linkage and session tracking.",
+         "57850"
+      ],
+      [
+         "undefined_function",
+         "The name of the undefined function being called, useful for error correlation and code analysis.",
+         "get_header"
+      ],
+      [
+         "file_path",
+         "Full filesystem path of the PHP file where the error occurred, useful for event grouping and root cause analysis.",
+         "/var/www/intranet.price.fox.org/wp-content/themes/go/index.php:15"
+      ],
+      [
+         "error_line",
+         "Line number in the file where the error was thrown, useful for pinpointing the exact location in code.",
+         "15"
+      ],
+      [
+         "stack_trace_main_line",
+         "Stack trace line number indicating the main execution context, useful for tracking call flow.",
+         "0"
+      ],
+      [
+         "throw_file_path",
+         "Full filesystem path of the PHP file where the exception was thrown, useful for error propagation tracing.",
+         "/var/www/intranet.price.fox.org/wp-content/themes/go/index.php"
+      ],
+      [
+         "throw_line",
+         "Line number where the exception was thrown, useful for exception origin identification.",
+         "15"
+      ]
+   ],
+   [
+      [
+         "log_type",
+         "The type of PHP error log entry as reported by PHP, useful for categorizing events.",
+         "php7:error"
+      ],
+      [
+         "pid",
+         "The process ID of the PHP script that encountered the error, used for process lineage and event correlation.",
+         "28408"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client that triggered the error, used for network linkage and session grouping.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "The source port of the client connection, used for network linkage and session grouping.",
+         "55254"
+      ],
+      [
+         "error_message",
+         "The PHP fatal error message containing the uncaught error details, used for event correlation and root cause analysis.",
+         "PHP Fatal error: Uncaught Error: Call to undefined function get_header() in /var/www/intranet.price.fox.org/wp-content/themes/twentytwentyone/index.php:17"
+      ],
+      [
+         "file_path",
+         "The file path where the error occurred, used for entity alignment and process lineage.",
+         "/var/www/intranet.price.fox.org/wp-content/themes/twentytwentyone/index.php"
+      ],
+      [
+         "theme_name",
+         "The name of the WordPress theme directory where the error occurred, extracted from the file path, used for entity alignment.",
+         "twentytwentyone"
+      ],
+      [
+         "line_number",
+         "The line number in the file where the error was thrown, used for event correlation and debugging.",
+         "17"
+      ],
+      [
+         "stack_trace",
+         "The stack trace of the PHP error showing the call path, used for process lineage and root cause analysis.",
+         "#0 {main}"
+      ],
+      [
+         "referer",
+         "The HTTP referer URL that led to the error, used for session grouping and network linkage.",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "php7_error",
+         "The error severity/type identifier from the PHP log.",
+         "php7:error"
+      ],
+      [
+         "pid",
+         "The process identifier (PID) of the PHP process that generated the log entry, useful for process lineage and event correlation.",
+         "28567"
+      ],
+      [
+         "client",
+         "The client IP address and port combination from which the request originated, useful for network linkage and source identification.",
+         "172.17.130.196:58912"
+      ],
+      [
+         "script",
+         "The file path of the PHP script that was referenced in the request, useful for file access auditing and attack pattern detection.",
+         "'/var/www/intranet.price.fox.org/wp-includes/blocks/file/info.php'"
+      ]
+   ],
+   [
+      [
+         "php7_error",
+         "The error type from the PHP7 engine, useful for classifying log event types",
+         "php7:error"
+      ],
+      [
+         "pid",
+         "Process identifier of the PHP process, useful for process lineage and grouping events by process",
+         "28574"
+      ],
+      [
+         "client",
+         "Client IP address and port making the request, useful for network linkage and source identification",
+         "172.17.130.196:55316"
+      ],
+      [
+         "script",
+         "File path of the requested script that was not found or could not be accessed, useful for resource identification and event correlation",
+         "'/var/www/intranet.price.fox.org/wp-config - Copy.php'"
+      ],
+      [
+         "referer",
+         "The HTTP referer URL indicating the page or resource that referred the request, useful for session grouping and web tracing",
+         "https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "log_level",
+         "The severity or type of the log message, useful for filtering and categorizing events by importance.",
+         "php7:warn"
+      ],
+      [
+         "pid",
+         "The process identifier, useful for grouping events from the same process for process lineage analysis.",
+         "28239"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client connecting to the server, useful for network linkage and source identification.",
+         "172.17.130.196"
+      ],
+      [
+         "client_port",
+         "The port number of the client connection, useful for network session tracking and correlation.",
+         "56964"
+      ],
+      [
+         "undefined_constant",
+         "The name of the undefined PHP constant being used, useful for identifying specific programming errors across multiple systems or applications.",
+         "ABSPATH"
+      ],
+      [
+         "assumed_constant",
+         "The value that the undefined constant is assumed to have, useful for understanding the workaround or fallback behavior in the PHP code.",
+         "'ABSPATH'"
+      ],
+      [
+         "script_path",
+         "The file system path to the PHP script that generated the warning, useful for debugging and identifying the affected codebase across environments.",
+         "/var/www/intranet.price.fox.org/wp-includes/blocks/index.php"
+      ],
+      [
+         "error_line",
+         "The line number in the script where the error occurred, useful for precise code-level debugging and error correlation.",
+         "9"
+      ]
+   ],
+   [
+      [
+         "log_level",
+         "The severity or type of the PHP log message, extracted from the bracketed prefix.",
+         "php7:warn"
+      ],
+      [
+         "pid",
+         "The process identifier of the PHP process generating the log entry.",
+         "28239"
+      ],
+      [
+         "client",
+         "The IP address and port of the client host making the request.",
+         "172.17.130.196:56964"
+      ],
+      [
+         "php_warning_type",
+         "The specific PHP warning function or statement being executed, extracted from the main warning message before the colon.",
+         "require(ABSPATHWPINC/blocks/archives.php)"
+      ],
+      [
+         "failed_path",
+         "The file or resource path that the operation attempted to access but failed to open, extracted from the warning message.",
+         "require(ABSPATHWPINC/blocks/archives.php)"
+      ],
+      [
+         "file_path",
+         "The absolute filesystem path to the PHP script where the error occurred.",
+         "/var/www/intranet.price.fox.org/wp-includes/blocks/index.php"
+      ],
+      [
+         "line_number",
+         "The line number in the PHP script where the error was triggered.",
+         "9"
+      ]
+   ],
+   [
+      [
+         "php7_level",
+         "The severity or subsystem identifier from the log header, useful for event classification and filtering.",
+         "php7:warn"
+      ],
+      [
+         "pid",
+         "Process ID of the PHP process generating the warning, essential for process lineage and session grouping.",
+         "27406"
+      ],
+      [
+         "client_ip",
+         "IP address of the client making the request, possibly including port, used for network linkage and source identification.",
+         "10.35.35.206"
+      ],
+      [
+         "client_port",
+         "Port number from which the client request originated, useful for network connection correlation.",
+         "32894"
+      ],
+      [
+         "php_error_type",
+         "The type of PHP error or warning being triggered, aiding in event categorization and troubleshooting.",
+         "PHP Warning"
+      ],
+      [
+         "php_function",
+         "The PHP function that failed, used for identifying operation-specific errors in the application logic.",
+         "scandir"
+      ],
+      [
+         "errno",
+         "The error number returned by the system call, standard for mapping to system error descriptions for alignment.",
+         "2"
+      ],
+      [
+         "errno_description",
+         "The textual description of the system error, enabling cross-system error correlation and debugging.",
+         "No such file or directory"
+      ],
+      [
+         "file_path",
+         "The absolute file path where the error occurred, critical for entity alignment of affected scripts or modules.",
+         "/var/www/intranet.price.fox.org/wp-content/plugins/wpdiscuz/utils/class.WpdiscuzCache.php"
+      ],
+      [
+         "line_number",
+         "The line number in the file where the error was triggered, used for precise fault localization in source code.",
+         "190"
+      ]
+   ]
+]

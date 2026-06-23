@@ -1,0 +1,45 @@
+[
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "mod": "module",
+            "from": "management_ip",
+            "admin": "user",
+            "act": "event_action",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "agent",
+            "msg",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "mod": "module",
+            "from": "management_ip",
+            "admin": "user",
+            "act": "event_action",
+            "result": "outcome",
+            "msg_inner_成功": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "agent",
+            "dsp_msg",
+            "fwlog",
+            "msg_inner_总共在线时间"
+        ]
+    ]
+]

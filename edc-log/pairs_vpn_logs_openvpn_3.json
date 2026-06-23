@@ -1,0 +1,1697 @@
+[
+   [
+      [
+         "source_ip_port",
+         "The source IP address and port number from which the certificate EKU check originates, useful for network-level entity identification and session grouping.",
+         "192.168.128.107:38377"
+      ]
+   ],
+   [
+      [
+         "user",
+         "dmorgan",
+         "dmorgan"
+      ],
+      [
+         "host_or_ip",
+         "The client IP address or host portion from the connection string.",
+         "192.168.130.84"
+      ],
+      [
+         "port",
+         "The client port number from the connection string.",
+         "59397"
+      ],
+      [
+         "signal",
+         "The signal name triggering the restart event.",
+         "SIGUSR1"
+      ],
+      [
+         "signal_detail",
+         "The detailed reason or type of the signal enclosed in brackets, aiding in event correlation.",
+         "soft,ping-restart"
+      ],
+      [
+         "event",
+         "The action or state described by the log message template, indicating what occurred.",
+         "received, client-instance restarting"
+      ]
+   ],
+   [
+      [
+         "client_address",
+         "The network address (IP and port) of the client initiating the connection, used for network endpoint identification and session correlation.",
+         "dmorgan/192.168.130.84:49438"
+      ],
+      [
+         "tls_version",
+         "The version of the TLS protocol negotiated for the control channel, used for security posture assessment and protocol compatibility alignment.",
+         "1.3"
+      ],
+      [
+         "tls_cipher",
+         "The cipher suite negotiated for the TLS control channel, used for encryption strength analysis and cryptographic profile alignment.",
+         "TLS_AES_256_GCM_SHA384"
+      ],
+      [
+         "certificate_bit_size",
+         "The size in bits of the peer certificate's RSA key, used for cryptographic key strength and authentication capability alignment.",
+         "4096"
+      ],
+      [
+         "signature_algorithm",
+         "The digital signature algorithm used in the peer certificate, used for cryptographic verification and identity validation alignment.",
+         "RSA-SHA256"
+      ]
+   ],
+   [
+      [
+         "source_id",
+         "Identifier or name of the originating entity or process, useful for entity alignment and source attribution.",
+         "bpotter/192.168.128.152:54185"
+      ],
+      [
+         "dst_ip",
+         "Destination IP address assigned as the primary virtual IP, used for network linkage and resource identification.",
+         "10.9.0.6"
+      ],
+      [
+         "src_ip",
+         "Source IP address associated with the source identifier, extractable from the source field, useful for network topology mapping.",
+         "192.168.128.152"
+      ],
+      [
+         "src_port",
+         "Source port number associated with the source identifier, useful for session grouping and process lineage.",
+         "54185"
+      ]
+   ],
+   [
+      [
+         "user_id",
+         "The username extracted from the log prefix, used for user identification and session grouping.",
+         "jwright"
+      ],
+      [
+         "src_ip",
+         "The source IP address of the incoming connection, extracted from the log prefix, used for network linkage and source identification.",
+         "192.168.128.107"
+      ],
+      [
+         "src_port",
+         "The source port number of the incoming connection, extracted from the log prefix, used for network linkage and session grouping.",
+         "48579"
+      ],
+      [
+         "control_message",
+         "The fixed string 'PUSH_REQUEST' indicating the type of control message received, used for event correlation and operation identification.",
+         "PUSH_REQUEST"
+      ]
+   ],
+   [
+      [
+         "source_ip",
+         "The source IP address extracted from the beginning of the log line, indicating the origin of the network connection.",
+         "192.168.130.84"
+      ],
+      [
+         "source_port",
+         "The source port number extracted from the beginning of the log line, indicating the network port used by the source.",
+         "43926"
+      ],
+      [
+         "sid",
+         "A session identifier used to correlate related TLS handshake packets or events.",
+         "98b6cd24"
+      ],
+      [
+         "raw_suffix",
+         "The trailing raw hexadecimal or binary string that may contain additional protocol-specific metadata or checksum data.",
+         "456f552f"
+      ]
+   ],
+   [
+      [
+         "dest",
+         "The destination session or target entity in a session move operation, used to trace session redirection or migration for event correlation.",
+         "TM_LAME_DUCK"
+      ],
+      [
+         "src",
+         "The source session or originating entity being moved, used to identify the origin of a session migration.",
+         "TM_ACTIVE"
+      ],
+      [
+         "reinit_src",
+         "An indicator or flag for whether the source should be reinitialized after the move, useful for session lifecycle tracking.",
+         "1"
+      ]
+   ],
+   [
+      [
+         "user",
+         "dmorgan/192.168.130.84:56027",
+         "dmorgan/192.168.130.84:56027"
+      ],
+      [
+         "sec",
+         "Connection security parameter (TCP timestamp values divided by slash)",
+         "3362/3361"
+      ],
+      [
+         "bytes",
+         "Total number of bytes transferred (sent/received)",
+         "4872800/-1"
+      ],
+      [
+         "pkts",
+         "Total number of packets transferred (sent/received)",
+         "7149/0"
+      ],
+      [
+         "src_ip",
+         "Source IP address extracted from the user field",
+         "192.168.130.84"
+      ],
+      [
+         "src_port",
+         "Source port number extracted from the user field",
+         "56027"
+      ]
+   ],
+   [
+      [
+         "user_id",
+         "Identifier for the user or process initiating the action, extracted from the segment before the slash in the first positional field, useful for user-level event correlation.",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the request originated, parsed from the IP portion of the first positional field, enabling network-level linkage.",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "Source port number used in the connection, extracted from the port portion after the colon in the first positional field, aiding session grouping.",
+         "58928"
+      ],
+      [
+         "verify_type",
+         "The type of verification performed, extracted from the variable slot after \"VERIFY\" in the template, useful for classifying the event.",
+         "KU"
+      ],
+      [
+         "result",
+         "The outcome of the verification, extracted from the final variable slot after \"OK\" in the template, aligning event results across systems.",
+         "OK"
+      ]
+   ],
+   [
+      [
+         "client_id",
+         "The identifier extracted from the log line indicating the user and source address (e.g., jwright/192.168.128.107:56332), used for session grouping and entity alignment.",
+         "jwright/192.168.128.107:56332"
+      ],
+      [
+         "depth",
+         "The certificate validation depth or chain level in the OpenVPN verification process, used for event correlation and security auditing.",
+         "1"
+      ],
+      [
+         "c",
+         "The country code extracted from the certificate subject, used for geographic entity alignment.",
+         "AT"
+      ],
+      [
+         "st",
+         "The state or province extracted from the certificate subject, used for location-based grouping.",
+         "Vienna"
+      ],
+      [
+         "l",
+         "The locality or city extracted from the certificate subject, used for location-based grouping.",
+         "Vienna"
+      ],
+      [
+         "o",
+         "The organization name extracted from the certificate subject, used for organizational entity alignment.",
+         "Some Organisation GmbH"
+      ],
+      [
+         "cn",
+         "The common name extracted from the certificate subject, used for service or device identification.",
+         "OpenVPN CA"
+      ],
+      [
+         "emailaddress",
+         "The email address from the certificate subject, used for user or administrative entity correlation.",
+         "admin@organisation.cyberrange.at"
+      ]
+   ],
+   [
+      [
+         "src_ip_port",
+         "The source IP address and port from which the log was generated.",
+         "192.168.128.107:47698"
+      ],
+      [
+         "depth",
+         "The verification depth value indicating the level of certificate chain validation.",
+         "0"
+      ],
+      [
+         "cn",
+         "The common name (CN) of the certificate subject being verified.",
+         "jwright"
+      ]
+   ],
+   [
+      [
+         "source_ip",
+         "The IP address of the source entity performing the certificate validation, used for network origin alignment.",
+         "192.168.128.107"
+      ],
+      [
+         "source_port",
+         "The port number on the source entity, used for network session identification.",
+         "57715"
+      ]
+   ],
+   [
+      [
+         "user_id",
+         "user identifier derived from the username before the slash in the log line",
+         "jwright"
+      ],
+      [
+         "client_ip",
+         "IP address of the client initiating the connection, extracted from the portion before the colon in the address field",
+         "192.168.128.107"
+      ],
+      [
+         "client_port",
+         "network port number used by the client, extracted after the colon in the address field",
+         "42867"
+      ],
+      [
+         "session_user",
+         "the authenticated user name shown inside the square brackets, representing the user context for the session",
+         "jwright"
+      ]
+   ],
+   [
+      [
+         "ip_port",
+         "Source IP address and port number from which the peer connection was initiated.",
+         "192.168.128.107:48579"
+      ],
+      [
+         "username",
+         "The username associated with the peer connection initiation, likely an authenticated user or process owner.",
+         "jwright"
+      ],
+      [
+         "af_inet_address",
+         "The IP address and port number of the peer with which the connection was established, including the AF_INET address family identifier.",
+         "192.168.128.107:48579"
+      ]
+   ],
+   [
+      [
+         "source_ip",
+         "The original source IP address from which the peer connection originated, useful for network linkage and session grouping.",
+         "192.168.128.152"
+      ],
+      [
+         "source_port",
+         "The TCP port number on the source side of the peer connection, useful for identifying specific network sessions.",
+         "54185"
+      ],
+      [
+         "peer_info_key",
+         "The key name in the peer information key=value pair, describing a specific protocol or feature setting.",
+         "IV_LZ4"
+      ],
+      [
+         "peer_info_value",
+         "The value associated with the peer info key, indicating the state or version of the protocol/feature.",
+         "1"
+      ]
+   ],
+   [
+      [
+         "bpotter_ip",
+         "The IP address of the bpotter source (part of a network address).",
+         "192.168.128.152"
+      ],
+      [
+         "bpotter_port",
+         "The port number associated with the bpotter source.",
+         "51710"
+      ],
+      [
+         "certificate_eku",
+         "The Extended Key Usage string contained in the certificate.",
+         "TLS Web Client Authentication"
+      ]
+   ],
+   [
+      [
+         "user",
+         "bpotter/192.168.128.152:37781 Outgoing Data Channel: Cipher 'AES-256-CBC' initialized with 256 bit key",
+         null
+      ],
+      [
+         "- bpotter/192.168.128.152",
+         "40201 Outgoing Data Channel: Cipher 'AES-256-CBC' initialized with 256 bit key",
+         null
+      ],
+      [
+         "- bpotter/192.168.128.152",
+         "54185 Outgoing Data Channel: Cipher 'AES-256-CBC' initialized with 256 bit key</s>",
+         null
+      ]
+   ],
+   [
+      [
+         "bpotter_host",
+         "The host part of the bpotter identifier/binary.",
+         "bpotter"
+      ],
+      [
+         "src_ip",
+         "The source IP address extracted from the log prefix.",
+         "192.168.128.152"
+      ],
+      [
+         "src_port",
+         "The source port number extracted after the colon in the log prefix.",
+         "47747"
+      ],
+      [
+         "channel_direction",
+         "The direction of the data channel (e.g., Outgoing or Incoming).",
+         "Outgoing Data Channel"
+      ],
+      [
+         "hash_bit_count",
+         "The number of bits used for the message hash.",
+         "160"
+      ],
+      [
+         "hash_type",
+         "The type or algorithm of the hash used for message authentication.",
+         "SHA1"
+      ]
+   ],
+   [
+      [
+         "bpotter_host",
+         "The hostname or service identifier from the log prefix, useful for entity alignment and service grouping.",
+         "bpotter"
+      ],
+      [
+         "bpotter_ip",
+         "The IP address extracted from the log prefix, used for network linkage and host identification.",
+         "192.168.128.152"
+      ],
+      [
+         "bpotter_port",
+         "The port number appended to the IP address, used for session grouping and network service identification.",
+         "40201"
+      ],
+      [
+         "control_message_type",
+         "The type of control message received, useful for event correlation and process flow alignment.",
+         "PUSH_REQUEST"
+      ]
+   ],
+   [
+      [
+         "bpotter",
+         "192.168.128.152:37781",
+         "bpotter"
+      ],
+      [
+         "ip_port",
+         "192.168.128.152:37781",
+         "192.168.128.152:37781"
+      ],
+      [
+         "signal",
+         "SIGUSR1[soft,ping-restart]",
+         "SIGUSR1[soft,ping-restart]"
+      ],
+      [
+         "event",
+         "received",
+         "received"
+      ],
+      [
+         "action",
+         "client-instance restarting",
+         "client-instance restarting"
+      ]
+   ],
+   [
+      [
+         "bpotter",
+         "The source process or hostname indicating the origin of the log event",
+         "bpotter"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the TLS connection originated",
+         "192.168.128.152"
+      ],
+      [
+         "src_port",
+         "Source port number associated with the TLS connection",
+         "51710"
+      ],
+      [
+         "sec",
+         "Duration or timestamp in seconds (possibly split into two values) of the soft reset event",
+         "3570/3570"
+      ],
+      [
+         "bytes",
+         "Total bytes transferred (possibly split into sent/received or pre/post reset values) during the TLS session",
+         "3740364/-1"
+      ],
+      [
+         "pkts",
+         "Total packet count (possibly split into sent/received or pre/post reset values) for the TLS session",
+         "8060/0"
+      ]
+   ],
+   [
+      [
+         "bpotter_user",
+         "The user or identity associated with the OpenVPN process, useful for session grouping and user-level event correlation",
+         "bpotter"
+      ],
+      [
+         "source_ip",
+         "The IP address from the client connection, useful for network linkage and identifying the origin of the session",
+         "192.168.128.152"
+      ],
+      [
+         "source_port",
+         "The network port on which the client is connected, useful for session tracking and network flow correlation",
+         "40201"
+      ],
+      [
+         "reason",
+         "The specific cause or trigger for the restart event, useful for event classification and understanding connection lifecycle",
+         "Inactivity timeout (--ping-restart)"
+      ]
+   ],
+   [
+      [
+         "bpotter_ip",
+         "The IP address (with optional port) from the bpotter prefix, useful for network endpoint identification and session grouping.",
+         "192.168.130.77"
+      ],
+      [
+         "bpotter_port",
+         "The port number associated with the bpotter IP address, indicating the specific network channel.",
+         "34755"
+      ],
+      [
+         "data_channel_direction",
+         "The direction of the data channel (Outgoing/Incoming), useful for event correlation and network flow analysis.",
+         "Outgoing"
+      ],
+      [
+         "cipher",
+         "The encryption cipher algorithm used in the data channel, useful for security posture alignment.",
+         "AES-256-CBC"
+      ],
+      [
+         "key_bit_length",
+         "The bit length of the encryption key, useful for encryption strength assessment and alignment.",
+         "256"
+      ]
+   ],
+   [
+      [
+         "bpotter_host",
+         "The host address from the bpotter field, extracted for network entity alignment and session grouping.",
+         "192.168.130.77"
+      ],
+      [
+         "bpotter_port",
+         "The port number associated with the bpotter host, used for network connection tracking.",
+         "34755"
+      ],
+      [
+         "data_channel_direction",
+         "The directional mode (Incoming/Outgoing) of the data channel, enabling event correlation and flow analysis.",
+         "Incoming"
+      ],
+      [
+         "hash_bit_length",
+         "The bit length of the message hash used for HMAC authentication, relevant for cryptographic policy validation.",
+         "160"
+      ]
+   ],
+   [
+      [
+         "bpotter_src",
+         "The source identifier combining IP address and port from the bpotter process initiating the learning event.",
+         "192.168.128.152:40201"
+      ],
+      [
+         "bpotter_dst",
+         "The destination identifier combining IP address and port from the bpotter process being learned.",
+         "192.168.128.152:40201"
+      ],
+      [
+         "learned_ip",
+         "The IP address being learned during the multi-learning event, often representing a discovered or communicated endpoint.",
+         "10.9.0.14"
+      ]
+   ],
+   [
+      [
+         "bpotter_src",
+         "The source process or client identifier extracted from the prefix before the colon, used for process lineage and endpoint tracking.",
+         "192.168.128.152:40201"
+      ],
+      [
+         "ipv4",
+         "The IPv4 address returned by the pool, used for network address allocation and connection tracking.",
+         "10.9.0.14"
+      ],
+      [
+         "ipv6",
+         "The IPv6 address status or value returned by the pool, used for network address allocation and dual-stack tracking.",
+         "(Not enabled)"
+      ]
+   ],
+   [
+      [
+         "bpotter_client",
+         "The client identifier extracted from the bpotter/<*>: field, used for session grouping and entity alignment.",
+         "192.168.128.152:40201"
+      ],
+      [
+         "status",
+         "The numeric status code associated with the control message, used for event correlation and result analysis.",
+         "1"
+      ],
+      [
+         "push_reply_directives",
+         "The semicolon-separated (original comma-separated) list of OpenVPN push reply directives and options, used for configuration alignment and network policy analysis.",
+         "PUSH_REPLY,redirect-gateway def1,block-outside-dns,route 10.9.0.1,topology net30,ping 10,ping-restart 120,ifconfig 10.9.0.14 10.9.0.13,peer-id 2,cipher AES-256-CBC"
+      ],
+      [
+         "redirect_gateway",
+         "Indicates whether the redirect-gateway option is set, used for network routing configuration alignment.",
+         "def1"
+      ],
+      [
+         "block_outside_dns",
+         "Indicates whether the block-outside-dns option is set, used for DNS configuration alignment.",
+         "block-outside-dns"
+      ],
+      [
+         "route",
+         "The network route pushed to the client, used for network topology alignment.",
+         "10.9.0.1"
+      ],
+      [
+         "topology",
+         "The VPN topology directive, used for network topology alignment and session configuration.",
+         "net30"
+      ],
+      [
+         "ping",
+         "The ping interval directive, used for keepalive configuration alignment.",
+         "10"
+      ],
+      [
+         "ping_restart",
+         "The ping-restart directive, used for keepalive timeout configuration alignment.",
+         "120"
+      ],
+      [
+         "ifconfig_local",
+         "The local IP address assigned to the client via ifconfig, used for IP address assignment and session alignment.",
+         "10.9.0.14"
+      ],
+      [
+         "ifconfig_remote",
+         "The remote IP address assigned to the client via ifconfig, used for IP address assignment and session alignment.",
+         "10.9.0.13"
+      ],
+      [
+         "peer_id",
+         "The peer ID assigned to the client, used for session and entity alignment.",
+         "2"
+      ],
+      [
+         "cipher",
+         "The encryption cipher used for the VPN session, used for cryptographic configuration alignment.",
+         "AES-256-CBC"
+      ]
+   ],
+   [
+      [
+         "dmorgan",
+         "The user or session identifier extracted from the log prefix, useful for session grouping or process lineage",
+         "dmorgan"
+      ],
+      [
+         "client_ip",
+         "The IP address of the client from the log prefix, enabling network linkage and location tracking",
+         "192.168.130.84"
+      ],
+      [
+         "client_port",
+         "The TCP or UDP port number of the client from the log prefix, useful for session grouping or network connection correlation",
+         "36998"
+      ],
+      [
+         "eku_value",
+         "The Enhanced Key Usage value present in the certificate, used for identifying or aligning certificate purposes",
+         "TLS Web Client Authentication"
+      ]
+   ],
+   [
+      [
+         "source_host_port",
+         "The source host and port from which the connection originates, extracted from the IP:port segment in the log.",
+         "192.168.130.84:58873"
+      ],
+      [
+         "channel_direction",
+         "The direction of the data channel, indicating whether it is outgoing or incoming.",
+         "Outgoing"
+      ],
+      [
+         "cipher_suite",
+         "The cryptographic cipher algorithm used for the data channel, as specified in single quotes.",
+         "AES-256-CBC"
+      ],
+      [
+         "key_size_bits",
+         "The size of the encryption key in bits, indicating the cryptographic strength of the cipher.",
+         "256"
+      ]
+   ],
+   [
+      [
+         "source_host",
+         "The host part of the source address before the colon, used for network entity alignment and identifying the originating machine.",
+         "dmorgan/192.168.130.84"
+      ],
+      [
+         "source_port",
+         "The port number extracted from the source address after the colon, useful for session grouping and network flow correlation.",
+         "53333"
+      ],
+      [
+         "learned_ip",
+         "The IP address being learned in the \"Learn\" event, representing a discovered network entity for network linkage.",
+         "10.9.0.14"
+      ],
+      [
+         "destination_host",
+         "The host part of the destination address before the colon, used for network entity alignment and identifying the target machine.",
+         "dmorgan/192.168.130.84"
+      ],
+      [
+         "destination_port",
+         "The port number extracted from the destination address after the colon, useful for session grouping and network flow correlation.",
+         "53333"
+      ]
+   ],
+   [
+      [
+         "logical_interface",
+         "The logical interface name associated with the virtual IP, useful for grouping and identifying specific network interfaces",
+         "dmorgan"
+      ],
+      [
+         "host_ip",
+         "The IP address of the host that owns the virtual IP, which can be used for network topology and host alignment",
+         "192.168.130.84"
+      ],
+      [
+         "port",
+         "The port number associated with the virtual IP session, enabling event correlation by port",
+         "57079"
+      ],
+      [
+         "virtual_ip",
+         "The primary virtual IP address being assigned to the logical interface, used for network addressing and traffic management",
+         "10.9.0.10"
+      ]
+   ],
+   [
+      [
+         "ip_address",
+         "The IP address from the source endpoint as extracted from the log prefix.",
+         "192.168.130.84"
+      ],
+      [
+         "port",
+         "The port number associated with the source IP address.",
+         "58873"
+      ],
+      [
+         "source_identifier",
+         "The combined source IP and port identifier in the format ip:port.",
+         "192.168.130.84:58873"
+      ],
+      [
+         "pool_name",
+         "The name of the pool that returned the IPv4 address.",
+         "MULTI_sva"
+      ],
+      [
+         "returned_ipv4",
+         "The IPv4 address returned by the pool for assignment or routing.",
+         "10.9.0.6"
+      ],
+      [
+         "returned_ipv6",
+         "The IPv6 address status returned by the pool; typically indicates if it is enabled or not.",
+         "(Not enabled)"
+      ]
+   ],
+   [
+      [
+         "source_ip_port",
+         "The source IP address and port of the client connection.",
+         "192.168.130.84:36998"
+      ],
+      [
+         "target_user",
+         "The target user or group name in the log message.",
+         "dmorgan"
+      ],
+      [
+         "command",
+         "The command or directive being sent.",
+         "PUSH_REPLY"
+      ],
+      [
+         "redirect_gateway",
+         "The redirect-gateway configuration flag.",
+         "def1"
+      ],
+      [
+         "block_outside_dns",
+         "The block-outside-dns configuration flag.",
+         "block-outside-dns"
+      ],
+      [
+         "route",
+         "The route directive value.",
+         "10.9.0.1"
+      ],
+      [
+         "topology",
+         "The topology mode setting.",
+         "net30"
+      ],
+      [
+         "ping",
+         "The ping interval value.",
+         "10"
+      ],
+      [
+         "ping_restart",
+         "The ping-restart timeout value.",
+         "120"
+      ],
+      [
+         "ifconfig_server",
+         "The server-side IP address in the ifconfig directive.",
+         "10.9.0.22"
+      ],
+      [
+         "ifconfig_client",
+         "The client-side IP address in the ifconfig directive.",
+         "10.9.0.21"
+      ],
+      [
+         "peer_id",
+         "The peer identifier number.",
+         "4"
+      ],
+      [
+         "cipher",
+         "The encryption cipher in use.",
+         "AES-256-CBC"
+      ],
+      [
+         "status",
+         "The status code of the operation.",
+         "1"
+      ]
+   ],
+   [
+      [
+         "dmorgan",
+         "the dmorgan identifier likely representing a username or process identifier associated with the client connection",
+         "dmorgan"
+      ],
+      [
+         "client_ip",
+         "the IP address of the client initiating the connection, extracted from the composite address",
+         "192.168.130.84"
+      ],
+      [
+         "client_port",
+         "the port number of the client, extracted from the composite address",
+         "36998"
+      ],
+      [
+         "depth",
+         "the certificate chain depth verified during SSL/TLS verification",
+         "1"
+      ],
+      [
+         "c",
+         "the country code from the certificate subject",
+         "AT"
+      ],
+      [
+         "st",
+         "the state or province from the certificate subject",
+         "Vienna"
+      ],
+      [
+         "l",
+         "the locality or city from the certificate subject",
+         "Vienna"
+      ],
+      [
+         "o",
+         "the organization name from the certificate subject",
+         "Some Organisation GmbH"
+      ],
+      [
+         "cn",
+         "the common name from the certificate subject",
+         "OpenVPN CA"
+      ],
+      [
+         "emailaddress",
+         "the email address from the certificate subject",
+         "admin@organisation.cyberrange.at"
+      ]
+   ],
+   [
+      [
+         "dmorgan",
+         "process or entity name performing the verification, useful for identifying the source application.",
+         "dmorgan"
+      ],
+      [
+         "ip_address",
+         "the IP address from which the log entry originates, essential for network-level entity alignment.",
+         "192.168.130.84"
+      ],
+      [
+         "port",
+         "the network port number used for the connection, useful for session grouping.",
+         "56027"
+      ],
+      [
+         "depth",
+         "the certificate chain depth indicating how many certificates were verified, useful for event correlation.",
+         "0"
+      ],
+      [
+         "cn",
+         "the Common Name (CN) field from the certificate, important for identity alignment.",
+         "dmorgan"
+      ]
+   ],
+   [
+      [
+         "client_ip",
+         "IP address of the client that experienced the inactivity timeout, useful for network entity identification and session correlation",
+         "192.168.130.84"
+      ],
+      [
+         "client_port",
+         "Network port number used by the client connection, useful for session identification and network flow alignment",
+         "33496"
+      ],
+      [
+         "username",
+         "The username associated with the session or process (from bracket notation), useful for user-based event grouping and access analysis",
+         "dmorgan"
+      ],
+      [
+         "event_type",
+         "The type of event described in the log (inactivity timeout or ping-restart), useful for event classification and alert correlation",
+         "Inactivity timeout (--ping-restart), restarting"
+      ]
+   ],
+   [
+      [
+         "dmorgan_field",
+         "The first segment after 'dmorgan/' containing an IP address and port number, used for network endpoint identification and session grouping",
+         "192.168.130.84:43926"
+      ],
+      [
+         "channel_direction",
+         "The direction of the data channel (Incoming or Outgoing), used for event correlation and communication flow analysis",
+         "Incoming"
+      ],
+      [
+         "hash_bits",
+         "The number of bits in the message hash, used for cryptographic parameter alignment and security policy matching",
+         "160"
+      ],
+      [
+         "hash_algorithm",
+         "The hash algorithm name used for HMAC authentication, used for protocol and security configuration alignment",
+         "SHA1"
+      ]
+   ],
+   [
+      [
+         "username",
+         "The remote login or system user associated with the event, useful for user entity alignment.",
+         "hwarren"
+      ],
+      [
+         "ip_address",
+         "The IP address from the remote origin, useful for network entity alignment and session grouping.",
+         "192.168.129.254"
+      ],
+      [
+         "port",
+         "The network port number of the remote connection, useful for session correlation and network linkage.",
+         "34841"
+      ],
+      [
+         "certificate_eku",
+         "The extended key usage attribute present in the certificate, useful for identifying certificate purpose and event correlation.",
+         "TLS Web Client Authentication"
+      ]
+   ],
+   [
+      [
+         "user",
+         "hwarren/192.168.129.254:34841 Incoming Data Channel: Cipher 'AES-256-CBC' initialized with 256 bit key",
+         null
+      ],
+      [
+         "source_user",
+         "The username extracted from the log prefix, used for user-level entity alignment and access tracking.",
+         "hwarren"
+      ],
+      [
+         "source_ip",
+         "The source IP address from the log prefix, used for network-level entity alignment and session grouping.",
+         "192.168.129.254"
+      ],
+      [
+         "source_port",
+         "The source port number from the log prefix, used for network-level entity alignment and session grouping.",
+         "34841"
+      ],
+      [
+         "channel_direction",
+         "The direction of the data channel (Incoming or Outgoing), used for event correlation and network flow analysis.",
+         "Incoming"
+      ],
+      [
+         "cipher_name",
+         "The name of the cipher algorithm used, used for cryptographic configuration alignment.",
+         "AES-256-CBC"
+      ],
+      [
+         "key_length",
+         "The length of the encryption key in bits, used for cryptographic strength analysis.",
+         "256"
+      ]
+   ],
+   [
+      [
+         "user",
+         "hwarren/192.168.129.254:34103",
+         null
+      ],
+      [
+         "user_port",
+         "34103",
+         null
+      ],
+      [
+         "data_channel_direction",
+         "Incoming",
+         null
+      ],
+      [
+         "hash_bit_length",
+         "160",
+         null
+      ],
+      [
+         "hash_algorithm",
+         "SHA1",
+         null
+      ]
+   ],
+   [
+      [
+         "user",
+         "hwarren/192.168.129.254:58928",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "The source IP address from which the connection originates, useful for network topology and threat correlation.",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "The source port number used in the connection, useful for session identification.",
+         "58928"
+      ],
+      [
+         "tls_version",
+         "The TLS protocol version negotiated for the control channel, useful for security posture assessment.",
+         "1.3"
+      ],
+      [
+         "cipher_suite",
+         "The cipher suite negotiated for the TLS session, useful for encryption strength analysis.",
+         "TLS_AES_256_GCM_SHA384"
+      ],
+      [
+         "peer_certificate_bits",
+         "The key bit length of the peer's RSA certificate, useful for certificate strength evaluation.",
+         "4096"
+      ],
+      [
+         "signature_algorithm",
+         "The signature algorithm used for the peer certificate, useful for cryptographic verification.",
+         "RSA-SHA256"
+      ]
+   ],
+   [
+      [
+         "source_ip",
+         "The source IP address from which the connection originates, useful for network topology mapping and traffic source identification.",
+         "192.168.129.254"
+      ],
+      [
+         "source_port",
+         "The source port number used in the connection, aiding in session correlation and service identification.",
+         "58928"
+      ],
+      [
+         "action",
+         "The event type or operation being performed, indicating a learning or discovery process for entity alignment.",
+         "Learn"
+      ],
+      [
+         "target_ip",
+         "The destination IP address being learned or communicated with, critical for network linkage and flow analysis.",
+         "10.9.0.14"
+      ],
+      [
+         "dest_ip",
+         "The destination IP address in the format hwarren/<ip>:<port>, representing the second host in the connection, useful for session grouping.",
+         "192.168.129.254"
+      ],
+      [
+         "dest_port",
+         "The destination port number in the connection, facilitating service identification and event correlation.",
+         "58928"
+      ]
+   ],
+   [
+      [
+         "field_src_ip",
+         "The source IP address from which the log originates, useful for network entity identification and topology mapping.",
+         "192.168.129.254"
+      ],
+      [
+         "field_src_port",
+         "The source port number associated with the source IP, helpful for session or connection tracking.",
+         "58928"
+      ],
+      [
+         "field_target_ip",
+         "The target or virtual IP address being assigned or reported as primary, aiding in network resource alignment and event correlation.",
+         "10.9.0.14"
+      ]
+   ],
+   [
+      [
+         "hwarren_user",
+         "The host or user identifier extracted from the log prefix, useful for entity and session grouping.",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "The source IP address from which the log originated, useful for network linkage and origin identification.",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "The source port associated with the log source, useful for session and connection tracking.",
+         "58928"
+      ],
+      [
+         "pool_label",
+         "A label identifying the pool operation context, useful for event correlation and grouping.",
+         "MULTI_sva"
+      ],
+      [
+         "assigned_ipv4",
+         "The IPv4 address returned by the pool, useful for resource allocation and network mapping.",
+         "10.9.0.14"
+      ],
+      [
+         "assigned_ipv6",
+         "The IPv6 address returned by the pool (shown as status if not enabled), useful for resource allocation tracking.",
+         "(Not enabled)"
+      ]
+   ],
+   [
+      [
+         "peer_id",
+         "The numeric identifier assigned to a peer in the VPN session, used for tracking and aligning per-client connections.",
+         "2"
+      ],
+      [
+         "ifconfig_local_ip",
+         "The local IP address assigned to the tunnel interface as part of the `ifconfig` push option, used for session-level network alignment.",
+         "10.9.0.14"
+      ],
+      [
+         "ifconfig_remote_ip",
+         "The remote IP address assigned to the tunnel interface as part of the `ifconfig` push option, used for session-level network alignment.",
+         "10.9.0.13"
+      ],
+      [
+         "cipher",
+         "The encryption algorithm negotiated for the VPN data channel, used for security policy alignment.",
+         "AES-256-CBC"
+      ],
+      [
+         "status",
+         "The result or state code of the control message transmission, used for event outcome alignment.",
+         "1"
+      ],
+      [
+         "route_network",
+         "The network address specified in a `route` push option, used for routing policy and network topology alignment.",
+         "10.9.0.1"
+      ],
+      [
+         "topology",
+         "The VPN subnet topology mode (e.g., `net30`) pushed to the client, used for network configuration alignment.",
+         "net30"
+      ],
+      [
+         "ping",
+         "The keepalive ping interval (in seconds) pushed to the client, used for connection maintenance alignment.",
+         "10"
+      ],
+      [
+         "ping_restart",
+         "The timeout (in seconds) after which the client restarts without ping response, used for session timeout alignment.",
+         "120"
+      ],
+      [
+         "redirect_gateway",
+         "Indicates whether default gateway redirection is enabled (value `def1`), used for routing policy alignment.",
+         "def1"
+      ],
+      [
+         "block_outside_dns",
+         "Indicates whether DNS queries outside the tunnel are blocked (value `block-outside-dns`), used for DNS security alignment.",
+         "block-outside-dns"
+      ]
+   ],
+   [
+      [
+         "username",
+         "The username extracted from the log prefix before the IP address, useful for identifying the user or service associated with the event.",
+         "hwarren"
+      ],
+      [
+         "source_ip",
+         "The source IP address from the log prefix, representing the host generating the log, useful for network-level entity alignment.",
+         "192.168.129.254"
+      ],
+      [
+         "source_port",
+         "The source port number from the log prefix, used to identify the specific network connection or session.",
+         "41251"
+      ],
+      [
+         "signal",
+         "The operating system signal name, indicating the type of signal received, useful for detecting process state changes and event correlation.",
+         "SIGUSR1"
+      ],
+      [
+         "signal_options",
+         "The signal options or parameters enclosed in brackets, providing additional context about the signal (e.g., restart type), useful for grouping related process events.",
+         "soft,ping-restart"
+      ],
+      [
+         "event_type",
+         "The event description extracted from the message text, indicating the nature of the received signal action.",
+         "received, client-instance restarting"
+      ]
+   ],
+   [
+      [
+         "hwarren",
+         "The user or entity involved in the log event, typically a system username or identifier, useful for user/entity attribution and session grouping.",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "The source IP address from which the connection originated, supporting network-level entity alignment and threat correlation.",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "The source port number used in the connection, aiding in precise network session identification and traffic analysis.",
+         "34841"
+      ],
+      [
+         "tls_error_type",
+         "The type or description of the TLS error that occurred, useful for categorizing security events and diagnosing handshake failures.",
+         "TLS handshake failed"
+      ]
+   ],
+   [
+      [
+         "hwarren",
+         "The username or system identifier extracted from the log prefix, useful for user or host entity alignment.",
+         "hwarren"
+      ],
+      [
+         "ip",
+         "The IP address of the source endpoint involved in the TLS error, useful for network entity linkage and session grouping.",
+         "192.168.129.254"
+      ],
+      [
+         "port",
+         "The port number of the source endpoint, useful for network connection correlation and session identification.",
+         "34841"
+      ],
+      [
+         "timeout_seconds",
+         "The timeout period in seconds within which the TLS key negotiation failed, useful for event timing analysis and troubleshooting.",
+         "60"
+      ]
+   ],
+   [
+      [
+         "user",
+         "hwarren/192.168.129.254:58928 TLS: soft reset sec=3509/3509 bytes=48888/-1 pkts=692/0",
+         null
+      ],
+      [
+         "host",
+         "The hostname or user identifier from the log prefix.",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "The source IP address from the connection prefix.",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "The source port number from the connection prefix.",
+         "58928"
+      ],
+      [
+         "protocol",
+         "The protocol or subsystem name from the log message.",
+         "TLS"
+      ],
+      [
+         "event",
+         "The event or action description from the log message.",
+         "soft reset"
+      ],
+      [
+         "sec",
+         "The elapsed or session seconds, often used for temporal alignment.",
+         "3509/3509"
+      ],
+      [
+         "bytes",
+         "The byte count for the session, useful for volume correlation.",
+         "48888/-1"
+      ],
+      [
+         "pkts",
+         "The packet count for the session, useful for network flow alignment.",
+         "692/0"
+      ]
+   ],
+   [
+      [
+         "hwarren",
+         "source entity identifier",
+         "hwarren"
+      ],
+      [
+         "src_ip_port",
+         "source ip address and port number",
+         "192.168.129.254:34103"
+      ],
+      [
+         "verify_status",
+         "outcome of certificate verification",
+         "OK"
+      ],
+      [
+         "depth",
+         "certificate chain depth value",
+         "0"
+      ],
+      [
+         "cn",
+         "common name from certificate",
+         "hwarren"
+      ]
+   ],
+   [
+      [
+         "host_ip",
+         "The IP address or hostname from which the log was generated, used for identifying the source machine in network alignment.",
+         "192.168.129.254"
+      ],
+      [
+         "port",
+         "The network port associated with the source or connection, used for session and service identification.",
+         "34841"
+      ]
+   ],
+   [
+      [
+         "hwarren_field",
+         "user or process identifier preceding the IP address, useful for user identification and session grouping",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "source IP address extracted from the dotted decimal notation, used for network linkage and origin tracking",
+         "192.168.129.254"
+      ],
+      [
+         "src_port",
+         "source port number associated with the connection, used for session correlation and network flow analysis",
+         "41251"
+      ],
+      [
+         "common_name",
+         "client common name or identifier inside brackets, used for authentication tracking and user alignment",
+         "hwarren"
+      ]
+   ],
+   [
+      [
+         "user",
+         "the value extracted from the inner key-value pair",
+         "256"
+      ]
+   ],
+   [
+      [
+         "user",
+         "jwright/192.168.128.107:41411",
+         "jwright/192.168.128.107:41411"
+      ],
+      [
+         "src_ip",
+         "The source IP address from which the session originates, useful for network linkage and origin tracking.",
+         "192.168.128.107"
+      ],
+      [
+         "src_port",
+         "The source port number associated with the session, aiding in network flow correlation.",
+         "41411"
+      ],
+      [
+         "direction",
+         "Indicates whether the data channel traffic is outgoing or incoming, for event flow orientation.",
+         "Outgoing"
+      ],
+      [
+         "bit_count",
+         "The number of bits used for the message hash, relevant for cryptographic strength and authentication policy alignment.",
+         "160"
+      ],
+      [
+         "hash_algorithm",
+         "The hash algorithm name used for HMAC authentication, supporting cryptographic context alignment.",
+         "SHA1"
+      ]
+   ],
+   [
+      [
+         "user",
+         "The username extracted from the log prefix before the slash, representing the user context for the session or process.",
+         "jwright"
+      ],
+      [
+         "source_ip",
+         "The IP address of the source endpoint, extracted from the first IP address in the log prefix before the colon, useful for network path identification and entity alignment.",
+         "192.168.128.107"
+      ],
+      [
+         "source_port",
+         "The port number of the source endpoint, extracted after the colon from the source address in the log prefix, aiding in network connection tracking.",
+         "57949"
+      ],
+      [
+         "learned_ip",
+         "The IP address being learned in the network routing or discovery event, useful for network topology mapping.",
+         "10.9.0.10"
+      ],
+      [
+         "destination_ip",
+         "The IP address of the destination endpoint, extracted from the second IP address after the arrow, enabling network flow correlation.",
+         "192.168.128.107"
+      ],
+      [
+         "destination_port",
+         "The port number of the destination endpoint, extracted after the colon from the destination address after the arrow, facilitating session grouping.",
+         "57949"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "source IP address of the local endpoint, used for network-level identification and session grouping",
+         "192.168.128.107"
+      ],
+      [
+         "src_port",
+         "source port number associated with the source IP, used for distinct connection tracking and session correlation",
+         "46786"
+      ],
+      [
+         "dest_ip",
+         "destination virtual IP address assigned as the primary virtual IP for the source, used for network routing and load balancing alignment",
+         "10.9.0.22"
+      ]
+   ],
+   [
+      [
+         "username",
+         "The username extracted from the log prefix, useful for user identification and access control alignment",
+         "jwright"
+      ],
+      [
+         "source_ip",
+         "The source IP address extracted from the log prefix, useful for network entity alignment and session grouping",
+         "192.168.128.107"
+      ],
+      [
+         "source_port",
+         "The source port number extracted from the log prefix after the colon, useful for network session linkage and service identification",
+         "49955"
+      ],
+      [
+         "process_name",
+         "The process or service name (e.g., MULTI_sva) that generated the log, useful for process lineage and event correlation",
+         "MULTI_sva"
+      ],
+      [
+         "allocated_ipv4",
+         "The IPv4 address returned from the pool, useful for IP address assignment tracking and network entity alignment",
+         "10.9.0.10"
+      ],
+      [
+         "ipv6_status",
+         "The status of IPv6 allocation (e.g., Not enabled), useful for network configuration alignment and protocol state tracking",
+         "(Not enabled)"
+      ]
+   ],
+   [
+      [
+         "username",
+         "VPN username extracted from the log prefix before the slash",
+         "jwright"
+      ],
+      [
+         "client_ip",
+         "IP address of the VPN client from the connection string",
+         "192.168.128.107"
+      ],
+      [
+         "client_port",
+         "Port number of the VPN client from the connection string",
+         "34436"
+      ],
+      [
+         "action",
+         "The type of control message being sent, in this case \"SENT CONTROL\" indicating an outgoing control packet",
+         "SENT CONTROL"
+      ],
+      [
+         "message_payload",
+         "The full string content of the control message inside the single quotes, containing configuration directives",
+         "PUSH_REPLY,redirect-gateway def1,block-outside-dns,route 10.9.0.1,topology net30,ping 10,ping-restart 120,ifconfig 10.9.0.6 10.9.0.5,peer-id 0,cipher AES-256-CBC"
+      ],
+      [
+         "push_reply",
+         "Indicates whether the message is a push reply to the client, derived from the \"PUSH_REPLY\" keyword",
+         "PUSH_REPLY"
+      ],
+      [
+         "redirect_gateway",
+         "VPN gateway redirection configuration directive, with parameters \"def1\" to redirect all traffic",
+         "redirect-gateway def1"
+      ],
+      [
+         "block_outside_dns",
+         "Directive to block DNS queries outside the VPN tunnel",
+         "block-outside-dns"
+      ],
+      [
+         "route",
+         "Network route pushed to the client, specifying a destination network gateway",
+         "route 10.9.0.1"
+      ],
+      [
+         "topology",
+         "VPN network topology type, set to \"net30\" for point-to-point subnet topology",
+         "topology net30"
+      ],
+      [
+         "ping",
+         "Keepalive ping interval in seconds for the VPN tunnel",
+         "ping 10"
+      ],
+      [
+         "ping_restart",
+         "Timeout in seconds after which the VPN restarts if no ping response received",
+         "ping-restart 120"
+      ],
+      [
+         "ifconfig",
+         "Pair of IP addresses assigned to the VPN client and server endpoints",
+         "ifconfig 10.9.0.6 10.9.0.5"
+      ],
+      [
+         "peer_id",
+         "Numeric identifier assigned to the VPN peer/client in the session",
+         "peer-id 0"
+      ],
+      [
+         "cipher",
+         "Encryption cipher algorithm used for the VPN tunnel",
+         "cipher AES-256-CBC"
+      ],
+      [
+         "status",
+         "Numeric status code indicating the result or state of the control message transmission",
+         "status=1"
+      ]
+   ],
+   [
+      [
+         "user",
+         "extracted from log (like jwright)",
+         "jwright"
+      ],
+      [
+         "src_ip",
+         "source IP address from the log line, useful for network origin identification",
+         "192.168.128.107"
+      ],
+      [
+         "src_port",
+         "source port number, useful for network socket identification",
+         "49955"
+      ],
+      [
+         "tls_state",
+         "TLS connection state (e.g., soft reset), useful for TLS event categorization",
+         "soft reset"
+      ],
+      [
+         "sec",
+         "elapsed seconds in the TLS session (as before/after slash), useful for session duration analysis",
+         "3379/3379"
+      ],
+      [
+         "bytes",
+         "total bytes transferred, may include negative values to indicate direction or error, useful for data volume correlation",
+         "16396164/-1"
+      ],
+      [
+         "pkts",
+         "total packets, with after-slash value indicating retransmitted or lost packets, useful for network reliability assessment",
+         "17626/0"
+      ]
+   ],
+   [
+      [
+         "username",
+         "The username associated with the authentication event, useful for user entity alignment.",
+         "jwright"
+      ],
+      [
+         "source_ip",
+         "The IP address from which the connection originated, used for network topology alignment and source identification.",
+         "192.168.128.107"
+      ],
+      [
+         "source_port",
+         "The source port number of the connection, aiding in session-level network flow correlation.",
+         "48579"
+      ],
+      [
+         "verification_status",
+         "The result or status of the certificate verification process, indicating whether it passed.",
+         "OK"
+      ],
+      [
+         "verification_depth",
+         "The depth of the certificate chain verification, relevant to trust path analysis.",
+         "0"
+      ],
+      [
+         "common_name",
+         "The Common Name (CN) field from the certificate, used for certificate identity alignment.",
+         "jwright"
+      ]
+   ]
+]

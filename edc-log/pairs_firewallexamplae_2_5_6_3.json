@@ -1,0 +1,146 @@
+[
+   [
+      [
+         "field_name",
+         "devid | definition: Unique device identifier used for device-level alignment and tracking across logs.",
+         "0"
+      ],
+      [
+         "field_name",
+         "date | definition: Timestamp of the event, used for temporal alignment and event sequencing.",
+         "2017/08/29 17:26:23"
+      ],
+      [
+         "field_name",
+         "dname | definition: Device or host name for source device identification and grouping.",
+         "themis"
+      ],
+      [
+         "field_name",
+         "logtype | definition: Numeric code representing the type of log, used for filtering and categorizing events.",
+         "9"
+      ],
+      [
+         "field_name",
+         "pri | definition: Priority or severity level of the log event, used for triage and filtering.",
+         "5"
+      ],
+      [
+         "field_name",
+         "ver | definition: Version identifier of the software or log format, aiding in compatibility and schema alignment.",
+         "0.3.0"
+      ],
+      [
+         "field_name",
+         "from | definition: Source IP address indicating the origin of the event, used for network path and threat attribution.",
+         "1.1.1.1"
+      ],
+      [
+         "field_name",
+         "mod | definition: Module name within the system that generated the event, used for functional grouping and root cause analysis.",
+         "zone"
+      ],
+      [
+         "field_name",
+         "act | definition: Action performed by the module, used for operation-level event correlation.",
+         "add"
+      ],
+      [
+         "field_name",
+         "result | definition: Numeric result or status code of the action, used for success/failure analysis and error tracking.",
+         "0"
+      ],
+      [
+         "field_name",
+         "cmd | definition: Command or operation identifier associated with the event, used for command-level audit and activity grouping.",
+         "add_seczone"
+      ],
+      [
+         "field_name",
+         "user | definition: Username associated with the event, used for user activity tracking and privilege auditing.",
+         "administrator"
+      ],
+      [
+         "field_name",
+         "dsp_msg | definition: Display message providing a human-readable description of the event, may contain additional key=value pairs for detailed alignment.",
+         "seczone name zone ifset"
+      ],
+      [
+         "field_name",
+         "fwlog | definition: Numeric flag indicating whether the event is a firewall log, used for log type classification and filtering.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier within the themis system, useful for entity alignment and device-specific grouping.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the logged event, critical for temporal event correlation and session grouping.",
+         "2017/08/29 17:33:54"
+      ],
+      [
+         "dname",
+         "Device name or type tag, used for source identification and log source alignment.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type of log, enabling log category filtering and classification.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event, useful for severity-based alerting and event triage.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software version identifier (nested as ver within a broader string), aiding in version-based correlation and system lineage tracking.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the event origin, essential for network linkage and origin-based grouping.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name within the themis system, enabling process lineage and module-level tracking.",
+         "zone"
+      ],
+      [
+         "act",
+         "Action performed (e.g., set, del, 添加), critical for event correlation and operation sequence analysis.",
+         "set"
+      ],
+      [
+         "result",
+         "Numeric result code indicating success or failure of the action, used for outcome-based filtering and error analysis.",
+         "0"
+      ],
+      [
+         "cmd",
+         "Command executed, useful for session grouping and command lineage tracking.",
+         "zone"
+      ],
+      [
+         "user",
+         "Username associated with the event, enabling user-specific session grouping and audit trail analysis.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "User-facing display message containing operation details, usable for extracting additional event context and nested field parsing.",
+         "ifset eth1,eth3"
+      ],
+      [
+         "fwlog",
+         "Flag or indicator related to firewall logging, used for log type discrimination and correlation with firewall events.",
+         "0"
+      ]
+   ]
+]

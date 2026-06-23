@@ -1,0 +1,345 @@
+[
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "comm": "process_name"
+        },
+        [
+            "apparmor",
+            "operation",
+            "info",
+            "profile",
+            "name"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "op"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "type",
+            "op",
+            "hostname"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "op": "event_type",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "op": "event_type",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "type",
+            "msg"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "op"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "old_auid": "auid",
+            "auid": "auid",
+            "tty": "tty",
+            "old_ses": "session_id",
+            "ses": "session_id",
+            "res": "outcome"
+        },
+        []
+    ],
+    [
+        {
+            "proctitle": "process_title"
+        },
+        [
+            "type"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "comm": "process_name",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "unit"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "comm": "process_name",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "unit"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "syscall": "syscall",
+            "success": "outcome",
+            "ppid": "ppid",
+            "pid": "pid",
+            "auid": "auid",
+            "uid": "uid",
+            "tty": "tty",
+            "ses": "session_id",
+            "comm": "process_name",
+            "exe": "process_exe"
+        },
+        [
+            "arch",
+            "exit",
+            "a0",
+            "a1",
+            "a2",
+            "a3",
+            "items",
+            "gid",
+            "euid",
+            "suid",
+            "fsuid",
+            "egid",
+            "sgid",
+            "fsgid",
+            "key"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "op"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "op"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "cwd": "cwd",
+            "cmd": "command",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "type"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "op"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "op",
+            "hostname"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "id": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg",
+            "op"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "acct": "user",
+            "exe": "process_exe",
+            "hostname": "src_hostname",
+            "addr": "src_ip",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "op"
+        ]
+    ],
+    [
+        {
+            "type": "event_type",
+            "pid": "pid",
+            "uid": "uid",
+            "auid": "auid",
+            "ses": "session_id",
+            "op": "event_type",
+            "acct": "user",
+            "exe": "process_exe",
+            "terminal": "terminal",
+            "res": "outcome"
+        },
+        [
+            "msg"
+        ]
+    ]
+]

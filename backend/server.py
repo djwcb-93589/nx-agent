@@ -102,6 +102,46 @@ KG_INPUT_RULES = (
         "relation_sources": ("dns_relation.csv",),
     },
     {
+        "fragment": Path("firewallexamplae/2.1.1.1/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
+        "fragment": Path("firewallexamplae/2.1.2.1/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
+        "fragment": Path("firewallexamplae/2.5.1/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
+        "fragment": Path("firewallexamplae/2.5.6/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
+        "fragment": Path("firewallexamplae/2.5.7/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
         "fragment": Path("vpn/logs/openvpn/3.csv"),
         "family": "vpn",
         "poi_targets": ("vpn_POI v2.csv",),
@@ -298,6 +338,8 @@ def _canonical_schema_path(source: str, kind: str) -> Path | None:
         family = "openvpn"
     elif "dnsmasq" in source_lower or "dns" in source_lower:
         family = "dns"
+    elif "firewallexamplae" in source_lower or "firewallexample" in source_lower:
+        family = "firewall"
     elif "auth" in source_lower:
         family = "auth"
     elif "apache" in source_lower:

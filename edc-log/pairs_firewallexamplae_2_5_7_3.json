@@ -1,0 +1,203 @@
+[
+   [
+      [
+         "devid",
+         "The device identifier for the source device generating the log.",
+         "0"
+      ],
+      [
+         "date",
+         "The timestamp of the logged event.",
+         "2012/02/16 15:01:03"
+      ],
+      [
+         "dname",
+         "The device name or hostname of the logging device.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "The numeric category or type of the log event.",
+         "9"
+      ],
+      [
+         "pri",
+         "The priority or severity level of the log.",
+         "5"
+      ],
+      [
+         "ver",
+         "The software or firmware version of the logging system.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "The source IP address of the event or device.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "The module or subsystem within the Themis tunnel generating the log.",
+         "blacklist"
+      ],
+      [
+         "act",
+         "The action or operation performed.",
+         "show"
+      ],
+      [
+         "result",
+         "The result code or status of the action.",
+         "0"
+      ],
+      [
+         "user",
+         "The username or account identity executing the operation.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "The display message containing a human-readable description of the event.",
+         "show blacklist"
+      ],
+      [
+         "fwlog",
+         "The firewall log index or reference number.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the event",
+         "2012/02/16 14:56:51"
+      ],
+      [
+         "dname",
+         "Display name of the device or application",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Type of log entry",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level",
+         "5"
+      ],
+      [
+         "ver",
+         "Version identifier",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name",
+         "黑名单"
+      ],
+      [
+         "act",
+         "Action performed",
+         "添加"
+      ],
+      [
+         "result",
+         "Outcome or status of the action",
+         "成功"
+      ],
+      [
+         "user",
+         "Username responsible for the event",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message containing event details",
+         "添加黑名单，ip 为 1.1.1.1"
+      ],
+      [
+         "fwlog",
+         "Firewall log flag or indicator",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the network device generating the log, useful for device-level grouping and entity identification.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp indicating when the log event occurred, crucial for temporal alignment and event sequencing.",
+         "2012/02/16 14:56:51"
+      ],
+      [
+         "dname",
+         "Device name, providing a human-readable identifier for the source device to support entity alignment.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric log type indicator, used for event categorization and filtering during log correlation.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event, supporting severity-based filtering and incident prioritization.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software or protocol version string, useful for matching logs from compatible systems and tracking version changes.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address identifying the origin of the traffic or request, key for network linkage and threat attribution.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or feature name (e.g., blacklist), enabling module-specific event grouping and analysis.",
+         "黑名单"
+      ],
+      [
+         "act",
+         "Action performed (e.g., display, restore), providing the operation type for process lineage and event correlation.",
+         "显示"
+      ],
+      [
+         "result",
+         "Outcome of the action, indicating success or failure for event completion tracking.",
+         "成功"
+      ],
+      [
+         "user",
+         "Username of the account performing the action, essential for user activity tracing and access auditing.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Human-readable display message providing additional context about the event, useful for log enrichment and investigation.",
+         "显示黑名单"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator or related flag, supporting firewall event correlation and linkage.",
+         "0"
+      ]
+   ]
+]

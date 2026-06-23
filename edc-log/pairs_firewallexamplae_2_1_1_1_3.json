@@ -1,0 +1,161 @@
+[
+   [
+      [
+         "devid",
+         "Device identifier for the source logging device.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp indicating when the event occurred.",
+         "2013/05/21 09:53:17"
+      ],
+      [
+         "dname",
+         "Device name or hostname of the logging device.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type of log.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log event.",
+         "6"
+      ],
+      [
+         "ver",
+         "Version of the log format or component.",
+         "0.3.0"
+      ],
+      [
+         "mod",
+         "Module or subsystem generating the log.",
+         "webui"
+      ],
+      [
+         "from",
+         "Source IP address from which the request originated.",
+         "10.1.5.200"
+      ],
+      [
+         "agent",
+         "User-agent string identifying the client application.",
+         "Mozilla/5.0"
+      ],
+      [
+         "admin",
+         "Username of the administrator performing the action.",
+         "administrator"
+      ],
+      [
+         "act",
+         "Action performed, often in the local language.",
+         "登录"
+      ],
+      [
+         "result",
+         "Numeric result code indicating success or failure of the action.",
+         "0"
+      ],
+      [
+         "msg",
+         "Message payload containing descriptive result text.",
+         "成功"
+      ],
+      [
+         "dsp_msg",
+         "Display message providing additional context about the event.",
+         "administrator 登录"
+      ],
+      [
+         "fwlog",
+         "Flag indicating whether the log is a firewall log.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the source system.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the event as recorded by the device.",
+         "2013/05/21 09:50:37"
+      ],
+      [
+         "dname",
+         "Device name or hostname of the logging system.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric type or category of the log event.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log.",
+         "6"
+      ],
+      [
+         "ver",
+         "Software or firmware version of the component generating the log.",
+         "0.3.0"
+      ],
+      [
+         "mod",
+         "Module or subsystem name within the application.",
+         "webui"
+      ],
+      [
+         "from",
+         "Source IP address of the request or client.",
+         "10.1.5.200"
+      ],
+      [
+         "agent",
+         "User-Agent string identifying the client software.",
+         "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)"
+      ],
+      [
+         "admin",
+         "Administrative username performing the action.",
+         "administrator"
+      ],
+      [
+         "act",
+         "Action or operation being performed, useful for event correlation.",
+         "退出"
+      ],
+      [
+         "result",
+         "Numeric result code indicating success or failure of the action.",
+         "0"
+      ],
+      [
+         "dsp_msg",
+         "Display message summarizing the action outcome in a human-readable form.",
+         "administrator 退出"
+      ],
+      [
+         "fwlog",
+         "Flag indicating whether the log entry pertains to firewall logging.",
+         "0"
+      ],
+      [
+         "msg_inner_成功",
+         "Indicator of successful operation, extracted from the nested payload in the msg field.",
+         "成功"
+      ],
+      [
+         "msg_inner_总共在线时间",
+         "Duration of the session in seconds, extracted from the nested payload in the msg field.",
+         "1439 秒"
+      ]
+   ]
+]

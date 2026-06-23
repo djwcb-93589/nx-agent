@@ -1,0 +1,2748 @@
+[
+   [
+      [
+         "devid",
+         "Device identifier for log source identification",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event for event temporal alignment",
+         "2012/03/01 14:33:01"
+      ],
+      [
+         "dname",
+         "Device or application name for source entity identification",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric log type for event classification",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log event",
+         "5"
+      ],
+      [
+         "ver",
+         "Software version for application lineage",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address for network entity alignment",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module name where the action occurred for process lineage",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed for event correlation",
+         "删除"
+      ],
+      [
+         "id",
+         "Identifier of the affected object for entity alignment",
+         "8"
+      ],
+      [
+         "user",
+         "Username who performed the action for session grouping",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message describing the action for event content alignment",
+         "删除了一条规则"
+      ],
+      [
+         "result",
+         "Outcome of the action for event correlation",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log flag for network event classification",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier, useful for correlating logs from the same device.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the logged event, used for chronological alignment and session grouping.",
+         "2012/03/01 10:00:00"
+      ],
+      [
+         "dname",
+         "Device or application name, useful for source identification.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric log type code, enabling event type classification.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log, for event correlation and filtering.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software or protocol version, for system lineage and compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address, enabling network linkage and origin identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name, for process lineage and system segmentation.",
+         "fc"
+      ],
+      [
+         "act",
+         "Action or operation performed, key for event correlation and activity tracking.",
+         "删除"
+      ],
+      [
+         "result",
+         "Result code indicating success or failure of the action, for event outcome alignment.",
+         "0"
+      ],
+      [
+         "user",
+         "Username or user identifier, for user-centric event grouping and lineage.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message containing a human-readable description, useful for event context alignment.",
+         "删除虚拟线路:1"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator, identifying firewall-related entries for network security correlation.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "The device identifier for the specific firewall component generating the log, enabling device-level alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event, formatted as YYYY/MM/DD HH:MM:SS, crucial for temporal alignment and event sequencing.",
+         "2012/03/01 10:00:00"
+      ],
+      [
+         "dname",
+         "The device name, typically constant as \"themis\", used for device family identification and grouping.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric type code for the log category, enabling log-type classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event, indicating severity for event correlation and prioritization.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software version of the component (e.g., 0.3.0), supporting version-based alignment and compatibility checks.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address (e.g., 1.1.1.1), used for network-level entity alignment and source identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name (e.g., fc), enabling module-level grouping and event correlation.",
+         "fc"
+      ],
+      [
+         "act",
+         "Action performed (e.g., set, add, del), central to event classification and process lineage tracking.",
+         "set"
+      ],
+      [
+         "result",
+         "Result code of the action (0 indicates success), used for outcome-based alignment and error detection.",
+         "0"
+      ],
+      [
+         "user",
+         "User account involved in the event (e.g., administrator), enabling user-level entity alignment and access correlation.",
+         "administrator"
+      ],
+      [
+         "vpipe",
+         "Virtual pipe identifier extracted from the dsp_msg payload, enabling session and connection-level correlation.",
+         "1"
+      ],
+      [
+         "fwlog",
+         "Firewall log flag (0 or 1), indicating whether the event is a firewall log for filtering and routing alignment.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier, used to correlate logs from specific network devices or components",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in \"YYYY/MM/DD HH:MM:SS\" format, useful for temporal ordering and session grouping",
+         "2012/03/01 14:35:25"
+      ],
+      [
+         "dname",
+         "Log source daemon or process name, aiding in event source identification",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type or category of log event",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log, useful for filtering by severity",
+         "5"
+      ],
+      [
+         "ver",
+         "Software or schema version of the log format, enabling version-aware parsing",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the entity generating the log, critical for network linkage",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or subsystem originating the log event, useful for process lineage",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed or triggered by the rule or event, useful for event correlation",
+         "add"
+      ],
+      [
+         "policy",
+         "Identifier or name of the policy being applied, enabling policy-to-log alignment",
+         "55"
+      ],
+      [
+         "id",
+         "Unique identifier for the specific rule or log entry, useful for deduplication and entity alignment",
+         "9"
+      ],
+      [
+         "sa",
+         "Source address (any or specific IP) for network rule matching, used for network linkage",
+         "any"
+      ],
+      [
+         "da",
+         "Destination address (any or specific IP) for network rule matching, used for network linkage",
+         "any"
+      ],
+      [
+         "iif",
+         "Ingress interface of the traffic, aiding in topology and flow analysis",
+         "any"
+      ],
+      [
+         "oif",
+         "Egress interface of the traffic, aiding in topology and flow analysis",
+         "any"
+      ],
+      [
+         "service",
+         "Network service or protocol matched by the rule, aiding in service identification",
+         "any"
+      ],
+      [
+         "time",
+         "Time constraint or schedule associated with the policy, useful for temporal correlation",
+         null
+      ],
+      [
+         "dcf",
+         "Data classification flag or policy ID",
+         "0"
+      ],
+      [
+         "avpolicy",
+         "Anti-virus policy identifier, useful for security policy alignment",
+         "0"
+      ],
+      [
+         "ipspolicy",
+         "Intrusion prevention system policy identifier, useful for security policy alignment",
+         "0"
+      ],
+      [
+         "pcpolicy",
+         "Policy control identifier",
+         "0"
+      ],
+      [
+         "eimpolicy",
+         "Endpoint integrity management policy identifier",
+         "0"
+      ],
+      [
+         "username",
+         "Username field, appears empty or absent, used for user-based correlation",
+         null
+      ],
+      [
+         "log",
+         "Logging status (on/off), indicating whether logging is enabled for the rule",
+         "off"
+      ],
+      [
+         "active",
+         "Rule active status (on/off), enabling event state correlation",
+         "on"
+      ],
+      [
+         "user",
+         "Administrative user who created or modified the rule, useful for user attribution",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Human-readable description of the action performed, helpful for event semantic understanding",
+         "add a rule of permit"
+      ],
+      [
+         "result",
+         "Numeric result or status code of the operation, useful for success/failure correlation",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log event indicator, used for log source identification",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the network appliance generating the log, used for entity alignment and device-specific grouping.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in the format \"YYYY/MM/DD HH:MM:SS\", used for event correlation and temporal sequencing.",
+         "2012/03/01 14:36:05"
+      ],
+      [
+         "dname",
+         "Log source or daemon name (e.g., Themis), used for system-level grouping and log type classification.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric identifier representing the log type or category, used for event classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log message, used for severity-based filtering and alert correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software or log format version number, used for compatibility checks and version-aware analysis.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the event origin, used for network connectivity mapping and threat attribution.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name involved in the event, used for process lineage and module-level correlation.",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed (e.g., set), used for event type classification and behavioral analysis.",
+         "set"
+      ],
+      [
+         "id",
+         "Numeric identifier for the rule or configuration object being modified, used for entity alignment across logs.",
+         "9"
+      ],
+      [
+         "avpolicy",
+         "Antivirus policy identifier, used for policy enforcement tracking and security events.",
+         "0"
+      ],
+      [
+         "ipspolicy",
+         "Intrusion prevention system policy identifier, used for threat defense policy mapping.",
+         "0"
+      ],
+      [
+         "pcpolicy",
+         "Policy control identifier (possibly for application or content control), used for policy audit trails.",
+         "0"
+      ],
+      [
+         "eimpolicy",
+         "Enhanced inspection and mitigation policy identifier, used for advanced threat protection correlation.",
+         "0"
+      ],
+      [
+         "log",
+         "Logging toggle state (on/off), used for operational status monitoring and configuration audits.",
+         "off"
+      ],
+      [
+         "user",
+         "User account name associated with the action, used for user-based session grouping and privilege escalation tracking.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message describing the action performed, used for event narrative and human-readable correlation.",
+         "set the rule"
+      ],
+      [
+         "result",
+         "Numeric result code of the operation, used for success/failure analysis and error correlation.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log event identifier or flag, used for network security event alignment.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the source log-generating device, used for device-level entity alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event, used for event correlation and chronological sequencing.",
+         "2012/03/01 14:32:12"
+      ],
+      [
+         "dname",
+         "Descriptive name of the device or log source, used for device identification and grouping.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type of log event, used for event classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log event, used for event triage and correlation.",
+         "5"
+      ],
+      [
+         "from",
+         "Source IP address of the event origin, used for network linkage and source identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name where the event occurred, used for process lineage and component tracking.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed in the event, used for event correlation and action-based grouping.",
+         "修改"
+      ],
+      [
+         "policy",
+         "Policy identifier associated with the event, used for policy-based grouping and event correlation.",
+         "55"
+      ],
+      [
+         "id",
+         "Unique identifier for the specific rule or event instance, used for entity alignment and deduplication.",
+         "8"
+      ],
+      [
+         "sport",
+         "Source port number for the network connection, used for network linkage and session identification.",
+         "999"
+      ],
+      [
+         "avpolicy",
+         "Antivirus policy identifier, used for policy-based grouping and security event correlation.",
+         "0"
+      ],
+      [
+         "ipspolicy",
+         "Intrusion prevention system policy identifier, used for policy-based grouping and security event correlation.",
+         "0"
+      ],
+      [
+         "pcpolicy",
+         "Policy identifier for PC-related rules, used for policy-based grouping and device-specific correlation.",
+         "0"
+      ],
+      [
+         "eimpolicy",
+         "Email inspection policy identifier, used for policy-based grouping and email security correlation.",
+         "0"
+      ],
+      [
+         "log",
+         "Logging status or configuration, used for auditing and event correlation.",
+         "关闭"
+      ],
+      [
+         "user",
+         "Username associated with the event, used for user-level entity alignment and session grouping.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message associated with the event, used for event description and correlation.",
+         "修改了规则"
+      ],
+      [
+         "result",
+         "Outcome or result of the action, used for event correlation and status tracking.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log identifier or flag, used for firewall-related event correlation and logging status.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the log source, useful for device-level correlation and grouping.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in \"YYYY/MM/DD HH:MM:SS\" format, enabling temporal alignment.",
+         "2012/03/01 14:31:07"
+      ],
+      [
+         "dname",
+         "Device or domain name associated with the log, used for source identification.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric log type code, classifying the event for category-based filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event, aiding in severity-based correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version number of the logging format, useful for schema compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address from which the log originated, enabling network-level linkage.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name involved in the event, for process lineage or module-level correlation.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed (e.g., add, delete), supporting event correlation and activity tracking.",
+         "添加"
+      ],
+      [
+         "policy",
+         "Policy identifier affected by the event, useful for policy-based grouping and compliance alignment.",
+         "55"
+      ],
+      [
+         "id",
+         "Event or rule identifier, enables unique event correlation across logs.",
+         "8"
+      ],
+      [
+         "sa",
+         "Source address (any or specific), for network traffic flow analysis.",
+         "any"
+      ],
+      [
+         "da",
+         "Destination address (any or specific), for network flow endpoint identification.",
+         "any"
+      ],
+      [
+         "iif",
+         "Input interface name where traffic entered, for network path or interface correlation.",
+         "eth1"
+      ],
+      [
+         "oif",
+         "Output interface name where traffic exited, for network routing analysis.",
+         "eth2"
+      ],
+      [
+         "service",
+         "Network service or protocol involved, for service-based event filtering.",
+         "http"
+      ],
+      [
+         "time",
+         "Time specification for policy activation (none if not set), for temporal policy alignment.",
+         null
+      ],
+      [
+         "dcf",
+         "Data classification flag or default value, for rule classification correlation.",
+         "0"
+      ],
+      [
+         "avpolicy",
+         "Antivirus policy identifier, for security policy linkage (when present).",
+         "0"
+      ],
+      [
+         "ipspolicy",
+         "Intrusion prevention system policy identifier, for IPS rule correlation.",
+         "0"
+      ],
+      [
+         "pcpolicy",
+         "Policy control identifier, for policy hierarchy alignment.",
+         "0"
+      ],
+      [
+         "eimpolicy",
+         "Endpoint integrity management policy identifier, for endpoint security alignment.",
+         "0"
+      ],
+      [
+         "username",
+         "User account associated with the event (may be empty), for user-based session grouping.",
+         ""
+      ],
+      [
+         "log",
+         "Logging status (e.g., 关闭 meaning closed), indicating logging configuration.",
+         "关闭"
+      ],
+      [
+         "active",
+         "Rule or event active status (e.g., 开启 meaning enabled), for operational state correlation.",
+         "开启"
+      ],
+      [
+         "user",
+         "User account performing the action (quoted value), for user entity alignment.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Descriptive message explaining the event (quoted value), containing contextual detail for manual interpretation.",
+         "添加了类型为允许的包过滤规则"
+      ],
+      [
+         "result",
+         "Result or outcome of the event (e.g., 成功 meaning success), useful for result-based filtering.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log count or indicator, for firewall event tallying.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for network or security devices, used for device-level entity alignment",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the event indicating when the log was generated, used for temporal correlation",
+         "2012/03/01 15:04:05"
+      ],
+      [
+         "dname",
+         "Domain or device name, used for grouping or identifying the source system",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type of log, used for log classification and filtering",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the event, used for severity assessment and alert correlation",
+         "5"
+      ],
+      [
+         "ver",
+         "Version identifier of the rule or system component, used for compatibility and change tracking",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the event originator, used for network linkage and origin identification",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module name within the system where the event was generated, used for component-level alignment",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed or attempted in the event, used for event correlation and process lineage",
+         "set"
+      ],
+      [
+         "id",
+         "Rule or event identifier, used for unique event correlation across logs",
+         "9"
+      ],
+      [
+         "log",
+         "Logging status or mode (e.g., on/off), used for determining logging configuration",
+         "off"
+      ],
+      [
+         "user",
+         "Username or account identifier associated with the event, used for user entity alignment and session grouping",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message providing human-readable description of the event, used for event interpretation and correlation",
+         "set the rule"
+      ],
+      [
+         "result",
+         "Numeric or status code indicating the outcome of the event, used for success/failure correlation",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator (binary or flag), used for firewall-specific event grouping",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "device identifier for network or security appliance; useful for device-level grouping",
+         "0"
+      ],
+      [
+         "date",
+         "timestamp of the event; useful for temporal alignment and timeline reconstruction",
+         "2012/03/01 15:14:55"
+      ],
+      [
+         "dname",
+         "device or product name; useful for identifying source system",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "numeric log category or type; useful for event classification",
+         "9"
+      ],
+      [
+         "pri",
+         "priority or severity level; useful for event filtering and triage",
+         "5"
+      ],
+      [
+         "ver",
+         "version of the rule or software; useful for compatibility and change tracking",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "source IP address initiating the operation; useful for network entity alignment",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "module or service name involved; useful for component-level correlation",
+         "policy"
+      ],
+      [
+         "act",
+         "action performed (e.g., add, delete); useful for event type classification",
+         "add"
+      ],
+      [
+         "policy",
+         "policy identifier or rule number; useful for policy-level correlation",
+         "57"
+      ],
+      [
+         "id",
+         "internal rule or event identifier; useful for unique event tracking",
+         "9"
+      ],
+      [
+         "sa",
+         "source address or zone; useful for network path analysis",
+         "any"
+      ],
+      [
+         "sat",
+         "source address translation status; useful for NAT traversal analysis",
+         null
+      ],
+      [
+         "pa",
+         "destination address (payload address) or translated address; useful for endpoint identification",
+         "10.50.10.240"
+      ],
+      [
+         "ia",
+         "identity or authentication attribute; useful for user/entity linkage",
+         "aaa"
+      ],
+      [
+         "iif",
+         "input interface; useful for network path and topology mapping",
+         "any"
+      ],
+      [
+         "oif",
+         "output interface; useful for network path and topology mapping",
+         "any"
+      ],
+      [
+         "ps",
+         "protocol or service name for source; useful for application-layer correlation",
+         "http"
+      ],
+      [
+         "is",
+         "protocol or service name for destination; useful for application-layer correlation",
+         "http"
+      ],
+      [
+         "log",
+         "logging status (on/off); useful for understanding log generation configuration",
+         "off"
+      ],
+      [
+         "active",
+         "rule active status (on/off); useful for policy enforcement state",
+         "on"
+      ],
+      [
+         "user",
+         "user account or name; useful for user-to-entity attribution",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "human-readable message describing the event action; useful for event interpretation and cross-system description alignment",
+         "add a rule of portmap"
+      ],
+      [
+         "result",
+         "result code (0 for success); useful for outcome-based filtering",
+         "0"
+      ],
+      [
+         "fwlog",
+         "firewall log flag (0 or 1); useful for log source categorization",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "device identifier of the logging entity, used for device-specific log alignment",
+         "0"
+      ],
+      [
+         "date",
+         "timestamp when the event occurred, used for temporal correlation and session grouping",
+         "2012/03/01 15:32:08"
+      ],
+      [
+         "dname",
+         "device name or hostname of the log source, used for source identification",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "numeric code indicating the category or type of log, used for log classification",
+         "9"
+      ],
+      [
+         "pri",
+         "priority or severity level of the log, used for event prioritization",
+         "5"
+      ],
+      [
+         "ver",
+         "version of the logging rule or format, used for format version tracking",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "source IP address initiating the event, used for network linkage and origin identification",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "module or policy module name involved in the event, used for component-level event correlation",
+         "策略"
+      ],
+      [
+         "act",
+         "action performed by the rule or system, used for event action alignment",
+         "清除"
+      ],
+      [
+         "user",
+         "username or account associated with the event, used for user entity correlation and session grouping",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "display message providing a human-readable description of the event, used for semantic event understanding",
+         "清除了规则"
+      ],
+      [
+         "result",
+         "outcome or status of the action, used for success/failure tracking",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "firewall log related flag or identifier, used for firewall log linkage",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the source device generating the log.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of when the event occurred, useful for event correlation and temporal alignment.",
+         "2012/03/01 15:09:19"
+      ],
+      [
+         "dname",
+         "Static device or product name, often a constant for grouping logs by source.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the log type or category.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version string of the log format or product, useful for compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the originator or server.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name where the event occurred.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action or operation performed.",
+         "修改"
+      ],
+      [
+         "id",
+         "Unique identifier for the specific rule or entity involved.",
+         "9"
+      ],
+      [
+         "sat",
+         "Attribute or status field (likely short for satisfaction or satellite).",
+         null
+      ],
+      [
+         "log",
+         "Logging state or control setting.",
+         "关闭"
+      ],
+      [
+         "user",
+         "Username of the administrator or user performing the action.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message providing a human-readable description of the operation.",
+         "修改了规则"
+      ],
+      [
+         "result",
+         "Outcome or result of the action.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log flag or indicator.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "The device identifier in the log metadata",
+         "0"
+      ],
+      [
+         "date",
+         "The timestamp indicating when the event occurred",
+         "2012/03/01 14:53:02"
+      ],
+      [
+         "dname",
+         "The device or domain name associated with the log source",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "The type or category of the log event",
+         "9"
+      ],
+      [
+         "pri",
+         "The priority or severity level of the log",
+         "5"
+      ],
+      [
+         "ver",
+         "The version string of the log format",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "The source IP address or origin identifier",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "The module or component involved in the event",
+         "策略"
+      ],
+      [
+         "act",
+         "The action performed during the event",
+         "修改"
+      ],
+      [
+         "id",
+         "The unique identifier for the log entry or event",
+         "9"
+      ],
+      [
+         "log",
+         "A short code or indicator of the log action type",
+         "关闭"
+      ],
+      [
+         "user",
+         "The username or account identifier associated with the event",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "A display message describing the event outcome or detail",
+         "修改了规则"
+      ],
+      [
+         "result",
+         "The result or status of the action performed",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "A flag or indicator related to firewall logging",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the source device generating the log, useful for aligning logs from specific network devices.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of when the log event occurred, critical for temporal alignment and event sequencing.",
+         "2012/03/01 15:25:24"
+      ],
+      [
+         "dname",
+         "The product or daemon name (Themis), used to filter logs from a specific software component.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code indicating the type or category of the log event, enabling event-type grouping.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log message, used for filtering critical events.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version identifier of the log format or software, aiding in format compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the entity generating or forwarding the log, used for network origin identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or functional component of the system that produced the log, useful for process lineage alignment.",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed by the rule or system, enabling event correlation (e.g., add, delete).",
+         "add"
+      ],
+      [
+         "policy",
+         "Policy identifier or number that the log event relates to, facilitating policy-based grouping.",
+         "58"
+      ],
+      [
+         "id",
+         "Numeric identifier for the specific rule or entry, used for exact entity matching.",
+         "9"
+      ],
+      [
+         "sa",
+         "Source address or zone (e.g., \"any\") for network traffic matching, aiding in network linkage.",
+         "any"
+      ],
+      [
+         "sat",
+         "Source address translation type or value, used for NAT-related network path alignment.",
+         null
+      ],
+      [
+         "pa",
+         "Primary address or IP address involved in the rule, for network entity correlation.",
+         "10.50.10.240"
+      ],
+      [
+         "ia",
+         "Incoming interface or interface address, helpful for network topology alignment.",
+         "bbb"
+      ],
+      [
+         "iif",
+         "Ingress interface (e.g., \"any\"), used for network path and traffic flow alignment.",
+         "any"
+      ],
+      [
+         "oif",
+         "Egress interface (e.g., \"any\", \"eth1\"), used for network outbound path identification.",
+         "any"
+      ],
+      [
+         "log",
+         "Flag indicating whether logging is enabled (on/off), for log generation behavior analysis.",
+         "off"
+      ],
+      [
+         "active",
+         "Flag indicating whether the rule is active (on/off), used for rule state alignment.",
+         "on"
+      ],
+      [
+         "user",
+         "Username or administrative account that triggered or configured the rule, useful for user-entity correlation.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message containing a human-readable description of the rule action, enabling semantic event correlation.",
+         "add a rule of ipmap"
+      ],
+      [
+         "result",
+         "Numeric result code indicating success or failure of the rule action, for outcome alignment.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Flag indicating whether firewall logging is enabled (0/1), for log filtering alignment.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier used for device-level entity alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the event, used for temporal correlation and session grouping.",
+         "2012/03/01 15:25:33"
+      ],
+      [
+         "dname",
+         "Device name or product name, useful for vendor and device-type identification.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Log type code, used for event categorization and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log, used for event prioritization.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version string indicating the log format or software version, useful for compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address or origin identifier, used for network linkage and source entity alignment.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name involved in the event, used for component-level correlation.",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed (e.g., del), used for event type classification.",
+         "del"
+      ],
+      [
+         "id",
+         "Rule or object identifier, used for entity and rule alignment.",
+         "9"
+      ],
+      [
+         "user",
+         "Username or administrator account involved, used for user entity alignment.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message describing the action result or event details, used for event context.",
+         "del the rule"
+      ],
+      [
+         "result",
+         "Result code or status of the action, used for success/failure classification.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log reference or flag, used for cross-system log linkage.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "The device identifier associated with the log source, enabling device-level alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "The timestamp when the rule event occurred, critical for temporal correlation.",
+         "2012/03/01 15:25:29"
+      ],
+      [
+         "dname",
+         "The device or product name for log source identification.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "The category or type code of the log event for classifying event types.",
+         "9"
+      ],
+      [
+         "pri",
+         "The priority or severity level of the log event for filtering criticality.",
+         "5"
+      ],
+      [
+         "ver",
+         "The version string of the software or rule format, aiding compatibility alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "The source IP address or origin identifier of the event for network linkage.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "The module or policy section involved in the event for process lineage.",
+         "policy"
+      ],
+      [
+         "act",
+         "The action performed (e.g., set) for event correlation.",
+         "set"
+      ],
+      [
+         "id",
+         "The rule or policy identifier for session grouping.",
+         "9"
+      ],
+      [
+         "sat",
+         "The satisfaction or status field indicating rule condition state.",
+         null
+      ],
+      [
+         "log",
+         "The logging flag indicating whether logging is enabled or disabled.",
+         "off"
+      ],
+      [
+         "user",
+         "The username or account identifier involved in the event for entity alignment.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "A static display message describing the action taken, for event classification.",
+         "set the rule"
+      ],
+      [
+         "result",
+         "The result code or outcome of the rule action for event correlation.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "A firewall log flag or indicator for log type differentiation.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the source device generating the log, used for device-level entity alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp indicating when the event occurred, used for event correlation and temporal grouping.",
+         "2012/03/01 15:21:30"
+      ],
+      [
+         "dname",
+         "Product or module name of the logging system, used for system lineage identification.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the log category, used for log classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log entry, used for event severity correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version identifier of the log format or software, used for version alignment across systems.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the component generating the log, used for network entity linkage.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or sub-system name where the rule operation was performed, used for process lineage tracking.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed on the rule (e.g., add, delete, modify), used for event type correlation.",
+         "添加"
+      ],
+      [
+         "policy",
+         "Unique identifier or number of the policy being operated on, used for policy-level entity alignment.",
+         "58"
+      ],
+      [
+         "id",
+         "Internal identifier for the rule or log entry, used for session grouping and entity matching.",
+         "9"
+      ],
+      [
+         "sa",
+         "Source address or zone specification, used for network topology alignment.",
+         "any"
+      ],
+      [
+         "sat",
+         "Source address translated or mapped value, used for NAT and address mapping correlation.",
+         null
+      ],
+      [
+         "pa",
+         "Destination address after translation (post-address), used for network path analysis.",
+         "10.50.10.240"
+      ],
+      [
+         "ia",
+         "Translated or intermediate address, used for address translation tracking.",
+         "bbb"
+      ],
+      [
+         "iif",
+         "Ingress interface name, used for network flow path alignment.",
+         "any"
+      ],
+      [
+         "oif",
+         "Egress interface name, used for network flow path alignment.",
+         "any"
+      ],
+      [
+         "service",
+         "Service or protocol specification, used for service-level event correlation.",
+         "<*>"
+      ],
+      [
+         "log",
+         "Logging status or toggle (e.g., on/off, enabled/disabled), used for log configuration alignment.",
+         "关闭"
+      ],
+      [
+         "active",
+         "Rule activation status (e.g., enabled/disabled), used for rule lifecycle tracking.",
+         "开启"
+      ],
+      [
+         "user",
+         "Username of the administrator who performed the action, used for user entity alignment.",
+         "administrator"
+      ],
+      [
+         "dsp_msg",
+         "Display message containing human-readable description of the rule operation, used for event context correlation.",
+         "添加了类型为 IP 映射的规则"
+      ],
+      [
+         "result",
+         "Result status of the rule operation (e.g., success/failure), used for event outcome correlation.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Numeric indicator for firewall logging status or reference, used for firewall log entity alignment.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the network device generating the log, useful for network device alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in a quoted string format, essential for event correlation and temporal ordering.",
+         "2012/03/01 15:31:25"
+      ],
+      [
+         "dname",
+         "Name of the log source or application, used for source identification and alignment.",
+         "Themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type or category of log, useful for log classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event as a numeric value, used for event severity alignment.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version identifier of the log format or application, helpful for compatibility and format alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the logged event, used for network entity and traffic alignment.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name within the application that generated the event, useful for process lineage and module correlation.",
+         "policy"
+      ],
+      [
+         "act",
+         "Action taken or event type (e.g., clear), used for event classification and activity alignment.",
+         "clear"
+      ],
+      [
+         "user",
+         "Username associated with the event in a quoted string, used for user entity and session alignment.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Descriptive message string containing details of the event, may contain nested fields for further parsing.",
+         "clear the rule"
+      ],
+      [
+         "result",
+         "Numeric result or status code of the event, used for outcome and status alignment.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator or numeric code, used for firewall event and policy alignment.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the device generating the log",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp when the event occurred",
+         "2014/06/18 19:04:27"
+      ],
+      [
+         "dname",
+         "Device name or hostname",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code for the log type/category",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority or severity level of the log",
+         "6"
+      ],
+      [
+         "ver",
+         "Version of the logging format/software",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the log origin",
+         "1.1.1.1"
+      ],
+      [
+         "dsp_msg",
+         "Free-text message describing the rule action and resource",
+         "RULE RESOURCE: rule resource released"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator or flag",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Unique identifier for the device generating the log",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp indicating when the log event occurred",
+         "2014/06/18 18:55:39"
+      ],
+      [
+         "dname",
+         "Name of the device or system component",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code for the type of log event",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log message",
+         "5"
+      ],
+      [
+         "ver",
+         "Version of the software or log format",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the network traffic or event originator",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component within the system that triggered the event",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed by the rule or process",
+         "添加"
+      ],
+      [
+         "policy",
+         "Policy number or identifier associated with the event",
+         "62"
+      ],
+      [
+         "id",
+         "Identifier for the specific rule or log entry",
+         "5"
+      ],
+      [
+         "sa",
+         "Source address or source attribute; used for network or identity alignment",
+         null
+      ],
+      [
+         "da",
+         "Destination address or destination attribute; used for network or identity alignment",
+         null
+      ],
+      [
+         "iif",
+         "Ingress interface where traffic entered the system",
+         "any"
+      ],
+      [
+         "oif",
+         "Egress interface where traffic left the system",
+         "any"
+      ],
+      [
+         "service",
+         "Service or protocol name associated with the event",
+         null
+      ],
+      [
+         "log",
+         "Status or setting of logging for this event (e.g., on/off)",
+         "关闭"
+      ],
+      [
+         "active",
+         "Active state of the rule or session",
+         "开启"
+      ],
+      [
+         "user",
+         "User account name associated with the event action",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Human-readable message describing the event, may contain nested data",
+         "添加了类型为允许的 NAT 规则"
+      ],
+      [
+         "result",
+         "Outcome or result code of the action or operation",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log tracking identifier or flag",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier for the log source, used for entity alignment and source identification.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in \"YYYY/MM/DD HH:MM:SS\" format, used for temporal correlation and ordering.",
+         "2014/06/18 18:41:00"
+      ],
+      [
+         "dname",
+         "Device or domain name of the log source, used for entity alignment and source grouping.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type of log, used for event classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event, used for event severity assessment and triage.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version string of the log format or software, used for compatibility and format interpretation.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address or hostname of the network entity that generated or triggered the event, used for network linkage and origin identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name where the action occurred, used for process lineage and event categorization.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed (e.g., add, delete, modify), used for event correlation and change tracking.",
+         "添加"
+      ],
+      [
+         "policy",
+         "Policy identifier or rule number affected, used for policy alignment and rule-based grouping.",
+         "59"
+      ],
+      [
+         "id",
+         "Internal event or rule identifier, used for entity alignment and unique event linking.",
+         "5"
+      ],
+      [
+         "sa",
+         "Source address or source attribute, used for network path analysis and flow tracking.",
+         null
+      ],
+      [
+         "da",
+         "Destination address or destination attribute, used for network path analysis and flow tracking.",
+         null
+      ],
+      [
+         "iif",
+         "Input interface name or identifier, used for network topology and path analysis.",
+         "any"
+      ],
+      [
+         "oif",
+         "Output interface name or identifier, used for network topology and path analysis.",
+         "any"
+      ],
+      [
+         "service",
+         "Network service or protocol name (e.g., ftp, http), used for service identification and application-layer grouping.",
+         "ftp"
+      ],
+      [
+         "time",
+         "Time condition or schedule associated with the rule, used for policy timing analysis.",
+         "any"
+      ],
+      [
+         "log",
+         "Logging status or setting (e.g., 关闭 meaning disabled), used for log configuration alignment.",
+         "关闭"
+      ],
+      [
+         "active",
+         "Active status of the rule (e.g., 开启 meaning enabled), used for rule state tracking.",
+         "开启"
+      ],
+      [
+         "user",
+         "User account or identity that performed or triggered the action, used for user-centric event correlation and access control analysis.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Descriptive message containing the event details, parsed for nested key-value fields.",
+         "添加了类型为代理的规则"
+      ],
+      [
+         "result",
+         "Outcome or status of the action (e.g., 成功 meaning success), used for event outcome correlation.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log identifier or flag, used for firewall log linkage and event source differentiation.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the event",
+         "2014/06/18 18:39:36"
+      ],
+      [
+         "dname",
+         "Device or daemon name",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Type of log entry",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log",
+         "5"
+      ],
+      [
+         "ver",
+         "Version of the log format or application",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the event",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed",
+         "add"
+      ],
+      [
+         "policy",
+         "Policy identifier",
+         "50"
+      ],
+      [
+         "id",
+         "Rule identifier",
+         "5"
+      ],
+      [
+         "sa",
+         "Source address (IP or MAC)",
+         null
+      ],
+      [
+         "da",
+         "Destination address (IP or MAC)",
+         null
+      ],
+      [
+         "izone",
+         "Ingress security zone",
+         null
+      ],
+      [
+         "ozone",
+         "Egress security zone",
+         null
+      ],
+      [
+         "service",
+         "Network service or protocol",
+         null
+      ],
+      [
+         "time",
+         "Time specification for the rule",
+         "any"
+      ],
+      [
+         "log",
+         "Log action or state (e.g., enabled/disabled)",
+         "关闭"
+      ],
+      [
+         "active",
+         "Rule activation state",
+         "开启"
+      ],
+      [
+         "user",
+         "User name or identity",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Display message description",
+         "add a rule of deny"
+      ],
+      [
+         "result",
+         "Result code or status",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log identifier or flag",
+         "0"
+      ]
+   ],
+   [
+      [
+         "field_name",
+         "devid",
+         "0"
+      ],
+      [
+         "field_name",
+         "date",
+         "2014/06/18 18:56:42"
+      ],
+      [
+         "field_name",
+         "dname",
+         "themis"
+      ],
+      [
+         "field_name",
+         "logtype",
+         "9"
+      ],
+      [
+         "field_name",
+         "pri",
+         "5"
+      ],
+      [
+         "field_name",
+         "ver",
+         "0.3.0"
+      ],
+      [
+         "field_name",
+         "from",
+         "1.1.1.1"
+      ],
+      [
+         "field_name",
+         "mod",
+         "policy"
+      ],
+      [
+         "field_name",
+         "act",
+         "添加"
+      ],
+      [
+         "field_name",
+         "policy",
+         "57"
+      ],
+      [
+         "field_name",
+         "id",
+         "5"
+      ],
+      [
+         "field_name",
+         "sa",
+         ""
+      ],
+      [
+         "field_name",
+         "pa",
+         "10.1.6.254"
+      ],
+      [
+         "field_name",
+         "iif",
+         "any"
+      ],
+      [
+         "field_name",
+         "ps",
+         "ftp"
+      ],
+      [
+         "field_name",
+         "log",
+         "关闭"
+      ],
+      [
+         "field_name",
+         "active",
+         "开启"
+      ],
+      [
+         "field_name",
+         "user",
+         "root"
+      ],
+      [
+         "field_name",
+         "dsp_msg",
+         "添加了类型为允许的端口映射规则"
+      ],
+      [
+         "field_name",
+         "result",
+         "成功"
+      ],
+      [
+         "field_name",
+         "fwlog",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "device identifier for the log source",
+         "0"
+      ],
+      [
+         "date",
+         "timestamp of the log event",
+         "2014/06/18 19:05:20"
+      ],
+      [
+         "dname",
+         "device or daemon name generating the log",
+         "themis"
+      ],
+      [
+         "logtype",
+         "numeric code representing the type of log",
+         "9"
+      ],
+      [
+         "pri",
+         "priority or severity level of the log",
+         "5"
+      ],
+      [
+         "ver",
+         "version of the logging format or software",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "source IP address of the event or origin",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "module or component within the system",
+         "策略"
+      ],
+      [
+         "act",
+         "action performed by the module",
+         "批量加载"
+      ],
+      [
+         "user",
+         "user account associated with the action",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "display message containing key-value fields when parseable",
+         "批量加载 ipv4 规则"
+      ],
+      [
+         "result",
+         "outcome of the action",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "flag or indicator for firewall log association",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier, used to identify the source device for log origin correlation.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event, crucial for temporal alignment and event sequencing.",
+         "2014/06/18 19:02:04"
+      ],
+      [
+         "dname",
+         "Fixed log source name, used for identifying the logging system or component.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric log type code, used to filter or categorize log events for alignment.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log, used for severity-based grouping and correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "Software version identifier, useful for compatibility and system lineage alignment.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the event originator, used for network linkage and source identification.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module name involved in the event, used for component-level event correlation.",
+         "policy"
+      ],
+      [
+         "act",
+         "Action performed (e.g., add, delete), used for event type classification and process lineage.",
+         "add"
+      ],
+      [
+         "policy",
+         "Policy identifier, used for configuration or rule-based event grouping.",
+         "104"
+      ],
+      [
+         "id",
+         "Unique identifier for the rule or object, used for entity alignment.",
+         "6"
+      ],
+      [
+         "sa",
+         "Source address field (empty here), used for network flow alignment.",
+         null
+      ],
+      [
+         "sport",
+         "Source port, used for network session correlation (value is \"none\" here).",
+         null
+      ],
+      [
+         "da",
+         "Destination address field (empty here), used for network flow alignment.",
+         null
+      ],
+      [
+         "iif",
+         "Input interface, used for network path or interface-based grouping.",
+         "any"
+      ],
+      [
+         "oif",
+         "Output interface, used for network path or interface-based grouping.",
+         "any"
+      ],
+      [
+         "service",
+         "Service name or protocol, used for service-level event correlation.",
+         null
+      ],
+      [
+         "time",
+         "Time condition or schedule associated with the rule, used for temporal rule alignment.",
+         "any"
+      ],
+      [
+         "active",
+         "Activation status of the rule (Chinese \"开启\" means \"enabled\"), used for rule lifecycle tracking.",
+         "开启"
+      ],
+      [
+         "user",
+         "User account name involved in the action, used for user identity and access alignment.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Descriptive message payload containing human-readable event details, used for event intent and context alignment.",
+         "add a rule of psa"
+      ],
+      [
+         "result",
+         "Result code of the operation (0 typically means success), used for outcome-based correlation.",
+         "0"
+      ],
+      [
+         "fwlog",
+         "Firewall log indicator (0 or 1), used for filtering or marking firewall-related events.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "The device identifier for the source device in the log, enabling device-level entity alignment and grouping.",
+         "0"
+      ],
+      [
+         "date",
+         "The timestamp when the event occurred, crucial for temporal alignment and event sequencing.",
+         "2014/06/18 18:58:45"
+      ],
+      [
+         "dname",
+         "The daemon or program name generating the log, useful for process lineage and source identification.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "The numeric log type code, enabling classification and categorization of log events.",
+         "9"
+      ],
+      [
+         "pri",
+         "The priority level of the log message, used for event severity correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "The version of the log format or rule set, supporting format evolution tracking.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "The source IP address from which the log or rule originates, enabling network linkage and source localization.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "The module or component name involved in the rule action, useful for event correlation and system component mapping.",
+         "策略"
+      ],
+      [
+         "act",
+         "The action performed (e.g., add, delete, modify), crucial for event correlation and operation type alignment.",
+         "添加"
+      ],
+      [
+         "policy",
+         "The policy identifier or number being applied or referenced, enabling policy grouping and rule association.",
+         "101"
+      ],
+      [
+         "id",
+         "The identifier of the rule or entry within the system, used for entity matching and session grouping.",
+         "5"
+      ],
+      [
+         "sa",
+         "The source address field in the rule, used for network linkage and traffic direction alignment.",
+         null
+      ],
+      [
+         "da",
+         "The destination address field in the rule, enabling network path correlation.",
+         null
+      ],
+      [
+         "iif",
+         "The incoming interface for the rule, used for network interface alignment and traffic routing.",
+         "any"
+      ],
+      [
+         "oif",
+         "The outgoing interface for the rule, used for egress traffic path identification.",
+         "any"
+      ],
+      [
+         "service",
+         "The network service or protocol specified in the rule, enabling service-level alignment.",
+         null
+      ],
+      [
+         "time",
+         "The time condition or schedule associated with the rule, useful for time-based policy matching.",
+         "any"
+      ],
+      [
+         "active",
+         "The activation status of the rule (e.g., enabled/disabled), used for rule state alignment.",
+         "开启"
+      ],
+      [
+         "user",
+         "The user account performing or associated with the rule action, enabling user identity correlation.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "The display message describing the rule operation or content, containing event description for semantic alignment.",
+         "添加了类型为主动防御的规则"
+      ],
+      [
+         "result",
+         "The outcome status of the operation (e.g., success/failure), used for event outcome correlation.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "The firewall log identifier or flag associated with the rule, enabling firewall log linkage.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "The device identifier from which the log originated, used for device-level alignment and filtering.",
+         "0"
+      ],
+      [
+         "date",
+         "The timestamp of the log event, crucial for temporal correlation and event ordering.",
+         "2014/06/18 18:44:49"
+      ],
+      [
+         "dname",
+         "The device name constant (themis), used for source identification and log type classification.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "The numeric type code of the log entry, used for log category filtering and event type grouping.",
+         "9"
+      ],
+      [
+         "pri",
+         "The priority or severity level of the log, used for alerting and triage.",
+         "5"
+      ],
+      [
+         "ver",
+         "The version identifier of the log format or rule schema, used for format compatibility and parser selection.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "The source IP address or origin identifier of the log or network entity, used for network linkage and source attribution.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "The module or category of the rule (e.g., 策略 for policy), used for policy type grouping and event classification.",
+         "策略"
+      ],
+      [
+         "act",
+         "The action taken (e.g., 添加 for add), used for event action identification and behavioral analysis.",
+         "添加"
+      ],
+      [
+         "policy",
+         "The policy identifier or rule number, used for policy-specific correlation and rule-based grouping.",
+         "57"
+      ],
+      [
+         "id",
+         "The unique identifier of the rule or entity, used for entity alignment and cross-referencing.",
+         "5"
+      ],
+      [
+         "sa",
+         "The source address or source identifier (often empty), used for source entity mapping in network flows.",
+         null
+      ],
+      [
+         "sat",
+         "The source address type or status (e.g., none), used for source attribute classification.",
+         null
+      ],
+      [
+         "pa",
+         "The post-address or destination IP after translation (e.g., 10.1.6.254), used for network path and NAT tracking.",
+         "10.1.6.254"
+      ],
+      [
+         "ia",
+         "The internal address or source host identifier (e.g., test_pc), used for internal host mapping and session grouping.",
+         "test_pc"
+      ],
+      [
+         "iif",
+         "The input interface (constant any), used for network interface association.",
+         "any"
+      ],
+      [
+         "oif",
+         "The output interface (constant any), used for network interface association.",
+         "any"
+      ],
+      [
+         "ps",
+         "The protocol or service name for the source (e.g., ftp), used for protocol-level grouping and service identification.",
+         "ftp"
+      ],
+      [
+         "is",
+         "The protocol or service name for the internal side (e.g., ftp), used for internal service correlation.",
+         "ftp"
+      ],
+      [
+         "log",
+         "The log switch setting (e.g., 关闭 for off), used for logging policy analysis and audit configuration.",
+         "关闭"
+      ],
+      [
+         "active",
+         "The active status of the rule (e.g., 开启 for enabled), used for rule lifecycle tracking and configuration alignment.",
+         "开启"
+      ],
+      [
+         "user",
+         "The user account that performed or owns the rule (e.g., root), used for user-based access control and accountability.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "The human-readable description of the action or rule change, used for semantic analysis and event description extraction.",
+         "添加了类型为端口映射的规则"
+      ],
+      [
+         "result",
+         "The outcome or result of the action (e.g., 成功 for success), used for success/failure analysis and event outcome classification.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "The firewall log identifier or flag, used for firewall log linking and event correlation.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier from which the log was generated, useful for device-level grouping and source alignment.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event, essential for temporal correlation and event sequencing.",
+         "2014/06/18 18:41:55"
+      ],
+      [
+         "dname",
+         "Device name constant, used for log family identification.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric type code of the log, useful for event type classification.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log entry, used for severity filtering.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version string of the log format, aiding format compatibility checks.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address of the device or management server that generated the log, useful for network-source alignment.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or component name within the device that generated the log, used for process/sub-system grouping.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action or operation performed, enabling event correlation by activity.",
+         "添加"
+      ],
+      [
+         "policy",
+         "Policy identifier associated with the event, useful for policy-level grouping and compliance tracking.",
+         "56"
+      ],
+      [
+         "id",
+         "Internal rule or reference ID, used for entity identification and linking.",
+         "5"
+      ],
+      [
+         "sa",
+         "Source address or entity name involved in the policy, useful for network/entity alignment.",
+         "dev_pc"
+      ],
+      [
+         "sat",
+         "Source address translation or associated IP, aiding network mapping.",
+         "10.50.10.43"
+      ],
+      [
+         "pa",
+         "Destination address or translated address in the policy, useful for network path correlation.",
+         null
+      ],
+      [
+         "ia",
+         "Destination interface or address name for the rule, used for interface-level alignment.",
+         null
+      ],
+      [
+         "iif",
+         "Ingress interface, set to \"any\" when not specified, helpful for traffic path analysis.",
+         "any"
+      ],
+      [
+         "oif",
+         "Egress interface, set to \"any\" when not specified, helpful for traffic path analysis.",
+         "any"
+      ],
+      [
+         "service",
+         "Service or protocol identifier (empty when not specified), used for service-level event correlation.",
+         null
+      ],
+      [
+         "log",
+         "Logging state (e.g., 关闭 for disabled), used for operational status alignment.",
+         "关闭"
+      ],
+      [
+         "active",
+         "Rule activation state (e.g., 开启 for enabled), useful for policy enforcement tracking.",
+         "开启"
+      ],
+      [
+         "user",
+         "User account that triggered or owns the rule, used for user-to-action alignment.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Display message containing a textual description of the action, often embedding nested operational details for event understanding.",
+         "添加了类型为 NAT 的规则"
+      ],
+      [
+         "result",
+         "Outcome of the operation (e.g., 成功 for success), used for event result correlation.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log toggle flag, used to indicate whether the rule generates firewall logs.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "devid",
+         "Device identifier from which the log originated; useful for correlating logs from the same network device.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp when the rule was created or the log was generated; critical for temporal ordering and alignment across logs.",
+         "2014/06/18 18:54:46"
+      ],
+      [
+         "dname",
+         "The daemon or process name generating the log; helps in grouping logs by software component.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric type code indicating the category or severity of the log; used for filtering and classification.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log; aids in filtering by importance for event correlation.",
+         "5"
+      ],
+      [
+         "ver",
+         "Version string of the rule or system; useful for compatibility checks and change tracking.",
+         "0.3.0"
+      ],
+      [
+         "from",
+         "Source IP address indicating the origin of the rule or packet; essential for network path alignment.",
+         "1.1.1.1"
+      ],
+      [
+         "mod",
+         "Module or functional area of the system (e.g., 策略 means policy); aligns logs to the same subsystem.",
+         "策略"
+      ],
+      [
+         "act",
+         "Action performed (e.g., 添加 means add); links events to specific operations for activity tracking.",
+         "添加"
+      ],
+      [
+         "policy",
+         "Identifier of the policy being modified or applied; groups related policy changes.",
+         "61"
+      ],
+      [
+         "id",
+         "Numeric identifier for the specific rule or log entry; enables exact event matching.",
+         "5"
+      ],
+      [
+         "sa",
+         "Source address, possibly empty, for network rules; used in session-based correlation.",
+         null
+      ],
+      [
+         "da",
+         "Destination address, possibly empty, for network rules; used in session-based correlation.",
+         null
+      ],
+      [
+         "iif",
+         "Input interface of the network traffic or rule (e.g., any matches all); aids in network topology alignment.",
+         "any"
+      ],
+      [
+         "oif",
+         "Output interface of the network traffic or rule; aids in network topology alignment.",
+         "any"
+      ],
+      [
+         "service",
+         "Service or application protocol associated with the rule; helps align events by network service.",
+         null
+      ],
+      [
+         "log",
+         "Setting for whether logging is enabled (e.g., 关闭 means off); indicates monitoring state.",
+         "关闭"
+      ],
+      [
+         "active",
+         "Status indicating if the rule is enabled (e.g., 开启 means on); used for rule life-cycle tracking.",
+         "开启"
+      ],
+      [
+         "user",
+         "User account that performed or owns the rule; critical for user-to-activity alignment.",
+         "root"
+      ],
+      [
+         "dsp_msg",
+         "Human-readable descriptive message explaining the rule action; allows for semantic grouping of similar events.",
+         "添加了类型为伪装的规则"
+      ],
+      [
+         "result",
+         "Outcome status of the operation (e.g., 成功 means success); used for success/failure correlation.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Firewall log identifier, typically a numeric flag; links related firewall log entries.",
+         "0"
+      ]
+   ]
+]

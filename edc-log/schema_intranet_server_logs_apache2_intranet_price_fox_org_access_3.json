@@ -1,0 +1,124 @@
+[
+    [
+        {
+            "src_ip": "src_ip",
+            "http_method": "event_action",
+            "uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "bytes_sent": "bytes_sent",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "http_method": "event_action",
+            "http_uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "response_size": "bytes_sent",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "http_method": "event_action",
+            "uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "response_size": "bytes_sent",
+            "referer": "referer",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "ip": "src_ip",
+            "http_method": "event_action",
+            "uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "bytes_sent": "bytes_sent",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "ip_address": "src_ip",
+            "http_method": "event_action",
+            "http_path": "object_name",
+            "http_version": "http_version",
+            "http_status_code": "status_code",
+            "http_response_size": "bytes_sent",
+            "referer": "referer",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "http_method": "event_action",
+            "http_path": "object_name",
+            "http_version_major": "http_version",
+            "http_version_minor": "http_version",
+            "status_code": "status_code",
+            "response_size": "bytes_sent",
+            "referer": "referer",
+            "user_agent": "user_agent"
+        },
+        [
+            "ip_version"
+        ]
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "status_code": "status_code",
+            "response_size": "bytes_sent"
+        },
+        []
+    ],
+    [
+        {
+            "client_ip": "src_ip",
+            "http_method": "event_action",
+            "request_uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "response_size": "bytes_sent",
+            "referer": "referer",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "http_method": "event_action",
+            "uri": "object_name",
+            "http_version": "http_version",
+            "status_code": "status_code",
+            "response_size": "bytes_sent",
+            "referer": "referer",
+            "user_agent": "user_agent"
+        },
+        []
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "method": "event_action",
+            "path": "object_name",
+            "status_code": "status_code",
+            "bytes_sent": "bytes_sent",
+            "user_agent": "user_agent"
+        },
+        []
+    ]
+]

@@ -1,0 +1,377 @@
+[
+   [
+      [
+         "src_ip",
+         "The source IP address of the client making the request, useful for entity alignment and network linkage.",
+         "10.35.35.206"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request, indicating the type of operation (POST, GET, etc.), useful for event correlation and session grouping.",
+         "POST"
+      ],
+      [
+         "uri",
+         "The Uniform Resource Identifier requested, including query parameters, useful for event correlation and process lineage.",
+         "/wp-cron.php?doing_wp_cron=1642517980.2262139320373535156250"
+      ],
+      [
+         "http_version",
+         "The HTTP version identifier from the request line, useful for protocol alignment and event correlation.",
+         "1.1"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server, useful for event classification and error analysis.",
+         "200"
+      ],
+      [
+         "bytes_sent",
+         "The size of the HTTP response body in bytes, useful for network throughput analysis and event correlation.",
+         "150"
+      ],
+      [
+         "user_agent",
+         "The user-agent string from the request, indicating the client software, useful for device fingerprinting and entity alignment.",
+         "WordPress/5.8.3; https://intranet.price.fox.org"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "Source IP address of the request originator, useful for network entity alignment",
+         "172.17.130.196"
+      ],
+      [
+         "http_method",
+         "HTTP method used in the request, useful for event classification",
+         "GET"
+      ],
+      [
+         "http_uri",
+         "Request URI path, useful for identifying targeted endpoints",
+         "/HNAP1"
+      ],
+      [
+         "http_version",
+         "HTTP protocol version, useful for protocol compatibility analysis",
+         "HTTP/1.1"
+      ],
+      [
+         "status_code",
+         "HTTP response status code, useful for event outcome classification",
+         "404"
+      ],
+      [
+         "response_size",
+         "Size of the HTTP response body in bytes, useful for traffic analysis",
+         "3263"
+      ],
+      [
+         "user_agent",
+         "User-Agent string identifying the client software, useful for device and software fingerprinting",
+         "Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "The source IP address from which the request originated, useful for network linkage and identifying the origin of events.",
+         "172.17.130.196"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request (e.g., GET, POST), useful for event correlation and understanding the type of action performed.",
+         "GET"
+      ],
+      [
+         "uri",
+         "The requested URI path, useful for identifying the target resource and grouping related requests.",
+         "/wp-content/themes/twentytwentyone/"
+      ],
+      [
+         "http_version",
+         "The HTTP version used in the request (e.g., 1.1), useful for protocol analysis and compatibility checks.",
+         "1.1"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server, useful for event correlation and detecting errors or successes.",
+         "500"
+      ],
+      [
+         "response_size",
+         "The size of the HTTP response body in bytes, useful for understanding data transfer volume and detecting anomalies.",
+         "191"
+      ],
+      [
+         "referer",
+         "The HTTP referer header indicating the previous page from which the request originated, useful for tracing request chains and session grouping.",
+         "https://intranet.price.fox.org"
+      ],
+      [
+         "user_agent",
+         "The user-agent string identifying the client software, useful for detecting automated tools or scanners and process lineage.",
+         "WPScan v3.8.20 (https://wpscan.com/wordpress-security-scanner)"
+      ]
+   ],
+   [
+      [
+         "ip",
+         "source IP address of the client making the HTTP request",
+         "172.17.130.196"
+      ],
+      [
+         "http_method",
+         "HTTP method used in the request",
+         "GET"
+      ],
+      [
+         "uri",
+         "the request URI path",
+         "/wp-includes/blocks/code/act"
+      ],
+      [
+         "http_version",
+         "the HTTP version specified in the request",
+         "1.1"
+      ],
+      [
+         "status_code",
+         "the HTTP response status code",
+         "404"
+      ],
+      [
+         "bytes_sent",
+         "the size of the HTTP response in bytes",
+         "363"
+      ],
+      [
+         "user_agent",
+         "the user agent string identifying the client browser and operating system",
+         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
+      ]
+   ],
+   [
+      [
+         "ip_address",
+         "The IP address from the log, useful for identifying source hosts and network-based alignment.",
+         "172.17.130.196"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request, aiding in event correlation and attack pattern identification.",
+         "HEAD"
+      ],
+      [
+         "http_path",
+         "The requested URL path, useful for web application activity tracking and resource targeting analysis.",
+         "/?attachment_id=22"
+      ],
+      [
+         "http_version",
+         "The HTTP version used in the request, relevant for protocol-level event correlation.",
+         "1.1"
+      ],
+      [
+         "http_status_code",
+         "The HTTP response status code returned by the server, used for detecting failures or successful requests.",
+         "404"
+      ],
+      [
+         "http_response_size",
+         "The size of the HTTP response body in bytes, useful for traffic volume analysis and anomaly detection.",
+         "323"
+      ],
+      [
+         "referer",
+         "The HTTP Referer header indicating the previous page, useful for tracing user navigation and campaign tracking.",
+         "https://intranet.price.fox.org"
+      ],
+      [
+         "user_agent",
+         "The user agent string identifying the client tool, useful for recognizing automated scanning tools and device fingerprinting.",
+         "WPScan v3.8.20 (https://wpscan.com/wordpress-security-scanner)"
+      ]
+   ],
+   [
+      [
+         "ip_version",
+         "The IP version or address literal from the log line prefix, useful for network entity alignment.",
+         "::1"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request, relevant for event correlation and attack pattern detection.",
+         "OPTIONS"
+      ],
+      [
+         "http_path",
+         "The requested HTTP path (often asterisk for server-wide options), useful for service discovery and alignment.",
+         "*"
+      ],
+      [
+         "http_version_major",
+         "The major version of HTTP protocol from the request line, useful for protocol compatibility analysis.",
+         "1"
+      ],
+      [
+         "http_version_minor",
+         "The minor version of HTTP protocol from the request line, useful for protocol version identification.",
+         "0"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server, relevant for event outcome analysis and alignment.",
+         "200"
+      ],
+      [
+         "response_size",
+         "The size of the HTTP response body in bytes, useful for traffic profiling and anomaly detection.",
+         "110"
+      ],
+      [
+         "referer",
+         "The Referer header from the HTTP request, useful for request origin tracking and session grouping.",
+         "-"
+      ],
+      [
+         "user_agent",
+         "The user-agent string sent by the client, useful for client identification and alignment across sessions.",
+         "Apache/2.4.29 (Ubuntu) OpenSSL/1.1.1 (internal dummy connection)"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "The source IP address of the host generating the log entry, used for network origin identification and cross-log source alignment.",
+         "10.35.33.144"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server, indicating the result of the request.",
+         "408"
+      ],
+      [
+         "response_size",
+         "The size of the server response in bytes, used for traffic volume analysis and event correlation.",
+         "2996"
+      ]
+   ],
+   [
+      [
+         "client_ip",
+         "The source IP address of the client making the HTTP request.",
+         "10.35.35.118"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request (e.g., GET, POST).",
+         "GET"
+      ],
+      [
+         "request_uri",
+         "The URI path and query string requested from the server.",
+         "/wp-admin/edit.php"
+      ],
+      [
+         "http_version",
+         "The HTTP version used in the request (e.g., 1.1).",
+         "1"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned to the client.",
+         "200"
+      ],
+      [
+         "response_size",
+         "The size of the response body in bytes.",
+         "13919"
+      ],
+      [
+         "referer",
+         "The HTTP Referer header indicating the previous page that linked to the current request.",
+         "-"
+      ],
+      [
+         "user_agent",
+         "The User-Agent string identifying the client application, operating system, and browser.",
+         "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "The source IP address of the client making the request, used for network origin identification and session grouping.",
+         "172.17.130.196"
+      ],
+      [
+         "http_method",
+         "The HTTP method used in the request, indicating the intended action (e.g., POST, GET) for event correlation.",
+         "POST"
+      ],
+      [
+         "uri",
+         "The request URI path and query string, used to identify the target resource for event correlation and forensic analysis.",
+         "/wp-admin/admin-ajax.php"
+      ],
+      [
+         "http_version",
+         "The HTTP version used in the request, typically \"1.0\" or \"1.1\", for protocol-level alignment.",
+         "1.1"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server, indicating the outcome of the request for event correlation.",
+         "200"
+      ],
+      [
+         "response_size",
+         "The size of the HTTP response body in bytes, useful for bandwidth or anomaly analysis.",
+         "5651"
+      ],
+      [
+         "referer",
+         "The HTTP Referer header value, indicating the previous web page from which the request originated, for session and traffic analysis.",
+         "https://intranet.price.fox.org/?p=5"
+      ],
+      [
+         "user_agent",
+         "The User-Agent string of the client, identifying the browser and operating system for device fingerprinting and alignment.",
+         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/95.0.4638.69 Safari/537.36"
+      ]
+   ],
+   [
+      [
+         "src_ip",
+         "The source IP address of the client making the HTTP request.",
+         "172.17.130.196"
+      ],
+      [
+         "method",
+         "The HTTP method used in the request (e.g., GET, POST).",
+         "GET"
+      ],
+      [
+         "path",
+         "The requested URI path, including any query parameters.",
+         "/ HTTP/1.0"
+      ],
+      [
+         "status_code",
+         "The HTTP response status code returned by the server.",
+         "200"
+      ],
+      [
+         "bytes_sent",
+         "The size of the HTTP response body in bytes.",
+         "20593"
+      ],
+      [
+         "user_agent",
+         "The User-Agent string from the HTTP request header, identifying the client application.",
+         "-"
+      ]
+   ]
+]

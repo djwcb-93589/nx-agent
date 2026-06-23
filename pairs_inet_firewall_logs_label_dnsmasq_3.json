@@ -1,0 +1,408 @@
+[
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq process generating the log entry, enabling process-level identification and session grouping.",
+         "14522"
+      ],
+      [
+         "query_domain",
+         "The domain name queried in the DNS caching step, serving as the primary entity for correlating DNS resolution events across logs.",
+         "a519.g2.akamai.net"
+      ],
+      [
+         "dns_response",
+         "The DNS resolution result for the cached query, indicating the type of response (e.g., NODATA-IPv6) to support event classification and network behavior analysis.",
+         "NODATA-IPv6"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq instance that encountered the error.",
+         "14522"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq instance generating the log entry",
+         "14522"
+      ],
+      [
+         "forwarded_query",
+         "The full forwarded DNS query string, typically including subdomain and destination",
+         "3x6-.72-.JoWdUTjYsikhFFqOtUn5ZLN3aX6NvIGJXeHMfgHlqB8sZziSx2ond*YuX*TS-.1vdBiDcmF1MDwnGQzcnBLCeEOaVge33S37efLnUPrA7mwL0SRuDwIwHlB*3W-.6HXR5wa9g0SSdKXzu8u4GqWzTIAeNdR57TBDOgze6Fcj8xHiWbC/fm0zaCha-.NixonLtd.docx.ycgjslfptkev.com"
+      ],
+      [
+         "dst",
+         "The destination IP address to which the DNS query was forwarded",
+         "192.168.255.254"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "Process identifier of the dnsmasq daemon.",
+         "14522"
+      ],
+      [
+         "nameserver_ip",
+         "IP address of the nameserver that refused the recursive query.",
+         "127.0.0.1"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq daemon that generated the log entry, useful for process lineage and host-level entity identification.",
+         "14522"
+      ],
+      [
+         "query_type",
+         "The DNS query record type specified in brackets, indicating the kind of DNS resource record being requested (e.g., AAAA for IPv6 address).",
+         "AAAA"
+      ],
+      [
+         "query_domain",
+         "The fully qualified domain name being queried, enabling network entity alignment and DNS event correlation.",
+         "archive.ubuntu.com"
+      ],
+      [
+         "source_ip",
+         "The IP address from which the DNS query originated, critical for network traffic analysis and host identification.",
+         "172.17.129.140"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq process generating the log entry, useful for cross-log process lineage and host-level correlation.",
+         "14522"
+      ],
+      [
+         "query_type",
+         "DNS query type extracted from the template query[A] indicator, representing the record type queried (e.g., A record), useful for event correlation and DNS activity classification.",
+         "A"
+      ],
+      [
+         "domain",
+         "The fully qualified domain name being queried, extracted from the variable between query type and \"from\", useful for network linkage, threat intelligence, and DNS query alignment.",
+         "3x6-.50-.ZJySrRuTVQziBZSVY0mmuCKDDTCi1*ren0Q/2OwfiZrL4lGru75Nj84d6hM5-.K*4cIFpz7WvabDxso6HAxbDiSX6rNeg9DGkNPu/Wk*g1wcbpgo/r/lLvi*KH-.35q8hdOEfCP3ANb0c6*T4WpgxuPS7pv5ezaOVQzjjFG3QZM44GIOXK2AMEyg-.CohenInc.docx.ycgjslfptkev.com"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the DNS query originated, useful for network linkage, session grouping, and identifying querying hosts.",
+         "10.35.33.111"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq daemon, used for process lineage tracking.",
+         "14522"
+      ],
+      [
+         "domain",
+         "The queried domain name in the DNS MX query, used for session grouping and entity identification.",
+         "whittaker.fox.org"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the DNS query originated, used for network linkage and origin identification.",
+         "172.17.131.81"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier (PID) of the dnsmasq process, useful for process lineage and event correlation.",
+         "14522"
+      ],
+      [
+         "query_type",
+         "Type of DNS query, extracted from the square bracket notation, indicating the record type requested for alignment with DNS event categories.",
+         "PTR"
+      ],
+      [
+         "queried_record",
+         "The full reverse DNS lookup string (without the trailing \"in-addr.arpa\" suffix), representing the IP address being resolved in reverse order, useful for network linkage and session grouping.",
+         "2.32.35.10"
+      ],
+      [
+         "source_ip",
+         "Source IP address from which the query originated, critical for network linkage and identifying the requesting host.",
+         "172.17.130.196"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq service, used for process-level entity and lineage alignment.",
+         "14522"
+      ],
+      [
+         "query_type",
+         "DNS query type (e.g., SRV), enabling service or protocol-level event correlation and categorization.",
+         "SRV"
+      ],
+      [
+         "query_target",
+         "The target domain or service name being queried, critical for network traffic and DNS resolution event alignment.",
+         "_https._tcp.artifacts.elastic.co"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the DNS query originated, used for network-level entity and host-based session grouping.",
+         "10.35.33.111"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq instance that generated the log, useful for process lineage and entity alignment.",
+         "14522"
+      ],
+      [
+         "query_type",
+         "DNS query type as recorded in brackets, indicating the record type being requested, useful for event correlation.",
+         "SRV"
+      ],
+      [
+         "query_target",
+         "The DNS query target domain or service name, used for event grouping and network linkage.",
+         "_http._tcp.archive.ubuntu.com"
+      ],
+      [
+         "source_ip",
+         "The IP address from which the DNS query originated, critical for network linkage and session grouping.",
+         "10.35.33.111"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq daemon generating the log entry.",
+         "14522"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the DNS query originated.",
+         "172.17.131.81"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the dnsmasq daemon that generated the DNS reply",
+         "14522"
+      ],
+      [
+         "query",
+         "The DNS query name (domain or subdomain) being resolved in the reply",
+         "telemetry-global.jivosite.com"
+      ],
+      [
+         "response_ip",
+         "The resolved IP address returned by the DNS server in the reply",
+         "99.80.253.169"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "The process ID of the dnsmasq instance generating the log, useful for process lineage and service identification.",
+         "1571"
+      ],
+      [
+         "query_name",
+         "The fully qualified domain name being queried in the DNS request, essential for event correlation and threat detection.",
+         "b1h.zemanta.com"
+      ],
+      [
+         "source_ip",
+         "The client IP address initiating the DNS query, crucial for network linkage and session grouping.",
+         "10.35.35.118"
+      ]
+   ],
+   [
+      [
+         "process_id",
+         "The process identifier assigned to the dnsmasq instance generating the event, useful for process lineage and session grouping.",
+         "1571"
+      ],
+      [
+         "replied_hostname",
+         "The domain name that was resolved in the DNS reply, enabling network linkage and entity alignment.",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "resolved_ip",
+         "The IP address that the hostname resolved to, used for network traffic correlation and event alignment.",
+         "64.202.112.191"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "process ID of the dnsmasq process, used for process lineage and host entity alignment",
+         "1573"
+      ],
+      [
+         "queried_host",
+         "domain name being resolved in the DNS reply, used for network entity and threat intelligence alignment",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "resolved_address",
+         "IP address returned in the DNS reply for the queried host, used for network connection linkage and event correlation",
+         "64.74.236.63"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "Process ID of the dnsmasq instance that generated the log, useful for process-level grouping and session lineage.",
+         "1627"
+      ],
+      [
+         "reply_domain",
+         "The domain name that is being replied to in the DNS query, enabling network-related entity alignment and event correlation.",
+         "gslb-aws-us-east-03.v.fwmrm.net"
+      ],
+      [
+         "reply_ip",
+         "The IP address returned in the DNS reply for the queried domain, valuable for network linkage and identifying resolved endpoints.",
+         "3.231.143.27"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "Process ID of the dnsmasq instance, useful for process lineage and session grouping.",
+         "1762"
+      ],
+      [
+         "queried_domain",
+         "The domain name being resolved in the DNS query, used for network entity alignment.",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "resolved_ip",
+         "The IP address returned for the queried domain, used for network linkage and event correlation.",
+         "50.31.142.255"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier of the dnsmasq process, useful for process lineage and entity alignment.",
+         "1774"
+      ],
+      [
+         "query_type",
+         "The DNS query type (e.g., A record), useful for event correlation and understanding query semantics.",
+         "A"
+      ],
+      [
+         "query_domain",
+         "The domain name being queried, useful for network linkage and threat intelligence alignment.",
+         "b1sync.zemanta.com"
+      ],
+      [
+         "src_ip",
+         "The source IP address from which the query originated, useful for network linkage and session grouping.",
+         "10.35.35.118"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "Process ID of the dnsmasq instance that performed the DNS reply, used for process lineage and event correlation.",
+         "1774"
+      ],
+      [
+         "reply_domain",
+         "The domain name being resolved in the DNS reply, used for network entity and session grouping.",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "reply_ip",
+         "The IP address returned as the resolution result in the DNS reply, used for network linkage and event alignment.",
+         "64.202.112.63"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier of the dnsmasq daemon, used for process lineage and event correlation.",
+         "2878"
+      ],
+      [
+         "queried_domain",
+         "The domain name being resolved in the DNS reply, used for network linkage and DNS query alignment.",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "resolved_ip",
+         "The IP address returned in the DNS reply, used for network linkage and entity resolution.",
+         "64.202.112.31"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier of the dnsmasq instance that generated the log, useful for session grouping and process lineage.",
+         "31658"
+      ],
+      [
+         "query_domain",
+         "The domain name queried by the client, used for event correlation and entity alignment.",
+         "zemanta-nychi.zemanta.com"
+      ],
+      [
+         "response_ip",
+         "The IP address returned in the DNS reply, enabling network linkage and threat correlation.",
+         "70.42.32.127"
+      ]
+   ],
+   [
+      [
+         "dnsmasq_pid",
+         "Process ID of the dnsmasq instance handling the DNS forwarding, useful for process lineage and event correlation.",
+         "1627"
+      ],
+      [
+         "forwarded_query",
+         "The DNS query domain name that was forwarded to an upstream server, critical for network event alignment and domain analysis.",
+         "29773.v.fwmrm.net"
+      ],
+      [
+         "forwarded_target",
+         "The IP address of the upstream DNS server to which the query was forwarded, essential for network linkage and topology mapping.",
+         "192.168.255.254"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier of the dnsmasq process generating the query, useful for process-level event correlation and lineage tracking.",
+         "2878"
+      ],
+      [
+         "query_type",
+         "The DNS query type, indicating the record type being requested (e.g., A record for IPv4 address resolution), used for event classification and network activity understanding.",
+         "A"
+      ],
+      [
+         "query_domain",
+         "The fully-qualified domain name being resolved in the DNS query, critical for session grouping, threat detection, and network traffic alignment.",
+         "b1sync.zemanta.com"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the DNS query originated, enabling network flow attribution and cross-device identity alignment.",
+         "172.17.130.196"
+      ]
+   ]
+]

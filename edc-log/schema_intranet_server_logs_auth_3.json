@@ -1,0 +1,111 @@
+[
+    [
+        {
+            "pid": "pid",
+            "user": "user",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "auth_method",
+            "ssh_version",
+            "key_type",
+            "key_hash"
+        ]
+    ],
+    [
+        {
+            "session_opener_pid": "pid",
+            "pam_service": "pam_service",
+            "pam_type": "pam_action",
+            "target_user": "target_user",
+            "uid": "actor_user"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "pam_service": "pam_service",
+            "pam_type": "pam_action",
+            "user": "user"
+        },
+        [
+            "hostname",
+            "session_event"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "session_device": "tty",
+            "user_account": "target_user",
+            "auth_user": "actor_user"
+        },
+        []
+    ],
+    [
+        {
+            "su_pid": "pid",
+            "su_target_user": "target_user",
+            "su_source_user": "actor_user"
+        },
+        []
+    ],
+    [
+        {
+            "user": "target_user",
+            "tty": "tty",
+            "pwd": "cwd",
+            "command": "command"
+        },
+        []
+    ],
+    [
+        {
+            "sudo": "program",
+            "session": "pam_service",
+            "user": "user"
+        },
+        [
+            "intranet_server",
+            "pam_unix"
+        ]
+    ],
+    [
+        {
+            "service": "program",
+            "user": "actor_user",
+            "tty": "tty",
+            "pwd": "cwd",
+            "target_user": "target_user",
+            "command": "command"
+        },
+        [
+            "hostname"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "session_id": "session_id",
+            "user": "user"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "session_id": "session_id"
+        },
+        []
+    ]
+]

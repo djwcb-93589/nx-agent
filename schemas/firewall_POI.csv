@@ -1,0 +1,28 @@
+time,Event timestamp from the embedded device date field or syslog prefix.
+device_name,Firewall device name or host that emitted the event.
+module,Firewall management module such as policy zone blacklist webui cli or flow control.
+event_type,Canonical firewall event category such as policy_rule zone_config blacklist admin_session or flow_control.
+event_action,Normalized action requested by the administrator such as add set del login logout show or clear.
+user,Administrator or operator account referenced by the event.
+management_ip,Management client IP address from the from field.
+outcome,Normalized result such as success failure or unknown.
+src_addr,Policy source address object or literal address from sa.
+dst_addr,Policy destination address object or literal address from da.
+interface_in,Inbound interface referenced by a firewall rule.
+interface_out,Outbound interface referenced by a firewall rule.
+src_zone,Inbound security zone referenced by a firewall rule.
+dst_zone,Outbound security zone referenced by a firewall rule.
+service,Firewall service or protocol object referenced by a rule.
+policy_id,Firewall policy identifier from policy.
+rule_id,Firewall rule identifier from id.
+rule_key,Stable composed identifier for a firewall rule.
+policy_type,Normalized policy type such as permit deny nat proxy port_map ip_map or antiddos.
+rule_state,Rule enabled state such as enabled disabled on or off.
+log_enabled,Whether logging is enabled for the rule.
+translated_src,Translated source address for NAT policies.
+public_ip,Public mapped address for IP or port mapping policies.
+internal_addr,Internal address or object used by mapping policies.
+public_service,Public mapped service or port.
+internal_service,Internal mapped service or port.
+zone_name,Security zone name extracted from zone configuration events.
+blacklist_ip,IP address added removed shown or cleared by blacklist events.

@@ -1,0 +1,687 @@
+[
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user",
+            "fwlog": "log_enabled"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "vpipe"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "username": "user",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "time",
+            "dcf",
+            "avpolicy",
+            "ipspolicy",
+            "pcpolicy",
+            "eimpolicy",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "log": "log_enabled",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "avpolicy",
+            "ipspolicy",
+            "pcpolicy",
+            "eimpolicy",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "log": "log_enabled",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "sport",
+            "avpolicy",
+            "ipspolicy",
+            "pcpolicy",
+            "eimpolicy",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "username": "user",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "time",
+            "dcf",
+            "avpolicy",
+            "ipspolicy",
+            "pcpolicy",
+            "eimpolicy",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "log": "log_enabled",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "pa": "dst_addr",
+            "ia": "user",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "ps": "service",
+            "is": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "sat",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "log": "log_enabled",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "sat",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "user": "user",
+            "result": "outcome",
+            "fwlog": "log_enabled"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "log",
+            "dsp_msg"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "sat": "translated_src",
+            "pa": "public_ip",
+            "ia": "internal_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "id": "rule_id",
+            "log": "log_enabled",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "sat",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "sat": "translated_src",
+            "pa": "dst_addr",
+            "ia": "internal_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "time",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "izone": "src_zone",
+            "ozone": "dst_zone",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "time",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {},
+        [
+            "field_name"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome",
+            "fwlog": "log_enabled"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "sport",
+            "time",
+            "dsp_msg"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "time",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "pa": "translated_src",
+            "ia": "internal_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "ps": "service",
+            "is": "internal_service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "sat",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "devid": "device_name",
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "sat": "translated_src",
+            "pa": "dst_addr",
+            "ia": "internal_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "policy": "policy_id",
+            "id": "rule_id",
+            "sa": "src_addr",
+            "da": "dst_addr",
+            "iif": "interface_in",
+            "oif": "interface_out",
+            "service": "service",
+            "log": "log_enabled",
+            "active": "rule_state",
+            "user": "user",
+            "result": "outcome"
+        },
+        [
+            "devid",
+            "dname",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ]
+]

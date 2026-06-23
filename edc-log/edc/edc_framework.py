@@ -231,22 +231,40 @@ class EDC:
         canonicalized_triplets_list = []
         canon_candidate_dict_per_entry_list = []
 
+        pairs_count = len(oie_triplets_list) if isinstance(oie_triplets_list, list) else 0
+        if len(input_text_list) != pairs_count:
+            logger.warning(
+                "Schema canonicalization input mismatch: %s templates, %s semantic pair entries. "
+                "Missing entries will be treated as empty mappings.",
+                len(input_text_list),
+                pairs_count,
+            )
+
         for idx, input_text in enumerate(tqdm(input_text_list)):
+            raw_items = (
+                oie_triplets_list[idx]
+                if idx < pairs_count and isinstance(oie_triplets_list[idx], list)
+                else []
+            )
             field_definition_pairs = [
                 (item[0], item[1])
-                for item in oie_triplets_list[idx]
+                for item in raw_items
                 if isinstance(item, list) and len(item) >= 2
             ]
-            oie_triplets = [field for field, _ in field_definition_pairs]
             sd_dict = {field: definition for field, definition in field_definition_pairs}
 
-            canonicalized_triplets, canon_candidate_dict_list = schema_canonicalizer.canonicalize_fields(
-                input_text, sd_dict, sc_prompt_template_str
-            )
+            if sd_dict:
+                canonicalized_triplets, canon_candidate_dict_list = schema_canonicalizer.canonicalize_fields(
+                    input_text, sd_dict, sc_prompt_template_str
+                )
+            else:
+                canonicalized_triplets = {}
+                canon_candidate_dict_list = self.schema
+
             canonicalized_triplets_list.append(canonicalized_triplets)
             canon_candidate_dict_per_entry_list.append(canon_candidate_dict_list)
 
-            print(f"{input_text}\n, {canonicalized_triplets}")
+            logger.debug("%s\n%s", input_text, canonicalized_triplets)
             #logger.debug(f"Retrieved candidate relations {canon_candidate_dict}")
 
         logger.info("Schema Canonicalization finished.")

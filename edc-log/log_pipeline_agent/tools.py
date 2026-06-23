@@ -11,6 +11,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import threading
 from typing import Any, Iterable
 
 import pandas as pd
@@ -25,6 +26,9 @@ from run import (
 
 from .config import PROJECT_ROOT, DatasetSpec
 from env_utils import load_dotenv, resolve_env_value
+
+
+_EDC_LEGACY_IO_LOCK = threading.Lock()
 
 
 @dataclass
@@ -217,13 +221,16 @@ def extract_field_semantics(
     template2samples = _load_template2samples(spec.template2samples_path)
     output_dir = output_dir or (PROJECT_ROOT / "log_output")
 
-    with working_directory(PROJECT_ROOT):
-        from edc.edc_framework import EDC
+    with _EDC_LEGACY_IO_LOCK:
+        with working_directory(PROJECT_ROOT):
+            from edc.edc_framework import EDC
 
-        edc = EDC(**_build_edc_config(spec, output_dir=output_dir))
-        edc.oie(template2samples[0], type=spec.tag)
+            edc = EDC(**_build_edc_config(spec, output_dir=output_dir))
+            edc.oie(template2samples[0], type=spec.tag)
 
-    source_path = spec.pairs_path if spec.pairs_path.exists() else legacy_path
+    source_path = legacy_path if force and legacy_path.exists() else (
+        spec.pairs_path if spec.pairs_path.exists() else legacy_path
+    )
     pairs = load_json(source_path)
     if source_path != spec.pairs_path:
         _save_json_artifact(spec.pairs_path, pairs)
@@ -273,17 +280,20 @@ def map_fields_to_poi_schema(
     pairs = load_json(spec.pairs_path)
     output_dir = output_dir or (PROJECT_ROOT / "log_output")
 
-    with working_directory(PROJECT_ROOT):
-        from edc.edc_framework import EDC
+    with _EDC_LEGACY_IO_LOCK:
+        with working_directory(PROJECT_ROOT):
+            from edc.edc_framework import EDC
 
-        edc = EDC(**_build_edc_config(spec, output_dir=output_dir))
-        canonicalized, candidate_dicts = edc.schema_canonicalization(template2samples[0], pairs)
-        if not candidate_dicts:
-            raise ValueError(f"No schema candidates returned for {spec.name}")
-        general_keys = list(candidate_dicts[0].keys())
-        edc.split_mappings_keep_other_keys(canonicalized, general_keys, spec.tag)
+            edc = EDC(**_build_edc_config(spec, output_dir=output_dir))
+            canonicalized, candidate_dicts = edc.schema_canonicalization(template2samples[0], pairs)
+            if not candidate_dicts:
+                raise ValueError(f"No schema candidates returned for {spec.name}")
+            general_keys = list(candidate_dicts[0].keys())
+            edc.split_mappings_keep_other_keys(canonicalized, general_keys, spec.tag)
 
-    source_path = spec.schema_path if spec.schema_path.exists() else legacy_path
+    source_path = legacy_path if force and legacy_path.exists() else (
+        spec.schema_path if spec.schema_path.exists() else legacy_path
+    )
     schema = load_json(source_path)
     if source_path != spec.schema_path:
         _save_json_artifact(spec.schema_path, schema)
@@ -367,6 +377,10 @@ def extract_params_from_logs(
         os.environ["DEEPSEEK_API_KEY"] = api_key
 
     spec.params_output_path.parent.mkdir(parents=True, exist_ok=True)
+    if force and spec.params_output_path.exists():
+        if spec.params_output_path.is_dir():
+            raise IsADirectoryError(f"Params output path is a directory: {spec.params_output_path}")
+        spec.params_output_path.unlink()
     command = [
         sys.executable,
         str(spec.extractor_script_path),

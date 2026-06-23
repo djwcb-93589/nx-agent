@@ -1,0 +1,666 @@
+[
+    [
+        {
+            "source_ip_port": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "user": "actor",
+            "host_or_ip": "src_ip",
+            "port": "src_port"
+        },
+        [
+            "signal",
+            "signal_detail",
+            "event"
+        ]
+    ],
+    [
+        {
+            "client_address": "actor"
+        },
+        [
+            "tls_version",
+            "tls_cipher",
+            "certificate_bit_size",
+            "signature_algorithm"
+        ]
+    ],
+    [
+        {
+            "source_id": "actor",
+            "dst_ip": "target",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        []
+    ],
+    [
+        {
+            "user_id": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "control_message"
+        ]
+    ],
+    [
+        {
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        [
+            "sid",
+            "raw_suffix"
+        ]
+    ],
+    [
+        {},
+        [
+            "dest",
+            "src",
+            "reinit_src"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "sec",
+            "bytes",
+            "pkts"
+        ]
+    ],
+    [
+        {
+            "user_id": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "result": "status"
+        },
+        [
+            "verify_type"
+        ]
+    ],
+    [
+        {
+            "client_id": "actor"
+        },
+        [
+            "depth",
+            "c",
+            "st",
+            "l",
+            "o",
+            "cn",
+            "emailaddress"
+        ]
+    ],
+    [
+        {
+            "src_ip_port": "src_ip",
+            "cn": "actor"
+        },
+        [
+            "depth"
+        ]
+    ],
+    [
+        {
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        []
+    ],
+    [
+        {
+            "user_id": "actor",
+            "client_ip": "src_ip",
+            "client_port": "src_port"
+        },
+        [
+            "session_user"
+        ]
+    ],
+    [
+        {
+            "ip_port": "src_ip",
+            "username": "actor"
+        },
+        [
+            "af_inet_address"
+        ]
+    ],
+    [
+        {
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        [
+            "peer_info_key",
+            "peer_info_value"
+        ]
+    ],
+    [
+        {
+            "bpotter_ip": "src_ip",
+            "bpotter_port": "src_port"
+        },
+        [
+            "certificate_eku"
+        ]
+    ],
+    [
+        {
+            "user": "actor"
+        },
+        [
+            "- bpotter/192.168.128.152"
+        ]
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "bpotter_host",
+            "channel_direction",
+            "hash_bit_count",
+            "hash_type"
+        ]
+    ],
+    [
+        {
+            "bpotter_ip": "src_ip",
+            "bpotter_port": "src_port"
+        },
+        [
+            "bpotter_host",
+            "control_message_type"
+        ]
+    ],
+    [
+        {
+            "bpotter": "actor"
+        },
+        [
+            "ip_port",
+            "signal",
+            "event",
+            "action"
+        ]
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "bpotter",
+            "sec",
+            "bytes",
+            "pkts"
+        ]
+    ],
+    [
+        {
+            "bpotter_user": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        [
+            "reason"
+        ]
+    ],
+    [
+        {
+            "bpotter_ip": "src_ip",
+            "bpotter_port": "src_port"
+        },
+        [
+            "data_channel_direction",
+            "cipher",
+            "key_bit_length"
+        ]
+    ],
+    [
+        {
+            "bpotter_host": "src_ip",
+            "bpotter_port": "src_port",
+            "data_channel_direction": "event_type"
+        },
+        [
+            "hash_bit_length"
+        ]
+    ],
+    [
+        {
+            "bpotter_src": "src_ip",
+            "learned_ip": "target"
+        },
+        [
+            "bpotter_dst"
+        ]
+    ],
+    [
+        {
+            "bpotter_src": "actor",
+            "ipv4": "target"
+        },
+        [
+            "ipv6"
+        ]
+    ],
+    [
+        {
+            "bpotter_client": "actor",
+            "status": "status",
+            "ifconfig_local": "target"
+        },
+        [
+            "push_reply_directives",
+            "redirect_gateway",
+            "block_outside_dns",
+            "route",
+            "topology",
+            "ping",
+            "ping_restart",
+            "ifconfig_remote",
+            "peer_id",
+            "cipher"
+        ]
+    ],
+    [
+        {
+            "dmorgan": "actor",
+            "client_ip": "src_ip",
+            "client_port": "src_port"
+        },
+        [
+            "eku_value"
+        ]
+    ],
+    [
+        {
+            "source_host_port": "src_ip"
+        },
+        [
+            "channel_direction",
+            "cipher_suite",
+            "key_size_bits"
+        ]
+    ],
+    [
+        {
+            "source_host": "actor",
+            "source_port": "src_port",
+            "learned_ip": "target",
+            "destination_host": "actor",
+            "destination_port": "src_port"
+        },
+        []
+    ],
+    [
+        {
+            "port": "src_port",
+            "virtual_ip": "target"
+        },
+        [
+            "logical_interface",
+            "host_ip"
+        ]
+    ],
+    [
+        {
+            "ip_address": "src_ip",
+            "port": "src_port",
+            "returned_ipv4": "target"
+        },
+        [
+            "source_identifier",
+            "pool_name",
+            "returned_ipv6"
+        ]
+    ],
+    [
+        {
+            "source_ip_port": "src_port",
+            "target_user": "actor",
+            "ifconfig_server": "target",
+            "status": "status"
+        },
+        [
+            "command",
+            "redirect_gateway",
+            "block_outside_dns",
+            "route",
+            "topology",
+            "ping",
+            "ping_restart",
+            "ifconfig_client",
+            "peer_id",
+            "cipher"
+        ]
+    ],
+    [
+        {
+            "dmorgan": "actor",
+            "client_ip": "src_ip",
+            "client_port": "src_port"
+        },
+        [
+            "depth",
+            "c",
+            "st",
+            "l",
+            "o",
+            "cn",
+            "emailaddress"
+        ]
+    ],
+    [
+        {
+            "dmorgan": "actor",
+            "ip_address": "src_ip",
+            "port": "src_port"
+        },
+        [
+            "depth",
+            "cn"
+        ]
+    ],
+    [
+        {
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "username": "actor"
+        },
+        [
+            "event_type"
+        ]
+    ],
+    [
+        {
+            "dmorgan_field": "src_ip",
+            "channel_direction": "event_type"
+        },
+        [
+            "hash_bits",
+            "hash_algorithm"
+        ]
+    ],
+    [
+        {
+            "username": "actor",
+            "ip_address": "src_ip",
+            "port": "src_port"
+        },
+        [
+            "certificate_eku"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "source_user": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        [
+            "channel_direction",
+            "cipher_name",
+            "key_length"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "user_port": "src_port"
+        },
+        [
+            "data_channel_direction",
+            "hash_bit_length",
+            "hash_algorithm"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "tls_version",
+            "cipher_suite",
+            "peer_certificate_bits",
+            "signature_algorithm"
+        ]
+    ],
+    [
+        {
+            "source_ip": "src_ip",
+            "source_port": "src_port",
+            "action": "event_type",
+            "target_ip": "target"
+        },
+        [
+            "dest_ip",
+            "dest_port"
+        ]
+    ],
+    [
+        {
+            "field_src_ip": "src_ip",
+            "field_src_port": "src_port",
+            "field_target_ip": "target"
+        },
+        []
+    ],
+    [
+        {
+            "hwarren_user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "assigned_ipv4": "target"
+        },
+        [
+            "pool_label",
+            "assigned_ipv6"
+        ]
+    ],
+    [
+        {
+            "ifconfig_local_ip": "target",
+            "status": "status"
+        },
+        [
+            "peer_id",
+            "ifconfig_remote_ip",
+            "cipher",
+            "route_network",
+            "topology",
+            "ping",
+            "ping_restart",
+            "redirect_gateway",
+            "block_outside_dns"
+        ]
+    ],
+    [
+        {
+            "username": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port"
+        },
+        [
+            "signal",
+            "signal_options",
+            "event_type"
+        ]
+    ],
+    [
+        {
+            "hwarren": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "tls_error_type": "event_type"
+        },
+        []
+    ],
+    [
+        {
+            "hwarren": "actor",
+            "ip": "src_ip",
+            "port": "src_port"
+        },
+        [
+            "timeout_seconds"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "event": "event_type"
+        },
+        [
+            "host",
+            "protocol",
+            "sec",
+            "bytes",
+            "pkts"
+        ]
+    ],
+    [
+        {
+            "hwarren": "actor",
+            "src_ip_port": "src_ip",
+            "verify_status": "status",
+            "cn": "actor"
+        },
+        [
+            "depth"
+        ]
+    ],
+    [
+        {
+            "host_ip": "host",
+            "port": "src_port"
+        },
+        []
+    ],
+    [
+        {
+            "hwarren_field": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "common_name"
+        ]
+    ],
+    [
+        {
+            "user": "actor"
+        },
+        []
+    ],
+    [
+        {
+            "user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port"
+        },
+        [
+            "direction",
+            "bit_count",
+            "hash_algorithm"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port",
+            "learned_ip": "target"
+        },
+        [
+            "destination_ip",
+            "destination_port"
+        ]
+    ],
+    [
+        {
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "dest_ip": "target"
+        },
+        []
+    ],
+    [
+        {
+            "username": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port",
+            "allocated_ipv4": "target"
+        },
+        [
+            "process_name",
+            "ipv6_status"
+        ]
+    ],
+    [
+        {
+            "username": "actor",
+            "client_ip": "src_ip",
+            "client_port": "src_port"
+        },
+        [
+            "action",
+            "message_payload",
+            "push_reply",
+            "redirect_gateway",
+            "block_outside_dns",
+            "route",
+            "topology",
+            "ping",
+            "ping_restart",
+            "ifconfig",
+            "peer_id",
+            "cipher",
+            "status"
+        ]
+    ],
+    [
+        {
+            "user": "actor",
+            "src_ip": "src_ip",
+            "src_port": "src_port",
+            "tls_state": "event_type"
+        },
+        [
+            "sec",
+            "bytes",
+            "pkts"
+        ]
+    ],
+    [
+        {
+            "username": "actor",
+            "source_ip": "src_ip",
+            "source_port": "src_port",
+            "verification_status": "status",
+            "common_name": "actor"
+        },
+        [
+            "verification_depth"
+        ]
+    ]
+]

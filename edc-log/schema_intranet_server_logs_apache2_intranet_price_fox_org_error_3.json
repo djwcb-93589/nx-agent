@@ -1,0 +1,201 @@
+[
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "error_code": "error_code",
+            "requested_path": "object_name"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "requested_path": "object_name",
+            "referer": "referer"
+        },
+        [
+            "client"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "denied_path": "object_name"
+        },
+        []
+    ],
+    [
+        {
+            "log_level": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "error_code": "error_code",
+            "directory_path": "object_name"
+        },
+        []
+    ],
+    [
+        {
+            "autoindex_error": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "directory": "object_name",
+            "referer": "referer"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip_port": "src_ip",
+            "request_path": "object_name"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "request_path": "object_name",
+            "referer": "referer"
+        },
+        []
+    ],
+    [
+        {
+            "log_level": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "file_path": "object_name"
+        },
+        [
+            "error_message",
+            "include_path",
+            "line_number"
+        ]
+    ],
+    [
+        {
+            "php7_level": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "script_path": "object_name",
+            "referer": "referer"
+        },
+        []
+    ],
+    [
+        {
+            "log_type": "severity",
+            "pid": "pid",
+            "client_ip_port": "src_ip",
+            "script_path": "object_name",
+            "referer": "referer"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "file_path": "object_name",
+            "throw_file_path": "object_name"
+        },
+        [
+            "undefined_function",
+            "error_line",
+            "stack_trace_main_line",
+            "throw_line"
+        ]
+    ],
+    [
+        {
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "file_path": "object_name",
+            "referer": "referer"
+        },
+        [
+            "log_type",
+            "error_message",
+            "theme_name",
+            "line_number",
+            "stack_trace"
+        ]
+    ],
+    [
+        {
+            "php7_error": "severity",
+            "pid": "pid",
+            "client": "src_ip",
+            "script": "object_name"
+        },
+        []
+    ],
+    [
+        {
+            "php7_error": "event_type",
+            "pid": "pid",
+            "client": "src_ip",
+            "script": "object_name",
+            "referer": "referer"
+        },
+        []
+    ],
+    [
+        {
+            "log_level": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "undefined_constant": "error_code",
+            "script_path": "object_name"
+        },
+        [
+            "assumed_constant",
+            "error_line"
+        ]
+    ],
+    [
+        {
+            "log_level": "severity",
+            "pid": "pid",
+            "client": "src_ip",
+            "failed_path": "object_name",
+            "file_path": "object_name"
+        },
+        [
+            "php_warning_type",
+            "line_number"
+        ]
+    ],
+    [
+        {
+            "php7_level": "severity",
+            "pid": "pid",
+            "client_ip": "src_ip",
+            "client_port": "src_port",
+            "php_error_type": "event_type",
+            "errno": "error_code",
+            "file_path": "object_name"
+        },
+        [
+            "php_function",
+            "errno_description",
+            "line_number"
+        ]
+    ]
+]

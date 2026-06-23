@@ -15,8 +15,8 @@ class DeepSeekClient:
         timeout=120,
         max_retries=5,
         temperature=0.0,
-        reasoning_effort="high",
-        thinking_enabled=True,
+        reasoning_effort=None,
+        thinking_enabled=False,
     ):
         load_dotenv()
         model = model or get_env("DEEPSEEK_MODEL", "deepseek-v4-flash")
@@ -68,19 +68,18 @@ class DeepSeekClient:
                     "messages": messages,
                     "max_tokens": max_tokens,
                     "temperature": request_temperature,
-                    "reasoning_effort": reasoning_effort or self.reasoning_effort,
-                    "extra_body": {
-                        "thinking": {
-                            "type": "enabled"
-                            if (
-                                self.thinking_enabled
-                                if thinking_enabled is None
-                                else thinking_enabled
-                            )
-                            else "disabled"
-                        }
-                    },
                 }
+                requested_reasoning_effort = (
+                    self.reasoning_effort if reasoning_effort is None else reasoning_effort
+                )
+                if requested_reasoning_effort:
+                    request_kwargs["reasoning_effort"] = requested_reasoning_effort
+
+                requested_thinking = (
+                    self.thinking_enabled if thinking_enabled is None else thinking_enabled
+                )
+                if requested_thinking:
+                    request_kwargs["extra_body"] = {"thinking": {"type": "enabled"}}
                 if response_format_json:
                     request_kwargs["response_format"] = {"type": "json_object"}
                 response = self.client.chat.completions.create(**request_kwargs)

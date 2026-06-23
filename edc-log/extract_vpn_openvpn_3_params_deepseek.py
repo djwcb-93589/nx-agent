@@ -174,7 +174,47 @@ def parse_field_item(field_item):
     }
 
 
-def read_input_csv(input_csv):
+def extract_template_text(template_entry):
+    text = str(template_entry or "").strip()
+    if text.startswith("Template:"):
+        text = text[len("Template:") :].strip()
+    if "\nSamples:" in text:
+        text = text.split("\nSamples:", 1)[0].strip()
+    return text
+
+
+def load_template_index(input_csv):
+    template_json_path = os.path.join(os.path.dirname(input_csv), "template2samples.json")
+    if os.path.isfile(template_json_path):
+        with open(template_json_path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        entries = raw[0] if isinstance(raw, list) and raw and isinstance(raw[0], list) else raw
+        template_index = {}
+        for index, entry in enumerate(entries, start=1):
+            template = extract_template_text(entry)
+            if template:
+                template_index[template] = index
+        if template_index:
+            return template_index
+
+    return dict(TEMPLATE_TO_SPEC_INDEX)
+
+
+def load_template_key_lookup(input_csv):
+    with open(input_csv, "r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+        fieldnames = {name.lower(): name for name in (reader.fieldnames or [])}
+        template_col = fieldnames.get("regextemplate")
+        if not template_col:
+            return {}
+        return {
+            row.get(template_col, ""): row.get(template_col, "")
+            for row in reader
+            if row.get(template_col, "")
+        }
+
+
+def read_input_csv(input_csv, template_index, template_lookup):
     with open(input_csv, "r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         fieldnames = {name.lower(): name for name in (reader.fieldnames or [])}
@@ -190,28 +230,30 @@ def read_input_csv(input_csv):
         rows = []
         for row in reader:
             template = row.get(template_col, "")
-            if template not in TEMPLATE_TO_SPEC_INDEX:
+            template_key = template_lookup.get(template, template)
+            if template_key not in template_index:
                 raise SystemExit(f"Unexpected RegexTemplate: {template}")
             rows.append(
                 {
                     "timestamp": row.get(ts_col, ""),
                     "log": row.get(content_col, ""),
                     "event_id": row.get(eventid_col, "").strip(),
-                    "regex_template": template,
+                    "regex_template": template_key,
+                    "raw_regex_template": template,
                 }
             )
     return rows
 
 
-def load_pairs_specs(pairs_json_path):
+def load_pairs_specs(pairs_json_path, expected_count=None):
     with open(pairs_json_path, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
     if not isinstance(raw, list):
         raise SystemExit("Pairs JSON must be a list.")
-    if len(raw) != len(TEMPLATE_TO_SPEC_INDEX):
+    if expected_count is not None and len(raw) != expected_count:
         raise SystemExit(
-            f"Pairs JSON count ({len(raw)}) does not match template mapping count ({len(TEMPLATE_TO_SPEC_INDEX)})."
+            f"Pairs JSON count ({len(raw)}) does not match template mapping count ({expected_count})."
         )
 
     specs = {}
@@ -446,13 +488,17 @@ def parse_selected_spec_indexes(raw_value):
 
 
 def run(args):
-    input_rows = read_input_csv(args.input_csv)
-    pair_specs, mapped_outputs, plain_fields = load_pairs_specs(args.pairs_json)
+    template_index = load_template_index(args.input_csv)
+    template_lookup = load_template_key_lookup(args.input_csv)
+    input_rows = read_input_csv(args.input_csv, template_index, template_lookup)
+    pair_specs, mapped_outputs, plain_fields = load_pairs_specs(
+        args.pairs_json, expected_count=len(template_index)
+    )
     columns = build_columns(mapped_outputs, plain_fields)
 
     template_to_fields = {}
     template_allowed_keys = {}
-    for template_text, spec_index in TEMPLATE_TO_SPEC_INDEX.items():
+    for template_text, spec_index in template_index.items():
         fields = pair_specs[spec_index]
         template_to_fields[template_text] = fields
 
@@ -480,7 +526,7 @@ def run(args):
         if unknown_templates:
             raise SystemExit(f"Unknown template(s): {list(unknown_templates)}")
     if selected_spec_indexes:
-        unknown_specs = selected_spec_indexes.difference(set(TEMPLATE_TO_SPEC_INDEX.values()))
+        unknown_specs = selected_spec_indexes.difference(set(template_index.values()))
         if unknown_specs:
             raise SystemExit(f"Unknown spec index(es): {sorted(unknown_specs)}")
 
@@ -513,7 +559,7 @@ def run(args):
             (not selected_templates or template_text in selected_templates)
             and (
                 not selected_spec_indexes
-                or TEMPLATE_TO_SPEC_INDEX[template_text] in selected_spec_indexes
+                or template_index[template_text] in selected_spec_indexes
             )
         )
     )
@@ -521,7 +567,7 @@ def run(args):
     print(
         "template mapping:",
         json.dumps(
-            {template: TEMPLATE_TO_SPEC_INDEX[template] for template in grouped},
+            {template: template_index[template] for template in grouped},
             ensure_ascii=False,
         ),
         flush=True,
@@ -532,7 +578,7 @@ def run(args):
             continue
         if (
             selected_spec_indexes
-            and TEMPLATE_TO_SPEC_INDEX[template_text] not in selected_spec_indexes
+            and template_index[template_text] not in selected_spec_indexes
         ):
             continue
 

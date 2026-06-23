@@ -1,0 +1,192 @@
+[
+    [
+        {
+            "pid": "pid",
+            "query": "qname",
+            "result": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "forwarded_query": "qname",
+            "forwarded_to": "dst_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "nameserver_addr": "dst_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "query_domain": "qname",
+            "src_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "domain": "qname",
+            "source_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "query_domain": "qname",
+            "src_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "process_id": "pid",
+            "query_name": "qname",
+            "source_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "query_target": "qname",
+            "src_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "query_type": "qtype",
+            "query_service": "qname",
+            "source_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "query_type": "qtype",
+            "query_domain": "qname",
+            "source_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "reply_hostname": "qname",
+            "reply_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "query_type": "qtype",
+            "query_domain": "qname",
+            "source_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "domain": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "domain": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "domain": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "queried_host": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "query_domain": "qname",
+            "src_ip": "src_ip"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "queried_name": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "dnsmasq_pid": "pid",
+            "query_domain": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "queried_host": "qname",
+            "resolved_ip": "answer_kind"
+        },
+        []
+    ],
+    [
+        {
+            "process_id": "pid",
+            "forwarded_domain": "qname",
+            "destination_ip": "dst_ip"
+        },
+        []
+    ],
+    [
+        {
+            "pid": "pid",
+            "query_type": "qtype",
+            "query_target": "qname",
+            "src": "src_ip"
+        },
+        []
+    ]
+]

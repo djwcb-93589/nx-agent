@@ -245,7 +245,11 @@ class LogParser:
                 "role": "assistant",
                 "content": '{"template":"try to connected to host: <*>, finished."}',
             },
-            {"role": "user", "content": f"Log list: {trimmed_list_log}"},
+            {
+                "role": "user",
+                "content": "Log list: "
+                + json.dumps(trimmed_list_log, ensure_ascii=False),
+            },
         ]
         return messages, trimmed_list_log
 
@@ -470,7 +474,10 @@ class LogParser:
             pass
         match = re.search(r'"template"\s*:\s*"((?:\\.|[^"])*)"', response_text, flags=re.DOTALL)
         if match:
-            return bytes(match.group(1), "utf-8").decode("unicode_escape").strip()
+            try:
+                return bytes(match.group(1), "utf-8").decode("unicode_escape").strip()
+            except UnicodeDecodeError:
+                return match.group(1).strip()
         return self.find_longest_backtick_content(response_text).strip()
 
     def request_log_template(self, log_list, dic=False, do_sample=False, max_new_tokens=None):

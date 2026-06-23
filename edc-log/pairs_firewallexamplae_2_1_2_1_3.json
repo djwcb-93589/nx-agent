@@ -1,0 +1,69 @@
+[
+   [
+      [
+         "devid",
+         "Device identifier for the source device generating the log; used for entity alignment and device grouping.",
+         "0"
+      ],
+      [
+         "date",
+         "Timestamp of the log event in the format \"YYYY/MM/DD HH:MM:SS\"; used for temporal alignment and event correlation.",
+         "2013/05/21 09:56:00"
+      ],
+      [
+         "dname",
+         "Device name of the log source; used for identifying the device type or model in entity alignment.",
+         "themis"
+      ],
+      [
+         "logtype",
+         "Numeric code representing the type or category of the log; used for log classification and filtering.",
+         "9"
+      ],
+      [
+         "pri",
+         "Priority level of the log event; used for severity-based event correlation and triage.",
+         "6"
+      ],
+      [
+         "ver",
+         "Software version identifier of the log source; used for version alignment and compatibility analysis.",
+         "0.3.0"
+      ],
+      [
+         "mod",
+         "Module or subsystem name that generated the log; used for event grouping and process lineage tracking.",
+         "cli"
+      ],
+      [
+         "from",
+         "Source IP address from which the administrative action originated; used for network linkage and origin identification.",
+         "10.1.5.200"
+      ],
+      [
+         "admin",
+         "Administrator username performing the action; used for user entity alignment and session grouping.",
+         "administrator"
+      ],
+      [
+         "act",
+         "Action or command performed by the administrator; used for event correlation and activity-based grouping.",
+         "离开"
+      ],
+      [
+         "dsp_msg",
+         "Display message captured from the terminal output; used for descriptive event context and payload analysis.",
+         "ac 终端输出"
+      ],
+      [
+         "result",
+         "Outcome or status of the action (e.g., success or failure); used for result-based event correlation and auditing.",
+         "成功"
+      ],
+      [
+         "fwlog",
+         "Flag or identifier indicating whether the log is related to firewall logging; used for log type filtering and alignment.",
+         "0"
+      ]
+   ]
+]

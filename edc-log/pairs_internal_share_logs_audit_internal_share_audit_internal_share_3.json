@@ -1,0 +1,689 @@
+[
+   [
+      [
+         "type",
+         "indicates the type of audit event, useful for event classification and filtering",
+         "AVC"
+      ],
+      [
+         "apparmor",
+         "reports the AppArmor subsystem status, enabling identification of profile management events",
+         "STATUS"
+      ],
+      [
+         "operation",
+         "describes the AppArmor operation performed, aiding in event correlation and activity tracking",
+         "profile_replace"
+      ],
+      [
+         "profile",
+         "specifies the AppArmor profile context, useful for security policy mapping and anomaly detection",
+         "unconfined"
+      ],
+      [
+         "name",
+         "identifies the file or process path associated with the AppArmor event, enabling asset and resource linkage",
+         "/usr/lib/NetworkManager/nm-dhcp-helper"
+      ],
+      [
+         "pid",
+         "provides the process ID of the executing program, facilitating process lineage and session grouping",
+         "17954"
+      ],
+      [
+         "comm",
+         "shows the command name of the process, supporting process identification and behavioral analysis",
+         "apparmor_parser"
+      ]
+   ],
+   [
+      [
+         "type",
+         "type of log event",
+         "CRED_ACQ"
+      ],
+      [
+         "pid",
+         "process id of the event originator",
+         "29440"
+      ],
+      [
+         "uid",
+         "user id associated with the process",
+         "0"
+      ],
+      [
+         "auid",
+         "audit user id of the process",
+         "4294967295"
+      ],
+      [
+         "ses",
+         "session id for the login session",
+         "4294967295"
+      ],
+      [
+         "msg",
+         "full message payload containing nested key-value pairs",
+         "op=PAM:setcred acct=\"root\" exe=\"/usr/sbin/cron\" hostname=? addr=? terminal=cron res=success"
+      ],
+      [
+         "op",
+         "operation performed within the PAM module",
+         "PAM:setcred"
+      ],
+      [
+         "acct",
+         "account name used in the operation",
+         "root"
+      ],
+      [
+         "exe",
+         "executable path that initiated the operation",
+         "/usr/sbin/cron"
+      ],
+      [
+         "hostname",
+         "hostname associated with the event",
+         "?"
+      ],
+      [
+         "addr",
+         "IP address or remote address of the connection",
+         "?"
+      ],
+      [
+         "terminal",
+         "terminal type used for the session",
+         "cron"
+      ],
+      [
+         "res",
+         "result or status of the operation",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "The type of event, indicating credential dispatching, useful for event categorization and filtering",
+         "CRED_DISP"
+      ],
+      [
+         "pid",
+         "Process ID of the process performing the credential operation, used for process lineage and session grouping",
+         "26298"
+      ],
+      [
+         "uid",
+         "User ID associated with the process, used for user-based event correlation",
+         "0"
+      ],
+      [
+         "auid",
+         "Audit user ID, typically the original user before any privilege escalation, used for audit trail and user tracking",
+         "0"
+      ],
+      [
+         "ses",
+         "Session identifier for the system session, used for session-based event grouping",
+         "129"
+      ],
+      [
+         "op",
+         "The PAM operation being performed, enabling alignment of authentication-related events",
+         "PAM:setcred"
+      ],
+      [
+         "acct",
+         "Account name involved in the PAM operation, used for user account event correlation",
+         "root"
+      ],
+      [
+         "exe",
+         "Path to the executable that initiated the PAM operation, useful for process lineage and binary analysis",
+         "/usr/sbin/cron"
+      ],
+      [
+         "hostname",
+         "Hostname associated with the operation, used for network and host-based event correlation",
+         "?"
+      ],
+      [
+         "addr",
+         "Address (IP or other) associated with the event, used for network linkage and source/destination identification",
+         "?"
+      ],
+      [
+         "terminal",
+         "Terminal device associated with the session, useful for session tracking and source identification",
+         "cron"
+      ],
+      [
+         "res",
+         "Result of the PAM operation, indicating success or failure for event outcome analysis",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "event type indicating the audit log entry category",
+         "LOGIN"
+      ],
+      [
+         "pid",
+         "process identifier of the logging process, useful for process lineage and session tracking",
+         "20949"
+      ],
+      [
+         "uid",
+         "user identifier of the user performing or associated with the login, relevant for user and access tracking",
+         "0"
+      ],
+      [
+         "old_auid",
+         "previous audit user identifier before login, aiding in session and identity transition analysis",
+         "4294967295"
+      ],
+      [
+         "auid",
+         "audit user identifier after login, used for user identity and audit trail alignment",
+         "0"
+      ],
+      [
+         "tty",
+         "terminal type associated with the login session, useful for session grouping and access context",
+         "(none)"
+      ],
+      [
+         "old_ses",
+         "previous login session identifier, useful for session handover and lineage analysis",
+         "4294967295"
+      ],
+      [
+         "ses",
+         "current login session identifier, critical for session grouping and event correlation",
+         "73"
+      ],
+      [
+         "res",
+         "result code indicating success or failure of the login attempt, used for event outcome alignment",
+         "1"
+      ]
+   ],
+   [
+      [
+         "type",
+         "Log event type identifier indicates audit event category, enabling filtering and alignment by event class.",
+         "PROCTITLE"
+      ],
+      [
+         "proctitle",
+         "Hex-encoded process title string representing the command-line arguments and program name, useful for process lineage and anomaly detection.",
+         "61707061726D6F725F706172736572002D72002D54002D57002F6574632F61707061726D6F722E642F7362696E2E6468636C69656E74"
+      ]
+   ],
+   [
+      [
+         "type",
+         "event type identifier",
+         "SERVICE_START"
+      ],
+      [
+         "pid",
+         "process identifier for the service",
+         "1"
+      ],
+      [
+         "uid",
+         "user identifier of the process owner",
+         "0"
+      ],
+      [
+         "auid",
+         "audit user identifier",
+         "4294967295"
+      ],
+      [
+         "ses",
+         "session identifier",
+         "4294967295"
+      ],
+      [
+         "msg",
+         "full audit message payload containing nested fields",
+         "unit=systemd-hostnamed comm=\"systemd\" exe=\"/lib/systemd/systemd\" hostname=? addr=? terminal=? res=success"
+      ],
+      [
+         "unit",
+         "service unit name being started",
+         "systemd-hostnamed"
+      ],
+      [
+         "comm",
+         "command name of the process",
+         "systemd"
+      ],
+      [
+         "exe",
+         "executable path of the process",
+         "/lib/systemd/systemd"
+      ],
+      [
+         "hostname",
+         "hostname where the event occurred",
+         "?"
+      ],
+      [
+         "addr",
+         "address associated with the event",
+         "?"
+      ],
+      [
+         "terminal",
+         "terminal associated with the event",
+         "?"
+      ],
+      [
+         "res",
+         "result of the service start action",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "Indicates the event type for classification and filtering.",
+         "SERVICE_STOP"
+      ],
+      [
+         "pid",
+         "Process identifier for entity and process lineage correlation.",
+         "1"
+      ],
+      [
+         "uid",
+         "User identifier for user entity and access control alignment.",
+         "0"
+      ],
+      [
+         "auid",
+         "Audit user identifier for tracking original login user across sessions.",
+         "4294967295"
+      ],
+      [
+         "ses",
+         "Session identifier for grouping events within a login session.",
+         "4294967295"
+      ],
+      [
+         "msg",
+         "Contains the inner payload with service stop details for nested field extraction.",
+         "unit=systemd-tmpfiles-clean comm=\"systemd\" exe=\"/lib/systemd/systemd\" hostname=? addr=? terminal=? res=success"
+      ],
+      [
+         "unit",
+         "Unit name of the stopped systemd service for service lifecycle and event correlation.",
+         "systemd-tmpfiles-clean"
+      ],
+      [
+         "comm",
+         "Command name of the process for process identification and lineage.",
+         "systemd"
+      ],
+      [
+         "exe",
+         "Executable path for process binary alignment and forensic analysis.",
+         "/lib/systemd/systemd"
+      ],
+      [
+         "hostname",
+         "Hostname field (placeholder) for network or system endpoint identification.",
+         "?"
+      ],
+      [
+         "addr",
+         "Network address field (placeholder) for network flow or endpoint correlation.",
+         "?"
+      ],
+      [
+         "terminal",
+         "Terminal identifier for session and access path tracking.",
+         "?"
+      ],
+      [
+         "res",
+         "Result status of the operation for outcome analysis and success/failure detection.",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "Audit event type identifier for system call classification.",
+         "SYSCALL"
+      ],
+      [
+         "arch",
+         "System architecture identifier for the CPU executing the syscall.",
+         "c000003e"
+      ],
+      [
+         "syscall",
+         "Numeric identifier of the system call being invoked.",
+         "1"
+      ],
+      [
+         "success",
+         "Indicates whether the syscall completed successfully.",
+         "yes"
+      ],
+      [
+         "exit",
+         "Return value or exit code of the syscall.",
+         "25025"
+      ],
+      [
+         "a0",
+         "First argument passed to the syscall (hexadecimal address/value).",
+         "6"
+      ],
+      [
+         "a1",
+         "Second argument passed to the syscall (hexadecimal address/value).",
+         "5577aa056ff0"
+      ],
+      [
+         "a2",
+         "Third argument passed to the syscall (hexadecimal address/value).",
+         "61c1"
+      ],
+      [
+         "a3",
+         "Fourth argument passed to the syscall (hexadecimal address/value).",
+         "0"
+      ],
+      [
+         "items",
+         "Count of additional items associated with the syscall event.",
+         "0"
+      ],
+      [
+         "ppid",
+         "Parent process ID of the process that invoked the syscall.",
+         "17953"
+      ],
+      [
+         "pid",
+         "Process ID of the process that invoked the syscall.",
+         "17954"
+      ],
+      [
+         "auid",
+         "Audit user ID (real user ID of the user who owns the process).",
+         "4294967295"
+      ],
+      [
+         "uid",
+         "User ID of the user running the process.",
+         "0"
+      ],
+      [
+         "gid",
+         "Group ID of the primary group for the process.",
+         "0"
+      ],
+      [
+         "euid",
+         "Effective user ID of the process.",
+         "0"
+      ],
+      [
+         "suid",
+         "Set-user-ID (saved) to determine effective user ID on exec.",
+         "0"
+      ],
+      [
+         "fsuid",
+         "Filesystem user ID for the process.",
+         "0"
+      ],
+      [
+         "egid",
+         "Effective group ID of the process.",
+         "0"
+      ],
+      [
+         "sgid",
+         "Set-group-ID (saved) to determine effective group ID on exec.",
+         "0"
+      ],
+      [
+         "fsgid",
+         "Filesystem group ID for the process.",
+         "0"
+      ],
+      [
+         "tty",
+         "Terminal associated with the process (pts0 indicates pseudoterminal).",
+         "pts0"
+      ],
+      [
+         "ses",
+         "Audit session identifier linking related process activities.",
+         "4294967295"
+      ],
+      [
+         "comm",
+         "Command name (process executable short name) during the syscall.",
+         "apparmor_parser"
+      ],
+      [
+         "exe",
+         "Full path to the executable binary that performed the syscall.",
+         "/sbin/apparmor_parser"
+      ],
+      [
+         "key",
+         "Arbitrary audit event key for filtering and grouping events.",
+         "(null)"
+      ]
+   ],
+   [
+      [
+         "type",
+         "log type identifier (USER_ACCT event) used for event categorization and routing",
+         "USER_ACCT"
+      ],
+      [
+         "pid",
+         "process ID of the process performing the action, useful for process lineage and event correlation",
+         "5768"
+      ],
+      [
+         "uid",
+         "user ID of the user under which the process runs, useful for user identity and access mapping",
+         "0"
+      ],
+      [
+         "auid",
+         "audit user ID (original login user ID), useful for tracking user identity across privilege escalations",
+         "4294967295"
+      ],
+      [
+         "ses",
+         "login session ID, useful for session grouping and session-level correlation",
+         "4294967295"
+      ],
+      [
+         "msg",
+         "raw message payload containing nested key-value fields for detailed event information",
+         "op=PAM:accounting acct=\"root\" exe=\"/usr/sbin/cron\" hostname=? addr=? terminal=cron res=success"
+      ],
+      [
+         "op",
+         "operation or action performed, useful for event type classification and correlation",
+         "PAM:accounting"
+      ],
+      [
+         "acct",
+         "account name (username) associated with the operation, useful for user activity mapping",
+         "root"
+      ],
+      [
+         "exe",
+         "executable path that performed the action, useful for process lineage and binary tracking",
+         "/usr/sbin/cron"
+      ],
+      [
+         "hostname",
+         "hostname of the originating system (placeholder if unknown), useful for network origin identification",
+         "?"
+      ],
+      [
+         "addr",
+         "IP address or network address of the originating system (placeholder if unknown), useful for network linkage and source identification",
+         "?"
+      ],
+      [
+         "terminal",
+         "terminal type or name associated with the session, useful for session context and environment tracking",
+         "cron"
+      ],
+      [
+         "res",
+         "result or outcome of the operation (success/failure), useful for event outcome analysis and anomaly detection",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "indicates the event type classification, used for categorizing and filtering log events.",
+         "USER_END"
+      ],
+      [
+         "pid",
+         "process identifier, used for tracking process-level activity and lineage.",
+         "7163"
+      ],
+      [
+         "uid",
+         "user identifier, used for identifying the user account associated with the process.",
+         "0"
+      ],
+      [
+         "auid",
+         "audit user identifier, used for audit trail and user accountability across sessions.",
+         "0"
+      ],
+      [
+         "ses",
+         "session identifier, used for grouping related events within a single login session.",
+         "171"
+      ],
+      [
+         "op",
+         "operation field indicating the PAM action performed, used for event correlation and authentication flow tracking.",
+         "PAM:session_close"
+      ],
+      [
+         "acct",
+         "account name associated with the operation, used for user identity alignment and access control analysis.",
+         "root"
+      ],
+      [
+         "exe",
+         "executable path that initiated the operation, used for process lineage and program execution tracking.",
+         "/usr/sbin/cron"
+      ],
+      [
+         "hostname",
+         "hostname of the originating system, used for network linkage and source identification.",
+         "?"
+      ],
+      [
+         "addr",
+         "IP address of the originating system, used for network linkage and source identification.",
+         "?"
+      ],
+      [
+         "terminal",
+         "terminal type or identifier, used for session grouping and access method identification.",
+         "cron"
+      ],
+      [
+         "res",
+         "result of the operation, used for event outcome classification and security monitoring.",
+         "success"
+      ]
+   ],
+   [
+      [
+         "type",
+         "log event type (audit event category)",
+         "USER_START"
+      ],
+      [
+         "pid",
+         "process identifier associated with the event",
+         "368"
+      ],
+      [
+         "uid",
+         "user identifier of the process owner",
+         "0"
+      ],
+      [
+         "auid",
+         "audit user identifier (original login user ID)",
+         "0"
+      ],
+      [
+         "ses",
+         "session identifier for the user session",
+         "150"
+      ],
+      [
+         "msg",
+         "raw message payload containing operation details",
+         "op=PAM:session_open acct=\"root\" exe=\"/usr/sbin/cron\" hostname=? addr=? terminal=cron res=success"
+      ],
+      [
+         "op",
+         "the PAM operation or action being performed",
+         "PAM:session_open"
+      ],
+      [
+         "acct",
+         "the account name involved in the session operation",
+         "root"
+      ],
+      [
+         "exe",
+         "the executable path that initiated the session",
+         "/usr/sbin/cron"
+      ],
+      [
+         "hostname",
+         "hostname of the originator (unknown if '?')",
+         "?"
+      ],
+      [
+         "addr",
+         "IP address of the originator (unknown if '?')",
+         "?"
+      ],
+      [
+         "terminal",
+         "terminal type or name associated with the session",
+         "cron"
+      ],
+      [
+         "res",
+         "result or outcome of the session operation",
+         "success"
+      ]
+   ]
+]

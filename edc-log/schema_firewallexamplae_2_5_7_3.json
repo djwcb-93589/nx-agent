@@ -1,0 +1,59 @@
+[
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ],
+    [
+        {
+            "date": "time",
+            "dname": "device_name",
+            "from": "management_ip",
+            "mod": "module",
+            "act": "event_action",
+            "result": "outcome",
+            "user": "user"
+        },
+        [
+            "devid",
+            "logtype",
+            "pri",
+            "ver",
+            "dsp_msg",
+            "fwlog"
+        ]
+    ]
+]

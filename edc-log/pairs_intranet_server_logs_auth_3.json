@@ -1,0 +1,279 @@
+[
+   [
+      [
+         "pid",
+         "Process ID of the SSH daemon handling the authentication event",
+         "25565"
+      ],
+      [
+         "user",
+         "Target user account for which publickey authentication was accepted",
+         "hwarren"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the SSH connection originated",
+         "172.17.130.196"
+      ],
+      [
+         "src_port",
+         "Source port number from which the SSH connection originated",
+         "42972"
+      ],
+      [
+         "auth_method",
+         "Authentication method used (publickey)",
+         "publickey"
+      ],
+      [
+         "ssh_version",
+         "SSH protocol version string (ssh2)",
+         "ssh2"
+      ],
+      [
+         "key_type",
+         "Type of cryptographic key used (RSA)",
+         "RSA"
+      ],
+      [
+         "key_hash",
+         "SHA256 fingerprint hash of the accepted public key",
+         "8wFbiaYPevKS/wYKnePO20v0iymTcrRh4Kr+1uRS1UM"
+      ]
+   ],
+   [
+      [
+         "session_opener_pid",
+         "Process identifier of the CRON session opener extracted from the square brackets.",
+         "20052"
+      ],
+      [
+         "pam_service",
+         "The PAM service name used in the pam_unix authentication context.",
+         "cron"
+      ],
+      [
+         "pam_type",
+         "The type of PAM operation being performed, such as session management.",
+         "session"
+      ],
+      [
+         "target_user",
+         "The username for whom the session was opened.",
+         "root"
+      ],
+      [
+         "uid",
+         "The user ID of the account that initiated the session.",
+         "0"
+      ]
+   ],
+   [
+      [
+         "hostname",
+         "The hostname extracted from the log prefix identifying the source system",
+         "intranet-server"
+      ],
+      [
+         "pid",
+         "The process identifier of the CRON daemon handling the session",
+         "25037"
+      ],
+      [
+         "pam_service",
+         "The PAM service module name used for authentication",
+         "cron"
+      ],
+      [
+         "pam_type",
+         "The PAM type or action performed within the session",
+         "session"
+      ],
+      [
+         "session_event",
+         "The event description indicating the closure of a user session",
+         "closed for user"
+      ],
+      [
+         "user",
+         "The username associated with the session being closed",
+         "root"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID associated with the SSH daemon handling the connection.",
+         "28573"
+      ],
+      [
+         "src_ip",
+         "Source IP address from which the connection originated.",
+         "172.17.130.196"
+      ],
+      [
+         "src_port",
+         "Source port number from which the connection was attempted.",
+         "52000"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process ID of the su command, useful for event correlation and process lineage tracking.",
+         "28816"
+      ],
+      [
+         "session_device",
+         "The pseudo-terminal device associated with the user session, useful for session grouping and resource tracking.",
+         "/dev/pts/1"
+      ],
+      [
+         "user_account",
+         "The target user account for the su operation, indicating the user identity being switched to in the authentication event.",
+         "www-data"
+      ],
+      [
+         "auth_user",
+         "The authenticating user initiating the su command from the original session.",
+         "phopkins"
+      ]
+   ],
+   [
+      [
+         "su_pid",
+         "Process ID of the su command, useful for process lineage and logging entity identification.",
+         "28816"
+      ],
+      [
+         "su_target_user",
+         "The target user account for the su operation, used for access control and user session correlation.",
+         "phopkins"
+      ],
+      [
+         "su_source_user",
+         "The originating user account that performed the su operation, used for audit trails and identity mapping.",
+         "www-data"
+      ]
+   ],
+   [
+      [
+         "user",
+         "the user who executed the sudo command, useful for user-to-command mapping",
+         "phopkins"
+      ],
+      [
+         "tty",
+         "the terminal device associated with the session, useful for session grouping",
+         "pts/1"
+      ],
+      [
+         "pwd",
+         "the present working directory when the command was executed, useful for understanding the execution context",
+         "/var/www/intranet.price.fox.org/wp-content/uploads/2022/01"
+      ],
+      [
+         "user",
+         "the target user the command was run as, useful for privilege escalation tracking",
+         "root"
+      ],
+      [
+         "command",
+         "the command executed via sudo, useful for command-line auditing and process lineage",
+         "list"
+      ]
+   ],
+   [
+      [
+         "intranet_server",
+         "The hostname or identifier of the server where the sudo session was closed",
+         "intranet-server"
+      ],
+      [
+         "sudo",
+         "The process or program name associated with the authentication event",
+         "sudo"
+      ],
+      [
+         "pam_unix",
+         "The PAM module used for the session management",
+         "pam_unix"
+      ],
+      [
+         "session",
+         "The PAM service or context name for the session event",
+         "session"
+      ],
+      [
+         "user",
+         "The username for which the sudo session was closed",
+         "root"
+      ]
+   ],
+   [
+      [
+         "hostname",
+         "The hostname of the machine where the log originates.",
+         "intranet-server"
+      ],
+      [
+         "service",
+         "The name of the service or process generating the log entry.",
+         "sudo"
+      ],
+      [
+         "user",
+         "The username of the user who executed the sudo command.",
+         "phopkins"
+      ],
+      [
+         "tty",
+         "The terminal device associated with the user session.",
+         "pts/1"
+      ],
+      [
+         "pwd",
+         "The current working directory of the user at the time of the command execution.",
+         "/var/www/intranet.price.fox.org/wp-content/uploads/2022/01"
+      ],
+      [
+         "target_user",
+         "The user identity that the sudo command is executed as.",
+         "root"
+      ],
+      [
+         "command",
+         "The full command string executed with sudo, including arguments and flags.",
+         "/bin/ls -laR /root/"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier for the systemd-logind daemon generating the session event, useful for process lineage and entity alignment.",
+         "1011"
+      ],
+      [
+         "session_id",
+         "Unique identifier assigned to the newly created login session, used for session grouping and event correlation.",
+         "283"
+      ],
+      [
+         "user",
+         "Authenticated username associated with the session, enabling user-level entity alignment and access tracking.",
+         "hwarren"
+      ]
+   ],
+   [
+      [
+         "pid",
+         "Process identifier of the systemd-logind daemon that managed the session.",
+         "1011"
+      ],
+      [
+         "session_id",
+         "Identifier of the user session that was removed.",
+         "98"
+      ]
+   ]
+]
