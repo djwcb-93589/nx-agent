@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>日志到知识图谱 Agent 工作台</title>
-    <link rel="stylesheet" href="/styles.css?v=20260616-split-proxy" />
+    <link rel="stylesheet" href="/styles.css?v=20260626-ui-tree" />
   </head>
   <body>
     <div class="app-shell">
@@ -52,105 +52,132 @@
         </section>
 
         <section class="control-grid">
-          <div class="control-panel">
+          <div class="control-panel collapsible-panel" data-collapsible-panel>
             <div class="panel-head compact">
               <div>
                 <h3>解析配置</h3>
                 <p>决定从哪些原始 .log 文件生成 3.csv、分组、POI 和关系库。</p>
               </div>
+              <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
             </div>
-            <div class="form-grid">
-              <label class="wide">
-                <span>运行范围</span>
-                <input id="projectInput" value="all" />
-              </label>
-              <label>
-                <span>样本数</span>
-                <input id="sampleInput" type="number" value="3" min="1" max="20" />
-              </label>
-              <label>
-                <span>展示行数</span>
-                <input id="limitInput" type="number" value="80" min="10" max="500" />
-              </label>
-              <label class="wide">
-                <span>模型</span>
-                <input id="modelInput" value="deepseek-v4-flash" />
-              </label>
-              <label>
-                <span class="field-label-with-help">
-                  相似度策略
-                  <button
-                    class="help-dot"
-                    type="button"
-                    title="选择日志分组和代表样本时使用的相似度计算方式。Jaccard 更适合按词集合比较，Cosine 更适合向量化文本比较，Random 只适合快速冒烟测试。"
-                    aria-label="相似度策略说明"
-                  >?</button>
-                </span>
-                <select id="similaritySelect">
-                  <option value="jaccard">Jaccard</option>
-                  <option value="cosine">Cosine</option>
-                  <option value="random">Random</option>
-                </select>
-              </label>
-              <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
-              <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
-              <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> DeepSeek 调度</label>
-              <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
-              <label class="check-line"><input id="mockCheckbox" type="checkbox" /> 离线烟测</label>
-            </div>
-            <div class="button-row">
-              <button id="startRunButton" class="primary-button" type="button">只运行日志解析</button>
-              <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
+            <div class="collapsible-body">
+              <div class="form-grid">
+                <label class="wide">
+                  <span>运行范围</span>
+                  <input id="projectInput" value="all" />
+                </label>
+                <label>
+                  <span>样本数</span>
+                  <input id="sampleInput" type="number" value="3" min="1" max="20" />
+                </label>
+                <label>
+                  <span>展示行数</span>
+                  <input id="limitInput" type="number" value="80" min="10" max="500" />
+                </label>
+                <label class="wide">
+                  <span>模型</span>
+                  <input id="modelInput" value="deepseek-v4-flash" />
+                </label>
+                <label>
+                  <span class="field-label-with-help">
+                    相似度策略
+                    <button
+                      class="help-dot"
+                      type="button"
+                      title="选择日志分组和代表样本时使用的相似度计算方式。Jaccard 更适合按词集合比较，Cosine 更适合向量化文本比较，Random 只适合快速冒烟测试。"
+                      aria-label="相似度策略说明"
+                    >?</button>
+                  </span>
+                  <select id="similaritySelect">
+                    <option value="jaccard">Jaccard</option>
+                    <option value="cosine">Cosine</option>
+                    <option value="random">Random</option>
+                  </select>
+                </label>
+                <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
+                <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
+                <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> DeepSeek 调度</label>
+                <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
+                <label class="check-line"><input id="mockCheckbox" type="checkbox" /> 离线烟测</label>
+              </div>
+              <div class="button-row">
+                <button id="startRunButton" class="primary-button" type="button">只运行日志解析</button>
+                <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
+              </div>
             </div>
           </div>
 
-          <div class="control-panel">
+          <div class="control-panel collapsible-panel" data-collapsible-panel>
             <div class="panel-head compact">
               <div>
                 <h3>图谱配置</h3>
                 <p>决定如何复用解析产物、生成 DAG、构建融合图和是否写入 Neo4j。</p>
               </div>
-              <span id="kgApiState" class="status-pill">检测中</span>
-            </div>
-            <label class="wide">
-              <span>自然语言任务</span>
-              <textarea id="kgTaskText" rows="3">复用当前日志解析结果，构建并融合所有日志知识图谱</textarea>
-            </label>
-            <div class="form-grid">
-              <label>
-                <span>行数限制</span>
-                <input id="kgLimitRows" type="number" min="1" placeholder="空为全部" />
-              </label>
-              <label>
-                <span>DAG 并发数</span>
-                <input id="kgMaxWorkers" type="number" min="1" max="8" value="3" />
-              </label>
-              <label class="wide">
-                <span>DeepSeek API Key</span>
-                <input id="kgApiKey" type="password" autocomplete="off" placeholder="空则使用环境变量" />
-              </label>
-              <label class="wide">
-                <span>融合图谱目录</span>
-                <input id="fusedGraphDir" type="text" />
-              </label>
-              <label class="check-line wide"><input id="kgForceCheckbox" type="checkbox" /> 强制重建图谱中间产物</label>
-            </div>
-            <fieldset class="neo4j-box">
-              <legend>Neo4j 写入确认</legend>
-              <div class="form-grid">
-                <label><span>URI</span><input id="neo4jUri" type="text" placeholder="bolt://localhost:7687" /></label>
-                <label><span>用户</span><input id="neo4jUser" type="text" placeholder="neo4j" /></label>
-                <label><span>密码</span><input id="neo4jPassword" type="password" autocomplete="off" /></label>
-                <label><span>数据库</span><input id="neo4jDatabase" type="text" value="neo4j" /></label>
+              <div class="panel-head-actions">
+                <span id="kgApiState" class="status-pill">检测中</span>
+                <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
               </div>
-              <label class="check-line"><input id="writeNeo4j" type="checkbox" /> 本次完成后写入 Neo4j</label>
-            </fieldset>
-            <div class="button-row">
-              <button id="fullRunButton" class="primary-button" type="button">运行完整流程</button>
-              <button id="preflightBtn" class="secondary-button" type="button">环境分析</button>
-              <button id="planBtn" class="secondary-button" type="button">生成 DAG</button>
-              <button id="kgRunBtn" class="primary-button muted-primary" type="button">只运行图谱构建</button>
             </div>
+            <div class="collapsible-body">
+              <label class="wide">
+                <span>自然语言任务</span>
+                <textarea id="kgTaskText" rows="3">复用当前日志解析结果，构建并融合所有日志知识图谱</textarea>
+              </label>
+              <div class="form-grid">
+                <label>
+                  <span>行数限制</span>
+                  <input id="kgLimitRows" type="number" min="1" placeholder="空为全部" />
+                </label>
+                <label>
+                  <span>DAG 并发数</span>
+                  <input id="kgMaxWorkers" type="number" min="1" max="8" value="3" />
+                </label>
+                <label class="wide">
+                  <span>DeepSeek API Key</span>
+                  <input id="kgApiKey" type="password" autocomplete="off" placeholder="空则使用环境变量" />
+                </label>
+                <label class="wide">
+                  <span>融合图谱目录</span>
+                  <input id="fusedGraphDir" type="text" />
+                </label>
+                <label class="check-line wide"><input id="kgForceCheckbox" type="checkbox" /> 强制重建图谱中间产物</label>
+              </div>
+              <fieldset class="neo4j-box">
+                <legend>Neo4j 写入确认</legend>
+                <div class="form-grid">
+                  <label><span>URI</span><input id="neo4jUri" type="text" placeholder="bolt://localhost:7687" /></label>
+                  <label><span>用户</span><input id="neo4jUser" type="text" placeholder="neo4j" /></label>
+                  <label><span>密码</span><input id="neo4jPassword" type="password" autocomplete="off" /></label>
+                  <label><span>数据库</span><input id="neo4jDatabase" type="text" value="neo4j" /></label>
+                </div>
+                <label class="check-line"><input id="writeNeo4j" type="checkbox" /> 本次完成后写入 Neo4j</label>
+              </fieldset>
+              <div class="button-row">
+                <button id="fullRunButton" class="primary-button" type="button">运行完整流程</button>
+                <button id="preflightBtn" class="secondary-button" type="button">环境分析</button>
+                <button id="planBtn" class="secondary-button" type="button">生成 DAG</button>
+                <button id="kgRunBtn" class="primary-button muted-primary" type="button">只运行图谱构建</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="schema-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>POI 字段库</h3>
+                <span id="poiMeta"></span>
+              </div>
+              <div class="panel-head-actions">
+                <button id="editPoiButton" class="mini-button" type="button">编辑 POI</button>
+              </div>
+            </div>
+            <div id="poiTable" class="table-wrap"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Relation 关系库</h3><span id="relationMeta"></span></div>
+            <div id="relationTable" class="table-wrap"></div>
           </div>
         </section>
 
@@ -221,21 +248,18 @@
             <div class="panel-head"><h3>深度分组树</h3><span id="treeMeta"></span></div>
             <div id="treeTable" class="table-wrap"></div>
           </div>
-          <div class="panel">
+          <div class="panel wide">
             <div class="panel-head">
               <div>
-                <h3>POI 字段库</h3>
-                <span id="poiMeta"></span>
+                <h3>客户事件 JSON</h3>
+                <span id="customerEventMeta"></span>
               </div>
               <div class="panel-head-actions">
-                <button id="editPoiButton" class="mini-button" type="button">编辑 POI</button>
+                <button id="downloadCustomerEventsButton" class="mini-button" type="button" disabled>下载 JSON</button>
               </div>
             </div>
-            <div id="poiTable" class="table-wrap"></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>Relation 关系库</h3><span id="relationMeta"></span></div>
-            <div id="relationTable" class="table-wrap"></div>
+            <div id="customerEventValidation" class="event-validation-summary"></div>
+            <div id="customerEventTable" class="table-wrap"></div>
           </div>
           <div class="panel wide">
             <div class="panel-head"><h3>解析运行汇总</h3><span id="summaryMeta"></span></div>
@@ -318,6 +342,6 @@
       </section>
     </div>
 
-    <script src="/app.js?v=20260616-split-proxy"></script>
+    <script src="/app.js?v=20260626-ui-tree"></script>
   </body>
 </html>

@@ -1,0 +1,6 @@
+Aug 29 17:26:23 themis zone: devid=0 date="2017/08/29 17:26:23" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=添加 result=0 cmd=add_seczone user=root dsp_msg="安全域名字 zone 接口集合" fwlog=0
+Aug 29 17:26:23 themis zone: devid=0 date="2017/08/29 17:26:23" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=add result=0 cmd=add_seczone user=root dsp_msg="seczone name zone ifset" fwlog=0
+Aug 29 17:33:54 themis zone: devid=0 date="2017/08/29 17:33:54" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=编辑 result=0 cmd=zone user=root dsp_msg="接口集合 eth1,eth3" fwlog=0
+Aug 29 17:33:54 themis zone: devid=0 date="2017/08/29 17:33:54" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=set result=0 cmd=zone user=root dsp_msg="ifset eth1,eth3" fwlog=0
+Aug 29 17:39:29 themis zone: devid=0 date="2017/08/29 17:39:29" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=删除 result=0 cmd=del_seczone user=root dsp_msg="安全域名称 zone" fwlog=0
+Aug 29 17:39:29 themis zone: devid=0 date="2017/08/29 17:39:29" dname=themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=zone act=del result=0 cmd=del_seczone user=root dsp_msg="seczone name zone" fwlog=0

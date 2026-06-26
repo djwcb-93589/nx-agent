@@ -24,7 +24,7 @@ from run import (
     _load_existing_template2samples,
 )
 
-from .config import PROJECT_ROOT, DatasetSpec
+from .config import AIT_ROOT, PROJECT_ROOT, DatasetSpec
 from env_utils import load_dotenv, resolve_env_value
 
 
@@ -83,6 +83,41 @@ def _count_csv_rows(path: Path) -> int:
         except StopIteration:
             return 0
         return sum(1 for _ in reader)
+
+
+def _export_firewall_customer_events(spec: DatasetSpec) -> tuple[dict[str, str], dict[str, Any]]:
+    if spec.family != "firewall" or not spec.params_output_path.is_file():
+        return {}, {}
+
+    from .firewall_events import export_customer_events
+
+    relative_output_dir = spec.csv_path.parent.resolve().relative_to(AIT_ROOT.resolve())
+    normalized_relative = Path(
+        relative_output_dir.as_posix().replace("firewallexamplae/", "firewallexample/", 1)
+    )
+    parser_output_dir = PROJECT_ROOT.parent / "result_deepseek" / normalized_relative
+    schema_root = PROJECT_ROOT.parent / "schemas"
+    payload = export_customer_events(
+        params_csv=spec.params_output_path,
+        output_dirs=(spec.csv_path.parent, parser_output_dir),
+        schema_path=schema_root / "firewall_customer_event_schema.json",
+        asset_path=schema_root / "firewall_assets.csv",
+        device_path=schema_root / "firewall_devices.csv",
+        source_name=spec.name,
+    )
+    preferred = payload["written"][-1]
+    return (
+        {
+            "customer_events": preferred["events"],
+            "customer_event_validation": preferred["validation"],
+            "customer_events_rejected": preferred["rejected"],
+        },
+        {
+            "customer_events": payload["report"]["event_count"],
+            "customer_events_rejected": payload["report"]["rejected_count"],
+            "customer_event_warnings": payload["report"]["warning_count"],
+        },
+    )
 
 
 def generate_template2samples(
@@ -352,22 +387,24 @@ def extract_params_from_logs(
 ) -> ToolResult:
     load_dotenv(PROJECT_ROOT)
     if spec.params_output_path.exists() and not force:
+        event_outputs, event_metrics = _export_firewall_customer_events(spec)
         return ToolResult(
             tool="extract_params_from_logs",
             message=f"Loaded existing params CSV for {spec.name}",
-            outputs={"params_csv": _path_text(spec.params_output_path)},
-            metrics={"rows": _count_csv_rows(spec.params_output_path)},
+            outputs={"params_csv": _path_text(spec.params_output_path), **event_outputs},
+            metrics={"rows": _count_csv_rows(spec.params_output_path), **event_metrics},
             skipped=True,
         )
     legacy_path = _legacy_params_path(spec)
     if legacy_path.exists() and not force:
         spec.params_output_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(legacy_path, spec.params_output_path)
+        event_outputs, event_metrics = _export_firewall_customer_events(spec)
         return ToolResult(
             tool="extract_params_from_logs",
             message=f"Imported existing params CSV for {spec.name} into artifacts",
-            outputs={"params_csv": _path_text(spec.params_output_path)},
-            metrics={"rows": _count_csv_rows(spec.params_output_path)},
+            outputs={"params_csv": _path_text(spec.params_output_path), **event_outputs},
+            metrics={"rows": _count_csv_rows(spec.params_output_path), **event_metrics},
             skipped=True,
         )
 
@@ -407,11 +444,12 @@ def extract_params_from_logs(
             f"STDOUT:\n{completed.stdout}\nSTDERR:\n{completed.stderr}"
         )
 
+    event_outputs, event_metrics = _export_firewall_customer_events(spec)
     return ToolResult(
         tool="extract_params_from_logs",
         message=f"Extracted params CSV for {spec.name}",
-        outputs={"params_csv": _path_text(spec.params_output_path)},
-        metrics={"rows": _count_csv_rows(spec.params_output_path)},
+        outputs={"params_csv": _path_text(spec.params_output_path), **event_outputs},
+        metrics={"rows": _count_csv_rows(spec.params_output_path), **event_metrics},
     )
 
 

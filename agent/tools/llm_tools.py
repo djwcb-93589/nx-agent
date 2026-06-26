@@ -91,12 +91,34 @@ def create_llm_client(config):
 
 
 def generate_log_regex(template_engine, log_list, records=False, do_sample=False):
-    return template_engine.generate_log_template_using_pipeline(
-        log_list=log_list,
-        dic=records,
-        do_sample=do_sample,
-        max_new_tokens=template_engine.max_new_tokens,
-    )
+    try:
+        return template_engine.generate_log_template_using_pipeline(
+            log_list=log_list,
+            dic=records,
+            do_sample=do_sample,
+            max_new_tokens=template_engine.max_new_tokens,
+        )
+    except RuntimeError as exc:
+        error_text = str(exc).lower()
+        if "deepseek request failed" not in error_text and "empty" not in error_text:
+            raise
+        logs = [
+            str(item.get("Content", "")) if isinstance(item, dict) else str(item)
+            for item in log_list
+        ]
+        logs = [log for log in logs if log]
+        if not logs:
+            raise
+        template = _generalize_logs(logs)
+        regex_pattern = template_engine.clean_regex(
+            logs[0],
+            template_engine.template_to_regex(template),
+        )
+        print(
+            f"DeepSeek template generation unavailable; deterministic fallback used: {exc}",
+            flush=True,
+        )
+        return regex_pattern
 
 
 def _extract_logs_from_messages(messages):

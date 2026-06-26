@@ -14,6 +14,8 @@ const state = {
   defaultFusedGraphDir: "",
   poiEditorRows: [],
   poiValidationTimer: null,
+  sourceTreeExpanded: new Set(),
+  sourceTreeKnownRoots: new Set(),
 };
 
 const els = {
@@ -62,6 +64,10 @@ const els = {
   editPoiButton: document.getElementById("editPoiButton"),
   relationTable: document.getElementById("relationTable"),
   relationMeta: document.getElementById("relationMeta"),
+  customerEventTable: document.getElementById("customerEventTable"),
+  customerEventMeta: document.getElementById("customerEventMeta"),
+  customerEventValidation: document.getElementById("customerEventValidation"),
+  downloadCustomerEventsButton: document.getElementById("downloadCustomerEventsButton"),
   summaryTable: document.getElementById("summaryTable"),
   summaryMeta: document.getElementById("summaryMeta"),
   kgApiState: document.getElementById("kgApiState"),
@@ -217,6 +223,7 @@ async function postJson(url, payload = {}) {
 
 async function bootstrap() {
   bindEvents();
+  installCollapsiblePanels();
   installMaximizeButtons();
   await Promise.allSettled([loadSources(), loadKgDatasets()]);
   await checkKgHealth();
@@ -246,6 +253,7 @@ async function checkKgHealth() {
 async function loadSources(options = {}) {
   const { reloadActive = false, silent = false } = options;
   state.sources = await fetchJson("/api/sources");
+  seedSourceTreeExpansion();
   applyFilter();
   await loadSummary();
   if (state.activeSource && reloadActive) {
@@ -258,7 +266,8 @@ async function loadSources(options = {}) {
 function applyFilter() {
   const query = els.sourceFilter.value.trim().toLowerCase();
   state.filtered = state.sources.filter((item) =>
-    item.source.toLowerCase().includes(query),
+    item.source.toLowerCase().includes(query) ||
+    sourceSegments(item.source).join("/").toLowerCase().includes(query),
   );
   renderSources();
 }
@@ -266,29 +275,181 @@ function applyFilter() {
 function renderSources() {
   els.sourceCount.textContent = `${state.filtered.length} 个日志源`;
   els.sourceList.innerHTML = "";
-  for (const item of state.filtered) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className =
-      "source-item" + (item.source === state.activeSource ? " active" : "");
-    button.innerHTML = `
-      <div class="source-title">${escapeHtml(item.source)}</div>
-      <div class="source-meta">
-        <span class="badge">${formatBytes(item.size_bytes)}</span>
-        <span class="badge ${item.output_available ? "ready" : "missing"}">
-          ${item.output_available ? "已有解析输出" : "未解析"}
-        </span>
-        <span class="badge">${item.result_files.length} 个结果文件</span>
-      </div>
-    `;
-    button.addEventListener("click", () => selectSource(item.source, true).catch(showSourceError));
-    els.sourceList.appendChild(button);
+  if (state.filtered.length === 0) {
+    els.sourceList.innerHTML = '<div class="empty compact-empty">没有匹配的日志源</div>';
+    return;
   }
+  const query = els.sourceFilter.value.trim().toLowerCase();
+  const tree = buildSourceTree(state.filtered);
+  const fragment = document.createDocumentFragment();
+  for (const child of tree.children.values()) {
+    fragment.appendChild(renderSourceNode(child, 0, query));
+  }
+  els.sourceList.appendChild(fragment);
+}
+
+function seedSourceTreeExpansion() {
+  for (const item of state.sources) {
+    const first = sourceSegments(item.source)[0];
+    if (first && !state.sourceTreeKnownRoots.has(first)) {
+      state.sourceTreeKnownRoots.add(first);
+      state.sourceTreeExpanded.add(`root/${first}`);
+    }
+  }
+}
+
+function buildSourceTree(items) {
+  const root = createSourceTreeNode("root", "root");
+  for (const item of items) {
+    const segments = sourceSegments(item.source);
+    let node = root;
+    node.total += 1;
+    if (item.output_available) node.ready += 1;
+    segments.forEach((segment, index) => {
+      const key = `${node.key}/${segment}`;
+      if (!node.children.has(segment)) {
+        node.children.set(segment, createSourceTreeNode(segment, key));
+      }
+      node = node.children.get(segment);
+      node.total += 1;
+      if (item.output_available) node.ready += 1;
+      if (index === segments.length - 1) {
+        node.item = item;
+      }
+    });
+  }
+  return root;
+}
+
+function createSourceTreeNode(label, key) {
+  return {
+    label,
+    key,
+    children: new Map(),
+    item: null,
+    total: 0,
+    ready: 0,
+  };
+}
+
+function renderSourceNode(node, depth, query) {
+  if (node.item && node.children.size === 0) {
+    return renderSourceLeaf(node, depth);
+  }
+  const active = nodeHasActiveSource(node);
+  const expanded = Boolean(query) || state.sourceTreeExpanded.has(node.key);
+  const wrapper = document.createElement("div");
+  wrapper.className = `source-tree-node depth-${Math.min(depth, 4)}`;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className =
+    "source-folder" +
+    (expanded ? " expanded" : "") +
+    (active ? " has-active" : "");
+  button.innerHTML = `
+    <span class="source-folder-caret">${expanded ? "▾" : "▸"}</span>
+    <span class="source-folder-label">${escapeHtml(node.label)}</span>
+    <span class="source-folder-count">${node.ready}/${node.total}</span>
+  `;
+  button.addEventListener("click", () => {
+    if (state.sourceTreeExpanded.has(node.key)) {
+      state.sourceTreeExpanded.delete(node.key);
+    } else {
+      state.sourceTreeExpanded.add(node.key);
+    }
+    renderSources();
+  });
+  wrapper.appendChild(button);
+
+  const children = document.createElement("div");
+  children.className = "source-tree-children";
+  children.hidden = !expanded;
+  for (const child of node.children.values()) {
+    children.appendChild(renderSourceNode(child, depth + 1, query));
+  }
+  wrapper.appendChild(children);
+  return wrapper;
+}
+
+function renderSourceLeaf(node, depth) {
+  const item = node.item;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className =
+    "source-item source-leaf" +
+    (item.source === state.activeSource ? " active" : "");
+  button.style.setProperty("--source-depth", Math.min(depth, 5));
+  button.innerHTML = `
+    <div class="source-title">${escapeHtml(node.label)}</div>
+    <div class="source-path">${escapeHtml(shortPath(item.source))}</div>
+    <div class="source-meta">
+      <span class="badge">${formatBytes(item.size_bytes)}</span>
+      <span class="badge ${item.output_available ? "ready" : "missing"}">
+        ${item.output_available ? "已有解析输出" : "未解析"}
+      </span>
+      <span class="badge">${item.result_files.length} 个结果文件</span>
+    </div>
+  `;
+  button.addEventListener("click", () => selectSource(item.source, true).catch(showSourceError));
+  return button;
+}
+
+function sourceSegments(source) {
+  const parts = String(source || "")
+    .replaceAll("\\", "/")
+    .split("/")
+    .filter(Boolean);
+  if (parts.length < 2) {
+    return parts;
+  }
+  const fileName = parts.at(-1);
+  const delimiterIndexes = ["：", ":"]
+    .map((delimiter) => fileName.indexOf(delimiter))
+    .filter((index) => index > 0);
+  if (delimiterIndexes.length === 0) {
+    return parts;
+  }
+  const delimiterIndex = Math.min(...delimiterIndexes);
+  const category = fileName.slice(0, delimiterIndex).trim();
+  const leaf = fileName.slice(delimiterIndex + 1).trim();
+  if (!category || !leaf) {
+    return parts;
+  }
+  return [...parts.slice(0, -1), category, leaf];
+}
+
+function expandSourcePath(source) {
+  const segments = sourceSegments(source);
+  let key = "root";
+  for (const segment of segments.slice(0, -1)) {
+    key = `${key}/${segment}`;
+    state.sourceTreeExpanded.add(key);
+  }
+}
+
+function nodeHasActiveSource(node) {
+  if (!state.activeSource) {
+    return false;
+  }
+  if (node.item?.source === state.activeSource) {
+    return true;
+  }
+  for (const child of node.children.values()) {
+    if (nodeHasActiveSource(child)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 async function selectSource(source, syncRunScope, options = {}) {
   const { silent = false } = options;
+  const sourceChanged = state.activeSource !== source;
   state.activeSource = source;
+  if (sourceChanged) {
+    expandSourcePath(source);
+  }
   if (syncRunScope) {
     els.projectInput.value = source;
   }
@@ -315,6 +476,7 @@ function setLoading() {
     els.treeTable,
     els.poiTable,
     els.relationTable,
+    els.customerEventTable,
   ]) {
     target.innerHTML = '<div class="empty">加载中</div>';
   }
@@ -329,6 +491,8 @@ function showSourceError(err) {
   els.treeMeta.textContent = "加载失败";
   els.poiMeta.textContent = "加载失败";
   els.relationMeta.textContent = "加载失败";
+  els.customerEventMeta.textContent = "加载失败";
+  els.customerEventValidation.textContent = "";
   const html = `<div class="empty">加载失败：${escapeHtml(message)}</div>`;
   els.rawInput.innerHTML = html;
   for (const target of [
@@ -338,6 +502,7 @@ function showSourceError(err) {
     els.treeTable,
     els.poiTable,
     els.relationTable,
+    els.customerEventTable,
   ]) {
     target.innerHTML = html;
   }
@@ -378,7 +543,28 @@ function renderPayload(payload) {
   els.editPoiButton.disabled = !state.activeSource;
   renderCsv(els.relationTable, payload.relation_schema);
   els.relationMeta.textContent = schemaMetaText(payload.schema_meta, payload.relation_schema);
+  renderCustomerEvents(payload.customer_events);
   renderMetrics(payload);
+}
+
+function renderCustomerEvents(payload) {
+  renderCsv(els.customerEventTable, payload);
+  const validation = payload?.validation || {};
+  els.downloadCustomerEventsButton.disabled = !payload?.available;
+  if (!payload?.available) {
+    els.customerEventMeta.textContent = "缺失";
+    els.customerEventValidation.textContent = "运行防火墙图谱参数抽取后生成客户事件 JSON。";
+    els.customerEventValidation.className = "event-validation-summary";
+    return;
+  }
+  const eventCount = payload.event_count ?? payload.rows?.length ?? 0;
+  const rejected = validation.rejected_count || 0;
+  const warnings = validation.warning_count || 0;
+  els.customerEventMeta.textContent = `${eventCount} 条事件`;
+  els.customerEventValidation.textContent =
+    `校验：通过 ${eventCount} 条，拒绝 ${rejected} 条，警告 ${warnings} 条`;
+  els.customerEventValidation.className =
+    `event-validation-summary ${rejected ? "bad" : warnings ? "warn" : "ok"}`;
 }
 
 function renderMetrics(payload) {
@@ -387,12 +573,16 @@ function renderMetrics(payload) {
   const groupRows = payload.group.available ? payload.group.rows.length : 0;
   const poiRows = payload.poi_schema.available ? payload.poi_schema.rows.length : 0;
   const relationRows = payload.relation_schema.available ? payload.relation_schema.rows.length : 0;
+  const customerEventRows = payload.customer_events?.available
+    ? payload.customer_events.event_count
+    : 0;
   const metrics = [
     ["原始预览", payload.input.rows.length],
     ["解析结果", resultRows],
     ["日志分组", groupRows],
     ["POI 字段", poiRows || "无"],
     ["关系规则", relationRows || "无"],
+    ["客户事件", customerEventRows || "无"],
     ["树中分组", tree.available ? tree.group_count : "无"],
   ];
   els.metricStrip.innerHTML = metrics
@@ -763,6 +953,26 @@ async function savePoiEditor() {
   }
 }
 
+function installCollapsiblePanels() {
+  document.querySelectorAll("[data-collapsible-panel]").forEach((panel) => {
+    if (panel.dataset.collapseInstalled === "1") {
+      return;
+    }
+    const body = panel.querySelector(".collapsible-body");
+    const button = panel.querySelector("[data-collapse-toggle]");
+    if (!body || !button) {
+      return;
+    }
+    button.addEventListener("click", () => {
+      const collapsed = panel.classList.toggle("is-collapsed");
+      body.hidden = collapsed;
+      button.textContent = collapsed ? "展开" : "收起";
+      button.setAttribute("aria-expanded", String(!collapsed));
+    });
+    panel.dataset.collapseInstalled = "1";
+  });
+}
+
 function installMaximizeButtons() {
   document.querySelectorAll(".panel, .run-panel").forEach((panel) => {
     if (panel.closest(".modal-panel") || panel.dataset.maxInstalled === "1") {
@@ -1078,6 +1288,15 @@ async function clearNeo4j() {
   els.clearNeo4jConfirm.value = "";
 }
 
+function downloadCustomerEvents() {
+  if (!state.activeSource || els.downloadCustomerEventsButton.disabled) {
+    return;
+  }
+  window.location.href = apiUrl(
+    `/api/customer-events/download?source=${encodeURIComponent(state.activeSource)}`,
+  );
+}
+
 function renderCsv(target, payload) {
   if (!payload || !payload.available) {
     target.innerHTML = '<div class="empty">没有文件</div>';
@@ -1181,6 +1400,7 @@ function bindEvents() {
   els.stopRunButton.addEventListener("click", () => stopRun().catch(showError));
   els.fullRunButton.addEventListener("click", () => startRun({ full: true }).catch(showError));
   els.editPoiButton.addEventListener("click", () => openPoiEditor().catch(showError));
+  els.downloadCustomerEventsButton.addEventListener("click", downloadCustomerEvents);
   els.closePoiEditorButton.addEventListener("click", closePoiEditor);
   els.addPoiRowButton.addEventListener("click", addPoiRow);
   els.savePoiButton.addEventListener("click", () => savePoiEditor().catch(showError));

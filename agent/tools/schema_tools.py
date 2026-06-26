@@ -74,6 +74,7 @@ def infer_schema_type(source_name, schemas_dir):
         "audit": ["audit"],
         "auth": ["auth.log", "/auth", "\\auth", "sshd", "sudo"],
         "dns": ["dnsmasq", "dns"],
+        "firewall": ["firewallexample", "firewallexamplae", "firewall"],
         "syslog": ["syslog", "messages", "kern.log"],
     }
     for schema_type, markers in candidates.items():
@@ -354,4 +355,3 @@ def copy_existing_schema_files(schemas_dir, schema_type, out_path):
         shutil.copyfile(poi_path, Path(out_path) / "poi_schema.csv")
     if relation_path.is_file():
         shutil.copyfile(relation_path, Path(out_path) / "relation_schema.csv")
-

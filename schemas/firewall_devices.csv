@@ -1,0 +1,2 @@
+device_name,management_ip,device_type,control_owner,control_owner_department,protocol,web_port,cli_port,terminal_port,service_url,src_mac,default_user
+themis,192.168.100.80,防火墙,root,防火墙服务,TCP,443,22,22,https://192.168.100.80:443,00:e0:4c:fe:ad:80,root

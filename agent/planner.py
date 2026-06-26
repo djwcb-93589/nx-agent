@@ -89,6 +89,10 @@ class DeepSeekPlanner:
                 max_tokens=self.max_tokens,
                 temperature=0.0,
             )
+            if isinstance(payload, list):
+                payload = {"actions": payload}
+            if not isinstance(payload, dict):
+                raise TypeError(f"Planner response must be an object or action array, got {type(payload).__name__}")
             actions = normalize_actions(payload.get("actions") or [])
             if not actions:
                 raise ValueError("Planner returned no valid actions.")

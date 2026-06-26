@@ -1,0 +1,5 @@
+src_ip,src_mac,src_owner,src_department,default_user,device_name
+192.168.100.10,00:e0:4c:fe:ad:10,admin,终端A,admin,终端A
+192.168.100.11,00:e0:4c:fe:ad:11,admin,终端B,admin,终端B
+192.168.100.50,00:e0:4c:fe:ad:50,root,管理端,root,管理端
+192.168.100.80,00:e0:4c:fe:ad:80,root,防火墙服务,root,防火墙服务

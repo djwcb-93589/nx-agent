@@ -1,0 +1,8 @@
+Feb 16 14:56:51 Themis tunnel: devid=0 date="2012/02/16 14:56:51" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=黑名单 act=添加 result=成功 user=root dsp_msg="添加黑名单，ip 为 192.168.100.10" fwlog=0
+Feb 16 15:01:03 Themis tunnel: devid=0 date="2012/02/16 15:01:03" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=blacklist act=add result=0 user=root dsp_msg="add blacklist ip=192.168.100.10" fwlog=0
+Feb 16 14:56:51 Themis tunnel: devid=0 date="2012/02/16 14:56:51" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=黑名单 act=显示 result=成功 user=root dsp_msg="显示黑名单" fwlog=0
+Feb 16 15:01:03 Themis tunnel: devid=0 date="2012/02/16 15:01:03" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=blacklist act=show result=0 user=root dsp_msg="show blacklist" fwlog=0
+Feb 16 14:56:51 Themis tunnel: devid=0 date="2012/02/16 14:56:51" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=黑名单 act=删除 result=成功 user=root dsp_msg="删除黑名单，ip 为 192.168.100.10" fwlog=0
+Feb 16 15:01:03 Themis tunnel: devid=0 date="2012/02/16 15:01:03" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=blacklist act=del result=0 user=root dsp_msg="del blacklist ip=192.168.100.10" fwlog=0
+Feb 16 14:56:51 Themis tunnel: devid=0 date="2012/02/16 14:56:51" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=黑名单 act=恢复 result=成功 user=root dsp_msg="恢复黑名单" fwlog=0
+Feb 16 15:01:03 Themis tunnel: devid=0 date="2012/02/16 15:01:03" dname=Themis logtype=9 pri=5 ver=0.3.0 from=192.168.100.50 mod=blacklist act=startup result=0 user=root dsp_msg="startup blacklist" fwlog=0

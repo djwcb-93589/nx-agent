@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from pathlib import Path
+import hashlib
 import re
 
 
@@ -121,7 +122,7 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
         log_source="dns",
     ),
     DatasetPattern(
-        path_fragment="firewallexamplae/2.1.1.1/3.csv",
+        path_fragment="firewallexample/设备管理日志：管理登录&退出日志（webui）/3.csv",
         name="firewall_example_2_1_1_1",
         family="firewall",
         poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
@@ -131,7 +132,7 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
         log_source="firewall",
     ),
     DatasetPattern(
-        path_fragment="firewallexamplae/2.1.2.1/3.csv",
+        path_fragment="firewallexample/设备管理日志：管理登录&退出日志 (CLI)/3.csv",
         name="firewall_example_2_1_2_1",
         family="firewall",
         poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
@@ -141,7 +142,7 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
         log_source="firewall",
     ),
     DatasetPattern(
-        path_fragment="firewallexamplae/2.5.1/3.csv",
+        path_fragment="firewallexample/防火墙安全策略日志/3.csv",
         name="firewall_example_2_5_1",
         family="firewall",
         poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
@@ -151,7 +152,7 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
         log_source="firewall",
     ),
     DatasetPattern(
-        path_fragment="firewallexamplae/2.5.6/3.csv",
+        path_fragment="firewallexample/设备管理日志：安全域创建&编辑/3.csv",
         name="firewall_example_2_5_6",
         family="firewall",
         poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
@@ -161,12 +162,22 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
         log_source="firewall",
     ),
     DatasetPattern(
-        path_fragment="firewallexamplae/2.5.7/3.csv",
+        path_fragment="firewallexample/设备管理日志：添加&显示&删除&开机恢复黑名单/3.csv",
         name="firewall_example_2_5_7",
         family="firewall",
         poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
         relation_csv_path=PROJECT_ROOT / "schemas" / "firewall_relation.csv",
         params_output_path=PARAMS_DIR / "firewall_example_2_5_7_3_params_extracted.csv",
+        extractor_script_path=PROJECT_ROOT / "extract_firewall_example_params.py",
+        log_source="firewall",
+    ),
+    DatasetPattern(
+        path_fragment="firewallexample/customer_event_simulated/3.csv",
+        name="firewall_example_customer_event_simulated",
+        family="firewall",
+        poi_schema_path=PROJECT_ROOT / "schemas" / "firewall_POI.csv",
+        relation_csv_path=PROJECT_ROOT / "schemas" / "firewall_relation.csv",
+        params_output_path=PARAMS_DIR / "firewall_example_customer_event_simulated_3_params_extracted.csv",
         extractor_script_path=PROJECT_ROOT / "extract_firewall_example_params.py",
         log_source="firewall",
     ),
@@ -207,15 +218,21 @@ DATASET_PATTERNS: tuple[DatasetPattern, ...] = (
 
 def build_ait_output_tag(csv_path: Path, ait_root: Path = AIT_ROOT) -> str:
     relative_path = csv_path.resolve().relative_to(ait_root.resolve()).with_suffix("")
-    parts = [re.sub(r"[^0-9A-Za-z]+", "_", part).strip("_") for part in relative_path.parts]
+    parts = []
+    for part in relative_path.parts:
+        normalized = re.sub(r"[^0-9A-Za-z]+", "_", part).strip("_")
+        if not normalized:
+            normalized = "u_" + hashlib.sha1(part.encode("utf-8")).hexdigest()[:10]
+        parts.append(normalized)
     return "_".join(part for part in parts if part) or "ait"
 
 
 def spec_for_csv(csv_path: Path, ait_root: Path = AIT_ROOT) -> DatasetSpec | None:
     csv_path = csv_path.resolve()
     relative = csv_path.relative_to(ait_root.resolve()).as_posix()
+    canonical_relative = relative.replace("firewallexamplae/", "firewallexample/", 1)
     for pattern in DATASET_PATTERNS:
-        if relative == pattern.path_fragment:
+        if canonical_relative == pattern.path_fragment:
             return DatasetSpec(
                 name=pattern.name,
                 family=pattern.family,
@@ -233,9 +250,11 @@ def spec_for_csv(csv_path: Path, ait_root: Path = AIT_ROOT) -> DatasetSpec | Non
 
 def discover_dataset_specs(ait_root: Path = AIT_ROOT) -> list[DatasetSpec]:
     ait_root = ait_root.resolve()
-    specs: list[DatasetSpec] = []
+    specs_by_name: dict[str, DatasetSpec] = {}
     for csv_path in sorted(ait_root.rglob("3.csv")):
         spec = spec_for_csv(csv_path, ait_root)
         if spec is not None:
-            specs.append(spec)
-    return specs
+            existing = specs_by_name.get(spec.name)
+            if existing is None or "firewallexamplae" in existing.csv_path.as_posix():
+                specs_by_name[spec.name] = spec
+    return sorted(specs_by_name.values(), key=lambda item: item.name)

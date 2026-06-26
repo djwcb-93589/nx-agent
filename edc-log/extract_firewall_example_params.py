@@ -37,6 +37,21 @@ FIXED_COLUMNS = [
     "internal_service",
     "zone_name",
     "blacklist_ip",
+    "alarm_type",
+    "src_ip",
+    "src_mac",
+    "src_owner",
+    "src_department",
+    "dst_ip",
+    "dst_port",
+    "protocol",
+    "login_account",
+    "login_time",
+    "control_device_type",
+    "control_name",
+    "control_owner",
+    "control_owner_department",
+    "pcpolicy",
 ]
 
 PREFIX_RE = re.compile(r"^(?P<host>\S+)\s+(?P<program>[^:\s]+):\s+(?P<body>.*)$")
@@ -243,7 +258,7 @@ def infer_policy_type(policy_id, display_message):
 
 def infer_event_type(module, prefix_program, action, display_message):
     combined = " ".join([module or "", prefix_program or "", action or "", display_message or ""]).lower()
-    if module in {"webui", "cli"}:
+    if module in {"webui", "cli", "terminal"}:
         return "admin_session"
     if module == "policy" or prefix_program == "rule":
         return "policy_rule"
@@ -323,11 +338,17 @@ def normalize_row(input_row, columns, log_source):
             "user": kv.get("user") or kv.get("admin") or "",
             "actor_user": kv.get("user") or kv.get("admin") or "",
             "management_ip": kv.get("from", ""),
-            "src_ip": kv.get("from", ""),
+            "alarm_type": kv.get("alarm_type", ""),
+            "src_ip": kv.get("src_ip") or kv.get("from", ""),
+            "src_mac": kv.get("src_mac") or kv.get("srp_mac", ""),
+            "src_owner": kv.get("src_owner", ""),
+            "src_department": kv.get("src_department", ""),
             "src_addr": kv.get("sa", ""),
+            "dst_ip": kv.get("dst_ip") or kv.get("da", ""),
             "dst_addr": kv.get("da", ""),
             "src_port": kv.get("sport", ""),
-            "dst_port": kv.get("dport", ""),
+            "dst_port": kv.get("dst_port") or kv.get("dport", ""),
+            "protocol": kv.get("protocol", ""),
             "interface_in": kv.get("iif", ""),
             "interface_out": kv.get("oif", ""),
             "src_zone": kv.get("izone", ""),
@@ -349,6 +370,13 @@ def normalize_row(input_row, columns, log_source):
             "command": kv.get("cmd", ""),
             "result": kv.get("result", ""),
             "outcome": normalize_outcome(kv.get("result", ""), display_message),
+            "login_account": kv.get("login_account") or kv.get("user") or kv.get("admin") or "",
+            "login_time": kv.get("login_time") or kv.get("date") or input_row.get("timestamp", ""),
+            "control_device_type": kv.get("control_device_type", ""),
+            "control_name": kv.get("control_name") or device_name,
+            "control_owner": kv.get("control_owner", ""),
+            "control_owner_department": kv.get("control_owner_department", ""),
+            "pcpolicy": kv.get("pcpolicy", ""),
             "display_message": display_message,
             "client_agent": kv.get("agent", ""),
             "blacklist_ip": "",
@@ -365,6 +393,7 @@ def normalize_row(input_row, columns, log_source):
         "mod": "module",
         "act": "event_action",
         "from": "management_ip",
+        "srp_mac": "src_mac",
         "policy": "policy_id",
         "id": "rule_id",
         "iif": "interface_in",

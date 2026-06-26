@@ -1,3 +1,0 @@
-devid=0 date="2013/05/21 09:53:17" dname=themis logtype=9 pri=6 ver=0.3.0 mod=webui from=10.1.5.200 agent="Mozilla/5.0" admin=administrator act=登录 result=0 msg="成功" dsp_msg="administrator 登录" fwlog=0
-devid=0 date="2013/05/21 09:54:18" dname=themis logtype=9 pri=6 ver=0.3.0 mod=webui from=10.1.5.200 agent="Mozilla/5.0" admin=administrator act=登录 result=1 msg="帐号 administrator 或口令错误！" dsp_msg="帐号登录错误" fwlog=0
-devid=0 date="2013/05/21 09:50:37" dname=themis logtype=9 pri=6 ver=0.3.0 mod=webui from=10.1.5.200 agent="Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; KB974487)" admin=administrator act=退出 result=0 msg="成功，总共在线时间 1439 秒" dsp_msg="administrator 退出" fwlog=0

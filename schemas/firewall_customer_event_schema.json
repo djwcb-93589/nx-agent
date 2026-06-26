@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "description": "Customer firewall alarm event output contract.",
+  "alarm_types": {
+    "1": {
+      "required": [
+        "src_ip",
+        "src_mac",
+        "dst_ip",
+        "dst_port",
+        "login_account",
+        "login_time"
+      ]
+    },
+    "2": {
+      "required": [
+        "src_ip",
+        "src_mac",
+        "dst_ip",
+        "dst_port",
+        "protocol",
+        "login_account",
+        "login_time"
+      ]
+    },
+    "3": {
+      "required": [
+        "src_ip",
+        "src_mac",
+        "dst_ip",
+        "dst_port",
+        "login_account",
+        "login_time"
+      ]
+    },
+    "4": {
+      "required": [
+        "control_device_type",
+        "control_name",
+        "control_ip",
+        "action",
+        "policy",
+        "src_ip",
+        "dst_ip",
+        "login_account",
+        "login_time"
+      ]
+    }
+  }
+}

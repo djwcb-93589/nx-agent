@@ -177,6 +177,56 @@ textarea {
   max-height: 38vh;
 }
 
+.source-tree-node {
+  display: grid;
+  gap: 6px;
+}
+
+.source-tree-children {
+  display: grid;
+  gap: 6px;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line-soft);
+}
+
+.source-folder {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #314149;
+  padding: 5px 6px;
+  text-align: left;
+}
+
+.source-folder:hover,
+.source-folder.has-active {
+  background: #edf5f4;
+}
+
+.source-folder-caret {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.source-folder-label {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.source-folder-count {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .side-block {
   border-top: 1px solid var(--line-soft);
   padding-top: 12px;
@@ -207,6 +257,10 @@ textarea {
   cursor: pointer;
 }
 
+.source-leaf {
+  width: 100%;
+}
+
 .source-item:hover,
 .source-item.active {
   border-color: var(--teal);
@@ -225,6 +279,14 @@ textarea {
   flex-wrap: wrap;
   gap: 6px;
   margin-top: 8px;
+}
+
+.source-path {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .badge {
@@ -355,6 +417,26 @@ textarea {
 .run-panel,
 .panel {
   padding: 14px;
+}
+
+.collapsible-body {
+  min-width: 0;
+}
+
+.collapsible-panel.is-collapsed .panel-head {
+  margin-bottom: 0;
+}
+
+.collapse-button {
+  min-width: 44px;
+  min-height: 28px;
+  border: 1px solid #cbd6dc;
+  border-radius: 6px;
+  background: #f6f9fa;
+  color: #24323a;
+  padding: 0 9px;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .panel-head {
@@ -739,6 +821,7 @@ button:disabled {
   overflow-wrap: anywhere;
 }
 
+.schema-grid,
 .panel-grid,
 .kg-grid {
   display: grid;
@@ -783,6 +866,29 @@ button:disabled {
   max-height: 360px;
   overflow: auto;
   border-top: 1px solid var(--line-soft);
+}
+
+.event-validation-summary {
+  min-height: 34px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line-soft);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.event-validation-summary.ok {
+  color: var(--green);
+  background: #effaf2;
+}
+
+.event-validation-summary.warn {
+  color: #76530a;
+  background: #fff8e8;
+}
+
+.event-validation-summary.bad {
+  color: var(--red);
+  background: #fff0ef;
 }
 
 .max-button {
@@ -1016,6 +1122,7 @@ td {
   .control-grid,
   .progress-grid,
   .split-panels,
+  .schema-grid,
   .panel-grid,
   .kg-grid,
   .stage-flow {

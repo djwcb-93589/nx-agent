@@ -14,6 +14,7 @@ import shutil
 import subprocess
 import sys
 import threading
+import extra_api
 
 from env_utils import load_dotenv
 
@@ -102,7 +103,7 @@ KG_INPUT_RULES = (
         "relation_sources": ("dns_relation.csv",),
     },
     {
-        "fragment": Path("firewallexamplae/2.1.1.1/3.csv"),
+        "fragment": Path("firewallexample/设备管理日志：管理登录&退出日志（webui）/3.csv"),
         "family": "firewall",
         "poi_targets": ("firewall_POI.csv",),
         "relation_targets": ("firewall_relation.csv",),
@@ -110,7 +111,7 @@ KG_INPUT_RULES = (
         "relation_sources": ("firewall_relation.csv",),
     },
     {
-        "fragment": Path("firewallexamplae/2.1.2.1/3.csv"),
+        "fragment": Path("firewallexample/设备管理日志：管理登录&退出日志 (CLI)/3.csv"),
         "family": "firewall",
         "poi_targets": ("firewall_POI.csv",),
         "relation_targets": ("firewall_relation.csv",),
@@ -118,7 +119,7 @@ KG_INPUT_RULES = (
         "relation_sources": ("firewall_relation.csv",),
     },
     {
-        "fragment": Path("firewallexamplae/2.5.1/3.csv"),
+        "fragment": Path("firewallexample/防火墙安全策略日志/3.csv"),
         "family": "firewall",
         "poi_targets": ("firewall_POI.csv",),
         "relation_targets": ("firewall_relation.csv",),
@@ -126,7 +127,7 @@ KG_INPUT_RULES = (
         "relation_sources": ("firewall_relation.csv",),
     },
     {
-        "fragment": Path("firewallexamplae/2.5.6/3.csv"),
+        "fragment": Path("firewallexample/设备管理日志：安全域创建&编辑/3.csv"),
         "family": "firewall",
         "poi_targets": ("firewall_POI.csv",),
         "relation_targets": ("firewall_relation.csv",),
@@ -134,7 +135,15 @@ KG_INPUT_RULES = (
         "relation_sources": ("firewall_relation.csv",),
     },
     {
-        "fragment": Path("firewallexamplae/2.5.7/3.csv"),
+        "fragment": Path("firewallexample/设备管理日志：添加&显示&删除&开机恢复黑名单/3.csv"),
+        "family": "firewall",
+        "poi_targets": ("firewall_POI.csv",),
+        "relation_targets": ("firewall_relation.csv",),
+        "poi_sources": ("firewall_POI.csv",),
+        "relation_sources": ("firewall_relation.csv",),
+    },
+    {
+        "fragment": Path("firewallexample/customer_event_simulated/3.csv"),
         "family": "firewall",
         "poi_targets": ("firewall_POI.csv",),
         "relation_targets": ("firewall_relation.csv",),
@@ -288,6 +297,8 @@ def read_summary(output_root: Path) -> dict:
 
 
 def load_source_payload(input_root: Path, output_root: Path, source: str, sample: str, limit: int) -> dict:
+    input_root = Path(input_root).resolve()
+    output_root = Path(output_root).resolve()
     raw_path = _safe_join(input_root, source)
     if not raw_path.is_file():
         raise FileNotFoundError(source)
@@ -317,6 +328,7 @@ def load_source_payload(input_root: Path, output_root: Path, source: str, sample
         "schema_meta": read_json_file(output_dir / "schema_meta.json"),
         "poi_schema": _read_schema_preview(output_dir, "poi_schema.csv", source, "poi", limit),
         "relation_schema": _read_schema_preview(output_dir, "relation_schema.csv", source, "relation", limit),
+        "customer_events": read_customer_event_preview(output_root, output_dir, limit),
     }
 
 
@@ -594,6 +606,68 @@ def read_json_file(path: Path) -> dict:
     return payload
 
 
+def read_customer_event_preview(output_root: Path, output_dir: Path, limit: int) -> dict:
+    events_path = _customer_event_artifact_path(
+        output_root,
+        output_dir,
+        "customer_events.json",
+    )
+    validation_path = _customer_event_artifact_path(
+        output_root,
+        output_dir,
+        "customer_event_validation.json",
+    )
+    if not events_path.is_file():
+        return {
+            "available": False,
+            "columns": [],
+            "rows": [],
+            "truncated": False,
+            "validation": {"available": False},
+            "path": "",
+        }
+
+    with events_path.open("r", encoding="utf-8") as file:
+        events = json.load(file)
+    if not isinstance(events, list):
+        raise ValueError(f"客户事件文件必须是 JSON 数组: {events_path}")
+
+    columns = ["alarm_type"]
+    flattened = []
+    for event in events[:limit]:
+        data = event.get("data") if isinstance(event, dict) else {}
+        data = data if isinstance(data, dict) else {}
+        row = {"alarm_type": event.get("alarm_type", "") if isinstance(event, dict) else ""}
+        row.update(data)
+        flattened.append(row)
+        for field in data:
+            if field not in columns:
+                columns.append(field)
+
+    validation = read_json_file(validation_path)
+    return {
+        "available": True,
+        "columns": columns,
+        "rows": flattened,
+        "truncated": len(events) > limit,
+        "validation": validation,
+        "path": str(events_path),
+        "event_count": len(events),
+    }
+
+
+def _customer_event_artifact_path(output_root: Path, output_dir: Path, filename: str) -> Path:
+    local_path = output_dir / filename
+    if local_path.is_file():
+        return local_path
+    try:
+        relative = output_dir.resolve().relative_to(Path(output_root).resolve())
+    except ValueError:
+        return local_path
+    edc_path = EDC_AIT_ROOT / relative / filename
+    return edc_path if edc_path.is_file() else local_path
+
+
 def sync_parser_outputs_to_edc(output_root: Path, schemas_root: Path) -> dict:
     output_root = Path(output_root).resolve()
     schemas_root = Path(schemas_root).resolve()
@@ -614,7 +688,7 @@ def sync_parser_outputs_to_edc(output_root: Path, schemas_root: Path) -> dict:
 
     for rule in KG_INPUT_RULES:
         fragment = rule["fragment"]
-        source_csv = output_root / fragment
+        source_csv = _kg_source_csv(output_root, fragment)
         target_csv = EDC_AIT_ROOT / fragment
         dataset_report = {
             "family": rule["family"],
@@ -666,6 +740,15 @@ def sync_parser_outputs_to_edc(output_root: Path, schemas_root: Path) -> dict:
                 )
         report["datasets"].append(dataset_report)
     return report
+
+
+def _kg_source_csv(output_root: Path, fragment: Path) -> Path:
+    primary = Path(output_root) / fragment
+    if primary.is_file() or "firewallexample" not in fragment.as_posix():
+        return primary
+    legacy_fragment = Path(fragment.as_posix().replace("firewallexample/", "firewallexamplae/", 1))
+    legacy = Path(output_root) / legacy_fragment
+    return legacy if legacy.is_file() else primary
 
 
 def kg_datasets_payload(output_root: Path | None = None, schemas_root: Path | None = None, sync: bool = True) -> dict:
@@ -1005,12 +1088,30 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                     )
                 )
                 return
+            if parsed.path == "/api/customer-events/download":
+                query = parse_qs(parsed.query)
+                source = query.get("source", [""])[0]
+                raw_path = _safe_join(self.input_root, source)
+                if not raw_path.is_file():
+                    raise FileNotFoundError(source)
+                relative = raw_path.relative_to(self.input_root)
+                output_dir = self.output_root / relative.with_suffix("")
+                event_path = _customer_event_artifact_path(
+                    self.output_root,
+                    output_dir,
+                    "customer_events.json",
+                )
+                self._send_download(event_path, "customer_events.json")
+                return
             if parsed.path == "/api/run/status":
                 query = parse_qs(parsed.query)
                 self._send_json(self.run_manager.status(tail=int(query.get("tail", ["300"])[0])))
                 return
             if parsed.path.startswith("/api/kg/"):
                 self._handle_kg_get(parsed)
+                return
+            if parsed.path == "/api/alarm/list":
+                self._send_json(extra_api.get_alarm_list())
                 return
             self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
         except Exception as exc:
@@ -1215,6 +1316,19 @@ class FrontendHandler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
         self.send_header("Pragma", "no-cache")
         self.send_header("Expires", "0")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_download(self, path: Path, filename: str) -> None:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        body = path.read_bytes()
+        self.send_response(HTTPStatus.OK)
+        self._send_cors_headers()
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
