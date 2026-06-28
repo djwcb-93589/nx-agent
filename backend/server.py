@@ -24,8 +24,11 @@ EDC_ROOT = REPO_ROOT / "edc-log"
 EDC_AIT_ROOT = EDC_ROOT / "AIT"
 EDC_SCHEMAS_ROOT = EDC_ROOT / "schemas"
 MAX_RUN_LOG_LINES = 2000
+LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
 
 load_dotenv(REPO_ROOT)
+for _secret_key in LLM_SECRET_ENV_KEYS:
+    os.environ.pop(_secret_key, None)
 
 
 try:
@@ -874,6 +877,9 @@ class RunManager:
             preserve_existing = bool(payload.get("preserveExisting", False))
             mock_llm = bool(payload.get("mockLlm", False))
             planner_enabled = bool(payload.get("plannerEnabled", True))
+            api_key = str(payload.get("api_key") or "").strip()
+            if not api_key and not mock_llm:
+                return False, "DeepSeek API Key 必须从前端输入，后端不再读取 .env。"
             matched_sources = match_sources(self.input_root, self.output_root, project)
 
             command = [
@@ -896,6 +902,10 @@ class RunManager:
                 str(self.output_root),
                 "--schemas_dir",
                 str(self.schemas_root),
+                "--api_key",
+                api_key,
+                "--api_key_env",
+                "",
             ]
             if write_group_tree:
                 command.append("--write_group_tree")
@@ -907,6 +917,8 @@ class RunManager:
                 command.append("--disable_planner")
 
             env = os.environ.copy()
+            for secret_key in LLM_SECRET_ENV_KEYS:
+                env.pop(secret_key, None)
             env["PYTHONUNBUFFERED"] = "1"
             env["PYTHONIOENCODING"] = "utf-8"
             self.state = {
@@ -1044,7 +1056,18 @@ def _now_text() -> str:
 
 
 def _display_command(command: list[str]) -> str:
-    return " ".join(str(part) for part in command)
+    redacted: list[str] = []
+    hide_next = False
+    for part in command:
+        text = str(part)
+        if hide_next:
+            redacted.append("***" if text else "")
+            hide_next = False
+            continue
+        redacted.append(text)
+        if text in {"--api_key", "--api-key"}:
+            hide_next = True
+    return " ".join(redacted)
 
 
 class FrontendHandler(SimpleHTTPRequestHandler):
@@ -1239,8 +1262,13 @@ class FrontendHandler(SimpleHTTPRequestHandler):
             kg_set_env_if_present("NEO4J_URI", payload.get("neo4j_uri"))
             kg_set_env_if_present("NEO4J_USER", payload.get("neo4j_user"))
             kg_set_env_if_present("NEO4J_PASSWORD", payload.get("neo4j_password"))
-            kg_set_env_if_present("DEEPSEEK_API_KEY", payload.get("api_key"))
-            kg_set_env_if_present("DS_TOKEN", payload.get("api_key"))
+            api_key = str(payload.get("api_key") or "").strip()
+            if api_key:
+                kg_set_env_if_present("DEEPSEEK_API_KEY", api_key)
+                kg_set_env_if_present("DS_TOKEN", api_key)
+            else:
+                for secret_key in LLM_SECRET_ENV_KEYS:
+                    os.environ.pop(secret_key, None)
             config_path = Path(payload.get("config", ""))
             if not config_path.is_absolute():
                 config_path = EDC_ROOT / config_path

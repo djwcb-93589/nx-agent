@@ -57,7 +57,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     run_parser.add_argument("--skip-param-extraction", action="store_true")
     run_parser.add_argument("--skip-kg-build", action="store_true")
-    run_parser.add_argument("--api-key", default="", help="DeepSeek API key. Defaults to env DS_TOKEN/DEEPSEEK_API_KEY.")
+    run_parser.add_argument("--api-key", default="", help="DeepSeek API key. Pass explicitly; .env is not used for API keys.")
     run_parser.add_argument("--limit-rows", type=int, help="Only build KG from the first N params rows.")
     run_parser.add_argument(
         "--per-dataset-graph-dir",

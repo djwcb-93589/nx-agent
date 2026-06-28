@@ -625,6 +625,10 @@ async function loadSummary() {
 }
 
 async function startRun(options = {}) {
+  const apiKey = els.kgApiKey.value.trim();
+  if (!apiKey && !els.mockCheckbox.checked) {
+    throw new Error("DeepSeek API Key is required. Enter it in the frontend; .env is not used for parsing.");
+  }
   const payload = {
     project: els.projectInput.value.trim() || "all",
     sample: Number(els.sampleInput.value || 3),
@@ -635,6 +639,7 @@ async function startRun(options = {}) {
     plannerEnabled: els.plannerCheckbox.checked,
     preserveExisting: els.preserveCheckbox.checked,
     mockLlm: els.mockCheckbox.checked,
+    api_key: apiKey,
   };
   const data = await postJson("/api/run/start", payload);
   renderRunStatus(data.status);

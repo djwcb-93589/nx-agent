@@ -10,7 +10,7 @@ class DeepSeekClient:
         self,
         model=None,
         api_key=None,
-        api_key_env="DEEPSEEK_API_KEY",
+        api_key_env="",
         base_url=None,
         timeout=120,
         max_retries=5,
@@ -25,14 +25,10 @@ class DeepSeekClient:
             "https://api.deepseek.com",
             aliases=("OPENAI_BASE_URL", "LLM_BASE_URL"),
         )
-        resolved_api_key = (
-            api_key
-            or get_env(api_key_env)
-            or get_env("DEEPSEEK_API_KEY", aliases=("DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY"))
-        )
+        resolved_api_key = api_key or (get_env(api_key_env) if api_key_env else "")
         if not resolved_api_key:
             raise ValueError(
-                "DeepSeek API key is missing. Set DEEPSEEK_API_KEY or pass --api_key."
+                "DeepSeek API key is missing. Enter it in the frontend or pass --api_key."
             )
 
         self.model = model

@@ -28,7 +28,11 @@ from env_utils import get_env, load_dotenv
 
 DEFAULT_FUSED_GRAPH_DIR = GRAPH_FUSED_DIR
 DEFAULT_SOURCE_GRAPH_DIR = GRAPH_SOURCES_DIR
+LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
+RUNTIME_API_KEY_ENV = "LOG_PIPELINE_RUNTIME_DEEPSEEK_API_KEY"
 load_dotenv(PROJECT_ROOT)
+for _secret_key in (*LLM_SECRET_ENV_KEYS, RUNTIME_API_KEY_ENV):
+    os.environ.pop(_secret_key, None)
 
 
 @dataclass
@@ -250,8 +254,13 @@ class ApiHandler(BaseHTTPRequestHandler):
                 _set_env_if_present("NEO4J_URI", payload.get("neo4j_uri"))
                 _set_env_if_present("NEO4J_USER", payload.get("neo4j_user"))
                 _set_env_if_present("NEO4J_PASSWORD", payload.get("neo4j_password"))
-                _set_env_if_present("DEEPSEEK_API_KEY", payload.get("api_key"))
-                _set_env_if_present("DS_TOKEN", payload.get("api_key"))
+                api_key = str(payload.get("api_key") or "").strip()
+                if api_key:
+                    _set_env_if_present("DEEPSEEK_API_KEY", api_key)
+                    _set_env_if_present("DS_TOKEN", api_key)
+                else:
+                    for secret_key in LLM_SECRET_ENV_KEYS:
+                        os.environ.pop(secret_key, None)
                 agent = LogKgPipelineAgent()
                 result = agent.query_neo4j(
                     config_path=Path(payload.get("config", "")),
@@ -376,9 +385,12 @@ def _sanitize_runtime_secret_payload(payload: dict[str, Any]) -> dict[str, Any]:
     sanitized = dict(payload)
     api_key = str(sanitized.get("api_key", "") or "").strip()
     if api_key:
-        os.environ["DEEPSEEK_API_KEY"] = api_key
-        os.environ["DS_TOKEN"] = api_key
-        sanitized["api_key"] = ""
+        os.environ[RUNTIME_API_KEY_ENV] = api_key
+        sanitized["api_key"] = f"${{{RUNTIME_API_KEY_ENV}}}"
+    else:
+        os.environ.pop(RUNTIME_API_KEY_ENV, None)
+        for secret_key in LLM_SECRET_ENV_KEYS:
+            os.environ.pop(secret_key, None)
 
     neo4j_password = str(sanitized.get("neo4j_password", "") or "")
     if neo4j_password:

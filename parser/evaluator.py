@@ -692,12 +692,9 @@ def build_arg_parser():
     parser.add_argument(
         "--api_key",
         type=str,
-        default=get_env(
-            "DEEPSEEK_API_KEY",
-            aliases=("DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY"),
-        ),
+        default="",
     )
-    parser.add_argument("--api_key_env", type=str, default="DEEPSEEK_API_KEY")
+    parser.add_argument("--api_key_env", type=str, default="")
     parser.add_argument(
         "--api_base",
         type=str,

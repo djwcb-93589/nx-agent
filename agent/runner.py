@@ -386,7 +386,7 @@ def build_arg_parser():
     parser.add_argument("--similarity", type=str, default="jaccard")
     parser.add_argument("--do_self_reflection", type=str, default="True")
     parser.add_argument("--api_key", type=str, default=DEFAULT_LLM_API_KEY)
-    parser.add_argument("--api_key_env", type=str, default="DEEPSEEK_API_KEY")
+    parser.add_argument("--api_key_env", type=str, default="")
     parser.add_argument("--api_base", type=str, default=DEFAULT_LLM_BASE_URL)
     parser.add_argument("--api_timeout", type=int, default=120)
     parser.add_argument("--api_retries", type=int, default=5)

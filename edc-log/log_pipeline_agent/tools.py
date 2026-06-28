@@ -29,6 +29,7 @@ from env_utils import load_dotenv, resolve_env_value
 
 
 _EDC_LEGACY_IO_LOCK = threading.Lock()
+LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
 
 
 @dataclass
@@ -38,6 +39,26 @@ class ToolResult:
     outputs: dict[str, str] = field(default_factory=dict)
     metrics: dict[str, Any] = field(default_factory=dict)
     skipped: bool = False
+
+
+def _configure_runtime_api_key(api_key: str, *, required: bool) -> str:
+    resolved = str(resolve_env_value(api_key) or "").strip()
+    for secret_key in LLM_SECRET_ENV_KEYS:
+        os.environ.pop(secret_key, None)
+    if resolved:
+        os.environ["DEEPSEEK_API_KEY"] = resolved
+        os.environ["DS_TOKEN"] = resolved
+        return resolved
+    if required:
+        raise ValueError("DeepSeek API Key must be provided by the frontend; .env is not used for API keys.")
+    return ""
+
+
+def _script_accepts_arg(script_path: Path, option: str) -> bool:
+    try:
+        return option in Path(script_path).read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return False
 
 
 @contextmanager
@@ -248,10 +269,7 @@ def extract_field_semantics(
             skipped=True,
         )
 
-    api_key = str(resolve_env_value(api_key) or "")
-    if api_key:
-        os.environ["DS_TOKEN"] = api_key
-        os.environ["DEEPSEEK_API_KEY"] = api_key
+    _configure_runtime_api_key(api_key, required=True)
 
     template2samples = _load_template2samples(spec.template2samples_path)
     output_dir = output_dir or (PROJECT_ROOT / "log_output")
@@ -306,10 +324,7 @@ def map_fields_to_poi_schema(
             skipped=True,
         )
 
-    api_key = str(resolve_env_value(api_key) or "")
-    if api_key:
-        os.environ["DS_TOKEN"] = api_key
-        os.environ["DEEPSEEK_API_KEY"] = api_key
+    _configure_runtime_api_key(api_key, required=True)
 
     template2samples = _load_template2samples(spec.template2samples_path)
     pairs = load_json(spec.pairs_path)
@@ -408,10 +423,8 @@ def extract_params_from_logs(
             skipped=True,
         )
 
-    api_key = str(resolve_env_value(api_key) or "")
-    if api_key:
-        os.environ["DS_TOKEN"] = api_key
-        os.environ["DEEPSEEK_API_KEY"] = api_key
+    extractor_accepts_api_key = _script_accepts_arg(spec.extractor_script_path, "--api-key")
+    runtime_api_key = _configure_runtime_api_key(api_key, required=extractor_accepts_api_key)
 
     spec.params_output_path.parent.mkdir(parents=True, exist_ok=True)
     if force and spec.params_output_path.exists():
@@ -431,6 +444,8 @@ def extract_params_from_logs(
         spec.log_source,
         *spec.extractor_extra_args,
     ]
+    if extractor_accepts_api_key:
+        command.extend(["--api-key", runtime_api_key])
     completed = subprocess.run(
         command,
         cwd=PROJECT_ROOT,

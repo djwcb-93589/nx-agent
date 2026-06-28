@@ -1,7 +1,6 @@
 import argparse
 import csv
 import json
-import os
 import time
 from collections import OrderedDict
 from datetime import datetime, timezone
@@ -120,10 +119,6 @@ TEMPLATE_TO_SPEC_INDEX = {
 def resolve_api_key(cli_value):
     if cli_value and cli_value.strip():
         return cli_value.strip()
-    for key in ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY"):
-        value = os.environ.get(key, "").strip()
-        if value:
-            return value
     return DEFAULT_API_KEY
 
 

@@ -14,7 +14,7 @@ class AgentConfig:
     similarity: str = "jaccard"
     do_self_reflection: str = "True"
     api_key: str | None = DEFAULT_LLM_API_KEY
-    api_key_env: str = "DEEPSEEK_API_KEY"
+    api_key_env: str = ""
     api_base: str = DEFAULT_LLM_BASE_URL
     api_timeout: int = 120
     api_retries: int = 5
