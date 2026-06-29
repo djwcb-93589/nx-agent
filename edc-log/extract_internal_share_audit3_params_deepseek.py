@@ -13,7 +13,7 @@ from env_utils import get_env, load_dotenv
 load_dotenv()
 
 DEFAULT_BASE_URL = get_env("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
-DEFAULT_MODEL = get_env("DEEPSEEK_PARAM_MODEL", "deepseek-chat")
+DEFAULT_MODEL = get_env("DEEPSEEK_PARAM_MODEL", "deepseek-v4-flash")
 DEFAULT_API_KEY = ""
 
 FIXED_COLUMNS = [

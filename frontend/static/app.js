@@ -16,6 +16,8 @@ const state = {
   poiValidationTimer: null,
   sourceTreeExpanded: new Set(),
   sourceTreeKnownRoots: new Set(),
+  runScopeSelection: new Set(),
+  runScopeTouched: false,
 };
 
 const els = {
@@ -31,6 +33,10 @@ const els = {
   sampleInput: document.getElementById("sampleInput"),
   limitInput: document.getElementById("limitInput"),
   projectInput: document.getElementById("projectInput"),
+  parseSourceList: document.getElementById("parseSourceList"),
+  parseSourceCount: document.getElementById("parseSourceCount"),
+  selectAllParseSourcesBtn: document.getElementById("selectAllParseSourcesBtn"),
+  clearParseSourcesBtn: document.getElementById("clearParseSourcesBtn"),
   modelInput: document.getElementById("modelInput"),
   similaritySelect: document.getElementById("similaritySelect"),
   reflectionCheckbox: document.getElementById("reflectionCheckbox"),
@@ -304,7 +310,9 @@ async function loadSources(options = {}) {
   const { reloadActive = false, silent = false } = options;
   state.sources = await fetchJson("/api/sources");
   seedSourceTreeExpansion();
+  syncRunScopeWithSources();
   applyFilter();
+  renderRunScopePicker();
   await loadSummary();
   if (state.activeSource && reloadActive) {
     await selectSource(state.activeSource, false, { silent }).catch(showSourceError);
@@ -333,6 +341,101 @@ function renderSources() {
     fragment.appendChild(renderSourceNode(child, 0, query));
   }
   els.sourceList.appendChild(fragment);
+}
+
+function syncRunScopeWithSources() {
+  const available = new Set(state.sources.map((item) => item.source));
+  if (!state.runScopeTouched) {
+    state.runScopeSelection = new Set(available);
+    syncProjectInputFromRunScope();
+    return;
+  }
+  state.runScopeSelection = new Set(
+    [...state.runScopeSelection].filter((source) => available.has(source)),
+  );
+  syncProjectInputFromRunScope();
+}
+
+function renderRunScopePicker() {
+  if (!els.parseSourceList) {
+    return;
+  }
+  els.parseSourceList.innerHTML = "";
+  if (state.sources.length === 0) {
+    els.parseSourceList.innerHTML = '<div class="empty compact-empty">没有可选日志</div>';
+    updateRunScopeCount();
+    return;
+  }
+  const fragment = document.createDocumentFragment();
+  const sortedSources = [...state.sources].sort((a, b) =>
+    sourceDisplayName(a.source).localeCompare(sourceDisplayName(b.source), "zh-CN"),
+  );
+  for (const item of sortedSources) {
+    const label = document.createElement("label");
+    label.className = "run-source-item";
+    label.innerHTML = `
+      <input class="parse-source-check" type="checkbox" value="${escapeHtml(item.source)}" ${
+        state.runScopeSelection.has(item.source) ? "checked" : ""
+      } />
+      <span>
+        ${escapeHtml(sourceDisplayName(item.source))}
+        <small>${escapeHtml(sourceSegments(item.source).slice(0, -1).join(" / "))}</small>
+      </span>
+    `;
+    const checkbox = label.querySelector("input");
+    checkbox.addEventListener("change", () => {
+      state.runScopeTouched = true;
+      if (checkbox.checked) {
+        state.runScopeSelection.add(item.source);
+      } else {
+        state.runScopeSelection.delete(item.source);
+      }
+      syncProjectInputFromRunScope();
+      updateRunScopeCount();
+    });
+    fragment.appendChild(label);
+  }
+  els.parseSourceList.appendChild(fragment);
+  updateRunScopeCount();
+}
+
+function setRunScopeSelection(sources) {
+  state.runScopeTouched = true;
+  state.runScopeSelection = new Set(sources);
+  syncProjectInputFromRunScope();
+  renderRunScopePicker();
+}
+
+function selectAllRunSources() {
+  setRunScopeSelection(state.sources.map((item) => item.source));
+}
+
+function clearRunSources() {
+  setRunScopeSelection([]);
+}
+
+function selectSingleRunSource(source) {
+  setRunScopeSelection(source ? [source] : []);
+}
+
+function selectedRunSources() {
+  return [...state.runScopeSelection].filter((source) =>
+    state.sources.some((item) => item.source === source),
+  );
+}
+
+function syncProjectInputFromRunScope() {
+  const selected = selectedRunSources();
+  const allSelected = state.sources.length > 0 && selected.length === state.sources.length;
+  els.projectInput.value = allSelected ? "all" : selected.join(",");
+}
+
+function updateRunScopeCount() {
+  if (!els.parseSourceCount) {
+    return;
+  }
+  const selected = selectedRunSources().length;
+  els.parseSourceCount.textContent = `${selected} / ${state.sources.length}`;
 }
 
 function seedSourceTreeExpansion() {
@@ -555,7 +658,7 @@ async function selectSource(source, syncRunScope, options = {}) {
     expandSourcePath(source);
   }
   if (syncRunScope) {
-    els.projectInput.value = source;
+    selectSingleRunSource(source);
   }
   renderSources();
   els.activeSource.textContent = sourceDisplayName(source);
@@ -733,8 +836,13 @@ async function startRun(options = {}) {
   if (!apiKey && !els.mockCheckbox.checked) {
     throw new Error("DeepSeek API Key is required. Enter it in the frontend; .env is not used for parsing.");
   }
+  const selectedSources = selectedRunSources();
+  if (selectedSources.length === 0) {
+    throw new Error("请至少勾选一个要解析的日志。");
+  }
+  syncProjectInputFromRunScope();
   const payload = {
-    project: els.projectInput.value.trim() || "all",
+    project: els.projectInput.value.trim(),
     sample: Number(els.sampleInput.value || 3),
     model: els.modelInput.value.trim() || "deepseek-v4-flash",
     similarity: els.similaritySelect.value,
@@ -1505,6 +1613,8 @@ function bindEvents() {
     await refreshKgSummary();
   });
   els.sourceFilter.addEventListener("input", applyFilter);
+  els.selectAllParseSourcesBtn.addEventListener("click", selectAllRunSources);
+  els.clearParseSourcesBtn.addEventListener("click", clearRunSources);
   els.startRunButton.addEventListener("click", () => startRun().catch(showError));
   els.stopRunButton.addEventListener("click", () => stopRun().catch(showError));
   els.fullRunButton.addEventListener("click", () => startRun({ full: true }).catch(showError));

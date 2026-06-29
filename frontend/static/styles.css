@@ -570,6 +570,84 @@ textarea {
   font-weight: 900;
 }
 
+.run-scope-field {
+  display: grid;
+  gap: 8px;
+}
+
+.run-scope-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.run-scope-head > span {
+  color: #40515a;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.run-scope-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.run-scope-actions span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.run-source-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px;
+  max-height: 180px;
+  overflow: auto;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 8px;
+}
+
+.run-source-item {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+}
+
+.run-source-item input {
+  width: auto;
+  min-height: auto;
+  margin-top: 2px;
+}
+
+.run-source-item span {
+  min-width: 0;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.run-source-item small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
 label span {
   display: block;
   margin-bottom: 5px;

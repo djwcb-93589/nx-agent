@@ -70,7 +70,7 @@ DeepSeek API Key 不再从 `.env` 读取，需要在前端页面的 `DeepSeek AP
 ```text
 DEEPSEEK_BASE_URL=https://api.deepseek.com
 DEEPSEEK_MODEL=deepseek-v4-flash
-DEEPSEEK_PARAM_MODEL=deepseek-chat
+DEEPSEEK_PARAM_MODEL=deepseek-v4-flash
 
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j

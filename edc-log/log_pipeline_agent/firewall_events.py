@@ -210,7 +210,7 @@ def validate_event(event: dict[str, Any], schema: dict[str, Any]) -> tuple[list[
 
 
 def _classify_alarm_type(row: dict[str, str], *, source_name: str) -> tuple[int, str]:
-    permissive = source_name.startswith("firewall_example")
+    permissive = _is_firewall_source(source_name)
     explicit = str(row.get("alarm_type", "")).strip()
     if explicit:
         try:
@@ -261,7 +261,7 @@ def _build_event(
     source_name: str,
 ) -> tuple[dict[str, Any], list[str]]:
     warnings = []
-    use_firewall_defaults = source_name.startswith("firewall_example")
+    use_firewall_defaults = _is_firewall_source(source_name)
     default_device = _firewall_default_device(devices) if use_firewall_defaults else {}
     device_name = _first(
         row.get("control_name"),
@@ -380,6 +380,11 @@ def _build_event(
         warnings.append("策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联")
 
     return {"alarm_type": 4, "data": data}, warnings
+
+
+def _is_firewall_source(source_name: str) -> bool:
+    text = str(source_name or "").casefold()
+    return "firewall" in text or "防火墙" in str(source_name or "")
 
 
 def _firewall_default_device(devices: dict[str, dict[str, str]]) -> dict[str, str]:

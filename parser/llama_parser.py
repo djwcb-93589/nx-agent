@@ -489,6 +489,9 @@ class LogParser:
             messages=messages,
             max_tokens=max_tokens,
             temperature=0.3 if do_sample else 0.0,
+            response_format_json=False,
+            reasoning_effort="",
+            thinking_enabled=False,
         )
         template = self.extract_template_from_response(response)
         return self.clean_regex(sampled_log_list[0], self.template_to_regex(template))

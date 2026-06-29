@@ -74,8 +74,9 @@ class DeepSeekClient:
                 requested_thinking = (
                     self.thinking_enabled if thinking_enabled is None else thinking_enabled
                 )
-                if requested_thinking:
-                    request_kwargs["extra_body"] = {"thinking": {"type": "enabled"}}
+                request_kwargs["extra_body"] = {
+                    "thinking": {"type": "enabled" if requested_thinking else "disabled"}
+                }
                 if response_format_json:
                     request_kwargs["response_format"] = {"type": "json_object"}
                 response = self.client.chat.completions.create(**request_kwargs)

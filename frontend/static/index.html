@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>日志到知识图谱 Agent 工作台</title>
-    <link rel="stylesheet" href="/styles.css?v=20260629-run-collapse-fix" />
+    <link rel="stylesheet" href="/styles.css?v=20260629-run-scope-picker" />
   </head>
   <body>
     <div class="app-shell">
@@ -107,10 +107,18 @@
             <div class="collapsible-body">
               <div class="config-section-title">解析设置</div>
               <div class="form-grid">
-                <label class="wide">
-                  <span>运行范围</span>
-                  <input id="projectInput" value="all" />
-                </label>
+                <div class="wide run-scope-field">
+                  <input id="projectInput" type="hidden" value="all" />
+                  <div class="run-scope-head">
+                    <span>运行范围</span>
+                    <div class="run-scope-actions">
+                      <span id="parseSourceCount">0 / 0</span>
+                      <button id="selectAllParseSourcesBtn" class="mini-button" type="button">全选</button>
+                      <button id="clearParseSourcesBtn" class="mini-button" type="button">清空</button>
+                    </div>
+                  </div>
+                  <div id="parseSourceList" class="run-source-list"></div>
+                </div>
                 <label>
                   <span>样本数</span>
                   <input id="sampleInput" type="number" value="3" min="1" max="20" />
@@ -341,6 +349,6 @@
       </section>
     </div>
 
-    <script src="/app.js?v=20260629-run-collapse-fix"></script>
+    <script src="/app.js?v=20260629-run-scope-picker"></script>
   </body>
 </html>

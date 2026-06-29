@@ -8,8 +8,8 @@
   "llm": {
     "api_key": "${DEEPSEEK_API_KEY}",
     "base_url": "https://api.deepseek.com",
-    "cypher_model": "deepseek-chat",
-    "answer_model": "deepseek-chat",
+    "cypher_model": "deepseek-v4-flash",
+    "answer_model": "deepseek-v4-flash",
     "temperature": 0.1,
     "max_tokens": 2000,
     "timeout_seconds": 120

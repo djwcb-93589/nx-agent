@@ -681,6 +681,161 @@ def _customer_event_artifact_path(output_root: Path, output_dir: Path, filename:
     return edc_path if edc_path.is_file() else local_path
 
 
+def export_customer_events_for_parsed_outputs(
+    input_root: Path,
+    output_root: Path,
+    schemas_root: Path,
+    project: str,
+) -> dict:
+    input_root = Path(input_root).resolve()
+    output_root = Path(output_root).resolve()
+    schemas_root = Path(schemas_root).resolve()
+    report = {
+        "checked": 0,
+        "generated": 0,
+        "skipped": 0,
+        "failed": 0,
+        "items": [],
+    }
+    for source in match_sources(input_root, output_root, project):
+        source_name = str(source.get("source") or "").replace("\\", "/")
+        if not source_name:
+            continue
+        output_dir = output_root / Path(source_name).with_suffix("")
+        report["checked"] += 1
+        if not output_dir.is_dir():
+            _customer_event_report_item(report, source_name, "skipped", "解析输出目录不存在")
+            continue
+        if not _is_firewall_parser_output(output_dir, source_name):
+            _customer_event_report_item(report, source_name, "skipped", "不是 firewall schema")
+            continue
+        result_csv = _latest_result_csv_path(output_dir)
+        if result_csv is None:
+            _customer_event_report_item(report, source_name, "skipped", "没有数字结果 CSV")
+            continue
+        try:
+            params_csv = _extract_firewall_params_for_customer_events(
+                result_csv=result_csv,
+                output_dir=output_dir,
+            )
+            written = _export_customer_events_from_params(
+                params_csv=params_csv,
+                output_dir=output_dir,
+                schemas_root=schemas_root,
+                source_name=source_name,
+            )
+        except Exception as exc:
+            _customer_event_report_item(report, source_name, "failed", str(exc))
+            continue
+        _customer_event_report_item(
+            report,
+            source_name,
+            "generated",
+            f"生成 {Path(written['events']).name}",
+            path=written["events"],
+        )
+    return report
+
+
+def _customer_event_report_item(
+    report: dict,
+    source: str,
+    status: str,
+    message: str,
+    *,
+    path: str = "",
+) -> None:
+    if status in {"generated", "skipped", "failed"}:
+        report[status] += 1
+    report["items"].append(
+        {
+            "source": source,
+            "status": status,
+            "message": message,
+            "path": path,
+        }
+    )
+
+
+def _is_firewall_parser_output(output_dir: Path, source_name: str) -> bool:
+    meta_path = output_dir / "schema_meta.json"
+    if meta_path.is_file():
+        try:
+            with meta_path.open("r", encoding="utf-8") as file:
+                meta = json.load(file)
+            schema_type = str(meta.get("schema_type") or "").strip().casefold()
+            if schema_type:
+                return schema_type == "firewall"
+        except Exception:
+            pass
+    text = f"{source_name} {output_dir.as_posix()}".casefold()
+    return "firewall" in text or "防火墙" in source_name or "防火墙" in output_dir.as_posix()
+
+
+def _latest_result_csv_path(output_dir: Path) -> Path | None:
+    name = _latest_result_file(output_dir)
+    return output_dir / name if name else None
+
+
+def _extract_firewall_params_for_customer_events(*, result_csv: Path, output_dir: Path) -> Path:
+    extractor = EDC_ROOT / "extract_firewall_example_params.py"
+    if not extractor.is_file():
+        raise FileNotFoundError(extractor)
+    params_csv = output_dir / "customer_event_params.csv"
+    command = [
+        sys.executable,
+        str(extractor),
+        "--input-csv",
+        str(result_csv),
+        "--pairs-json",
+        str(output_dir / "customer_event_pairs.json"),
+        "--output-csv",
+        str(params_csv),
+        "--log-source",
+        "firewall",
+    ]
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    completed = subprocess.run(
+        command,
+        cwd=EDC_ROOT,
+        text=True,
+        capture_output=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+        env=env,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(
+            "防火墙客户事件参数抽取失败"
+            f"\nSTDOUT:\n{completed.stdout}\nSTDERR:\n{completed.stderr}"
+        )
+    return params_csv
+
+
+def _export_customer_events_from_params(
+    *,
+    params_csv: Path,
+    output_dir: Path,
+    schemas_root: Path,
+    source_name: str,
+) -> dict[str, str]:
+    if EDC_ROOT.is_dir() and str(EDC_ROOT) not in sys.path:
+        sys.path.insert(0, str(EDC_ROOT))
+    from log_pipeline_agent.firewall_events import export_customer_events
+
+    payload = export_customer_events(
+        params_csv=params_csv,
+        output_dirs=(output_dir,),
+        schema_path=schemas_root / "firewall_customer_event_schema.json",
+        asset_path=schemas_root / "firewall_assets.csv",
+        device_path=schemas_root / "firewall_devices.csv",
+        source_name=source_name,
+    )
+    return payload["written"][-1]
+
+
 def sync_parser_outputs_to_edc(output_root: Path, schemas_root: Path) -> dict:
     output_root = Path(output_root).resolve()
     schemas_root = Path(schemas_root).resolve()
@@ -1004,7 +1159,35 @@ class RunManager:
                 self.state["message"] = "解析任务已停止。"
             elif returncode == 0:
                 self.state["status"] = "succeeded"
-                self.state["message"] = "解析任务已完成。"
+                customer_event_report = export_customer_events_for_parsed_outputs(
+                    self.input_root,
+                    self.output_root,
+                    self.schemas_root,
+                    str(self.state.get("project") or "all"),
+                )
+                self.state["logs"].append(
+                    "Customer event export: "
+                    f"generated={customer_event_report['generated']}, "
+                    f"skipped={customer_event_report['skipped']}, "
+                    f"failed={customer_event_report['failed']}"
+                )
+                if customer_event_report["failed"]:
+                    failed_sources = [
+                        item["source"]
+                        for item in customer_event_report["items"]
+                        if item["status"] == "failed"
+                    ]
+                    self.state["message"] = (
+                        "解析任务已完成，但客户事件 JSON 生成失败: "
+                        + ", ".join(failed_sources[:3])
+                    )
+                elif customer_event_report["generated"]:
+                    self.state["message"] = (
+                        "解析任务已完成，已生成 "
+                        f"{customer_event_report['generated']} 个客户事件 JSON。"
+                    )
+                else:
+                    self.state["message"] = "解析任务已完成。"
                 sync_parser_outputs_to_edc(self.output_root, self.schemas_root)
             else:
                 self.state["status"] = "failed"
@@ -1014,6 +1197,7 @@ class RunManager:
         clean_line = line.replace("\r", "").strip()
         if not clean_line:
             return
+        completed_source = ""
         with self.lock:
             if self.state.get("id") != run_id:
                 return
@@ -1030,6 +1214,9 @@ class RunManager:
             elif " Agent parsing done." in clean_line:
                 self.state["completed_sources"] += 1
                 self.state["message"] = "一个日志源解析完成。"
+                completed_source = clean_line.split(" Agent parsing done.", 1)[0].strip()
+                if not completed_source:
+                    completed_source = str(self.state.get("current_source") or "").strip()
             if clean_line.startswith(TRACE_PREFIX):
                 try:
                     event = json.loads(clean_line[len(TRACE_PREFIX) :])
@@ -1038,6 +1225,49 @@ class RunManager:
                         self.state["traces"] = self.state["traces"][-MAX_RUN_LOG_LINES:]
                 except json.JSONDecodeError:
                     pass
+        if completed_source:
+            self._export_customer_events_for_source(run_id, completed_source)
+
+    def _export_customer_events_for_source(self, run_id: int, source_name: str) -> None:
+        source_name = source_name.strip().replace("\\", "/")
+        if not source_name:
+            return
+        try:
+            report = export_customer_events_for_parsed_outputs(
+                self.input_root,
+                self.output_root,
+                self.schemas_root,
+                source_name,
+            )
+        except Exception as exc:
+            report = {
+                "checked": 1,
+                "generated": 0,
+                "skipped": 0,
+                "failed": 1,
+                "items": [
+                    {
+                        "source": source_name,
+                        "status": "failed",
+                        "message": str(exc),
+                        "path": "",
+                    }
+                ],
+            }
+        with self.lock:
+            if self.state.get("id") != run_id:
+                return
+            self.state["logs"].append(
+                "Customer event export for "
+                f"{source_name}: generated={report['generated']}, "
+                f"skipped={report['skipped']}, failed={report['failed']}"
+            )
+            if len(self.state["logs"]) > MAX_RUN_LOG_LINES:
+                self.state["logs"] = self.state["logs"][-MAX_RUN_LOG_LINES:]
+            if report["failed"]:
+                self.state["message"] = "一个日志源解析完成，但客户事件 JSON 生成失败。"
+            elif report["generated"]:
+                self.state["message"] = "一个日志源解析完成，客户事件 JSON 已生成。"
 
     def _empty_state(self) -> dict:
         return {
