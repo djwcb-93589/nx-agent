@@ -14,12 +14,22 @@ import shutil
 import subprocess
 import sys
 import threading
-import extra_api
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+BACKEND_ROOT = Path(__file__).resolve().parent
+for _path in (REPO_ROOT, BACKEND_ROOT):
+    _path_text = str(_path)
+    if _path_text not in sys.path:
+        sys.path.insert(0, _path_text)
+
+try:
+    from . import extra_api
+except ImportError:  # pragma: no cover - supports `python backend/server.py`.
+    import extra_api
 
 from env_utils import load_dotenv
 
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 EDC_ROOT = REPO_ROOT / "edc-log"
 EDC_AIT_ROOT = EDC_ROOT / "AIT"
 EDC_SCHEMAS_ROOT = EDC_ROOT / "schemas"

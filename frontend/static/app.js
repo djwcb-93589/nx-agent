@@ -165,6 +165,56 @@ const EVENT_LABELS = {
   job_failed: "任务失败",
 };
 
+const SOURCE_BUCKET_PATH = ["安全保密产品", "防火墙日志", "数据所防火墙"];
+const SOURCE_TAXONOMY = [
+  {
+    label: "安全保密产品",
+    children: [
+      {
+        label: "防火墙日志",
+        children: [
+          { label: "数据所防火墙", bucket: "firewall-datasuo" },
+          { label: "天融信防火墙" },
+          { label: "......" },
+        ],
+      },
+      {
+        label: "检测器日志",
+        children: [{ label: "数据所检测器" }, { label: "......" }],
+      },
+      { label: "防病毒日志" },
+      { label: "入侵检测日志" },
+      { label: "......" },
+    ],
+  },
+  {
+    label: "终端",
+    children: [
+      {
+        label: "套件日志",
+        children: [{ label: "中孚套件" }, { label: "IE 套件" }],
+      },
+      {
+        label: "主机审计日志",
+        children: [{ label: "北信源主审" }, { label: "......" }],
+      },
+    ],
+  },
+  {
+    label: "服务器",
+    children: [
+      {
+        label: "主机审计日志",
+        children: [{ label: "北信源主审" }, { label: "......" }],
+      },
+    ],
+  },
+  {
+    label: "应用系统",
+    children: [{ label: "邮件" }, { label: "OA" }, { label: "协同" }, { label: "......" }],
+  },
+];
+
 const API_BASE = resolveApiBase();
 
 function resolveApiBase() {
@@ -265,10 +315,7 @@ async function loadSources(options = {}) {
 
 function applyFilter() {
   const query = els.sourceFilter.value.trim().toLowerCase();
-  state.filtered = state.sources.filter((item) =>
-    item.source.toLowerCase().includes(query) ||
-    sourceSegments(item.source).join("/").toLowerCase().includes(query),
-  );
+  state.filtered = state.sources.filter((item) => sourceMatchesQuery(item, query));
   renderSources();
 }
 
@@ -289,35 +336,47 @@ function renderSources() {
 }
 
 function seedSourceTreeExpansion() {
-  for (const item of state.sources) {
-    const first = sourceSegments(item.source)[0];
-    if (first && !state.sourceTreeKnownRoots.has(first)) {
-      state.sourceTreeKnownRoots.add(first);
-      state.sourceTreeExpanded.add(`root/${first}`);
+  const seed = (nodes, prefix = "root") => {
+    for (const node of nodes) {
+      const key = `${prefix}/${node.label}`;
+      if (!state.sourceTreeKnownRoots.has(key)) {
+        state.sourceTreeKnownRoots.add(key);
+        state.sourceTreeExpanded.add(key);
+      }
+      if (node.children?.length) {
+        seed(node.children, key);
+      }
     }
+  };
+  seed(SOURCE_TAXONOMY);
+}
+
+function sourceMatchesQuery(item, query) {
+  if (!query) {
+    return true;
   }
+  return [
+    item.source,
+    sourceDisplayName(item.source),
+    sourceSegments(item.source).join("/"),
+  ].some((value) => String(value || "").toLowerCase().includes(query));
 }
 
 function buildSourceTree(items) {
   const root = createSourceTreeNode("root", "root");
-  for (const item of items) {
-    const segments = sourceSegments(item.source);
-    let node = root;
-    node.total += 1;
-    if (item.output_available) node.ready += 1;
-    segments.forEach((segment, index) => {
-      const key = `${node.key}/${segment}`;
-      if (!node.children.has(segment)) {
-        node.children.set(segment, createSourceTreeNode(segment, key));
-      }
-      node = node.children.get(segment);
-      node.total += 1;
-      if (item.output_available) node.ready += 1;
-      if (index === segments.length - 1) {
-        node.item = item;
-      }
-    });
+  appendTaxonomyNodes(root, SOURCE_TAXONOMY);
+  const bucket = findSourceNode(root, SOURCE_BUCKET_PATH);
+  const sortedItems = [...items].sort((a, b) =>
+    sourceDisplayName(a.source).localeCompare(sourceDisplayName(b.source), "zh-CN"),
+  );
+  for (const item of sortedItems) {
+    const label = sourceDisplayName(item.source);
+    const key = `${bucket.key}/source:${item.source}`;
+    const node = createSourceTreeNode(label, key);
+    node.item = item;
+    bucket.children.set(key, node);
   }
+  updateSourceNodeCounts(root);
   return root;
 }
 
@@ -332,12 +391,53 @@ function createSourceTreeNode(label, key) {
   };
 }
 
+function appendTaxonomyNodes(parent, definitions) {
+  for (const definition of definitions) {
+    const key = `${parent.key}/${definition.label}`;
+    const node = createSourceTreeNode(definition.label, key);
+    parent.children.set(definition.label, node);
+    if (definition.children?.length) {
+      appendTaxonomyNodes(node, definition.children);
+    }
+  }
+}
+
+function findSourceNode(root, labels) {
+  let node = root;
+  for (const label of labels) {
+    node = node.children.get(label);
+    if (!node) {
+      throw new Error(`Missing source taxonomy node: ${labels.join("/")}`);
+    }
+  }
+  return node;
+}
+
+function updateSourceNodeCounts(node) {
+  if (node.item) {
+    node.total = 1;
+    node.ready = node.item.output_available ? 1 : 0;
+    return { total: node.total, ready: node.ready };
+  }
+  let total = 0;
+  let ready = 0;
+  for (const child of node.children.values()) {
+    const counts = updateSourceNodeCounts(child);
+    total += counts.total;
+    ready += counts.ready;
+  }
+  node.total = total;
+  node.ready = ready;
+  return { total, ready };
+}
+
 function renderSourceNode(node, depth, query) {
   if (node.item && node.children.size === 0) {
     return renderSourceLeaf(node, depth);
   }
   const active = nodeHasActiveSource(node);
-  const expanded = Boolean(query) || state.sourceTreeExpanded.has(node.key);
+  const hasChildren = node.children.size > 0;
+  const expanded = hasChildren && state.sourceTreeExpanded.has(node.key);
   const wrapper = document.createElement("div");
   wrapper.className = `source-tree-node depth-${Math.min(depth, 4)}`;
 
@@ -346,29 +446,44 @@ function renderSourceNode(node, depth, query) {
   button.className =
     "source-folder" +
     (expanded ? " expanded" : "") +
-    (active ? " has-active" : "");
+    (active ? " has-active" : "") +
+    (!hasChildren ? " empty-folder" : "");
   button.innerHTML = `
-    <span class="source-folder-caret">${expanded ? "▾" : "▸"}</span>
+    <span class="source-folder-caret">${hasChildren ? (expanded ? "▾" : "▸") : ""}</span>
     <span class="source-folder-label">${escapeHtml(node.label)}</span>
     <span class="source-folder-count">${node.ready}/${node.total}</span>
   `;
-  button.addEventListener("click", () => {
-    if (state.sourceTreeExpanded.has(node.key)) {
-      state.sourceTreeExpanded.delete(node.key);
-    } else {
-      state.sourceTreeExpanded.add(node.key);
-    }
-    renderSources();
-  });
+  button.setAttribute("aria-expanded", String(expanded));
   wrapper.appendChild(button);
 
-  const children = document.createElement("div");
-  children.className = "source-tree-children";
-  children.hidden = !expanded;
-  for (const child of node.children.values()) {
-    children.appendChild(renderSourceNode(child, depth + 1, query));
+  let children = null;
+  if (hasChildren) {
+    children = document.createElement("div");
+    children.className = "source-tree-children";
+    children.hidden = !expanded;
+    children.classList.toggle("is-hidden", !expanded);
+    for (const child of node.children.values()) {
+      children.appendChild(renderSourceNode(child, depth + 1, query));
+    }
+    wrapper.appendChild(children);
+
+    button.addEventListener("click", () => {
+      const nextExpanded = !state.sourceTreeExpanded.has(node.key);
+      if (nextExpanded) {
+        state.sourceTreeExpanded.add(node.key);
+      } else {
+        state.sourceTreeExpanded.delete(node.key);
+      }
+      button.classList.toggle("expanded", nextExpanded);
+      button.setAttribute("aria-expanded", String(nextExpanded));
+      const caret = button.querySelector(".source-folder-caret");
+      if (caret) {
+        caret.textContent = nextExpanded ? "▾" : "▸";
+      }
+      children.hidden = !nextExpanded;
+      children.classList.toggle("is-hidden", !nextExpanded);
+    });
   }
-  wrapper.appendChild(children);
   return wrapper;
 }
 
@@ -382,7 +497,7 @@ function renderSourceLeaf(node, depth) {
   button.style.setProperty("--source-depth", Math.min(depth, 5));
   button.innerHTML = `
     <div class="source-title">${escapeHtml(node.label)}</div>
-    <div class="source-path">${escapeHtml(shortPath(item.source))}</div>
+    <div class="source-path">${escapeHtml(sourceSegments(item.source).join(" / "))}</div>
     <div class="source-meta">
       <span class="badge">${formatBytes(item.size_bytes)}</span>
       <span class="badge ${item.output_available ? "ready" : "missing"}">
@@ -396,27 +511,16 @@ function renderSourceLeaf(node, depth) {
 }
 
 function sourceSegments(source) {
-  const parts = String(source || "")
+  return [...SOURCE_BUCKET_PATH, sourceDisplayName(source)];
+}
+
+function sourceDisplayName(source) {
+  const fileName = String(source || "")
     .replaceAll("\\", "/")
     .split("/")
-    .filter(Boolean);
-  if (parts.length < 2) {
-    return parts;
-  }
-  const fileName = parts.at(-1);
-  const delimiterIndexes = ["：", ":"]
-    .map((delimiter) => fileName.indexOf(delimiter))
-    .filter((index) => index > 0);
-  if (delimiterIndexes.length === 0) {
-    return parts;
-  }
-  const delimiterIndex = Math.min(...delimiterIndexes);
-  const category = fileName.slice(0, delimiterIndex).trim();
-  const leaf = fileName.slice(delimiterIndex + 1).trim();
-  if (!category || !leaf) {
-    return parts;
-  }
-  return [...parts.slice(0, -1), category, leaf];
+    .filter(Boolean)
+    .at(-1) || "";
+  return fileName.replace(/\.log$/i, "");
 }
 
 function expandSourcePath(source) {
@@ -454,7 +558,7 @@ async function selectSource(source, syncRunScope, options = {}) {
     els.projectInput.value = source;
   }
   renderSources();
-  els.activeSource.textContent = source;
+  els.activeSource.textContent = sourceDisplayName(source);
   if (!silent) {
     setLoading();
   }

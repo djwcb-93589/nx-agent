@@ -4,11 +4,12 @@ from http import HTTPStatus
 from urllib.parse import urlparse
 import os
 import json
+import glob
 from datetime import datetime
 
-# 获取当前脚本所在目录，拼接出 event.json 的绝对路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-EVENT_JSON_PATH = os.path.join(BASE_DIR, "event.json")
+# 相对于当前文件(backend目录)获取 result_deepseek/firewallexample 的绝对路径
+EVENTS_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "result_deepseek", "firewallexample"))
 
 # 资产表
 asset_list = [
@@ -19,13 +20,18 @@ asset_list = [
 ]
 
 
-def load_events(event_json_path: str) -> list:
-    try:
-        with open(event_json_path, "r", encoding="utf-8") as f:
-            events = json.load(f)
-    except Exception:
-        events = []
-    return events if isinstance(events, list) else []
+def load_events(base_dir: str) -> list:
+    all_events = []
+    search_pattern = os.path.join(base_dir, "**", "customer_events.json")
+    for file_path in glob.glob(search_pattern, recursive=True):
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                events = json.load(f)
+                if isinstance(events, list):
+                    all_events.extend(events)
+        except Exception:
+            continue
+    return all_events
 
 
 def get_asset_by_ip(ip: str, assets: list) -> dict:
@@ -36,7 +42,7 @@ def get_asset_by_ip(ip: str, assets: list) -> dict:
 
 
 def get_alarm_list() -> list:
-    events = load_events(EVENT_JSON_PATH)
+    events = load_events(EVENTS_DIR)
     
     event_list = []
     for item in events:
@@ -60,7 +66,7 @@ def get_alarm_list() -> list:
             event_info = {
                 "event_name": "用户终端违规登录运维管理员账户",
                 "event_type": alarm_type,
-                "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "time": data.get("login_time", ""),
                 "involved_assets": asset_info.get("name", ""),
                 "involved_ip": src_ip,
                 "src_ip": src_ip,
@@ -80,7 +86,7 @@ def get_alarm_list() -> list:
             event_info = {
                 "event_name": "用户终端违规登录非运维管理员账户",
                 "event_type": alarm_type,
-                "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "time": data.get("login_time", ""),
                 "involved_assets": asset_info.get("name", ""),
                 "involved_ip": src_ip,
                 "src_ip": src_ip,
@@ -104,7 +110,7 @@ def get_alarm_list() -> list:
                 event_info = {
                     "event_name": "管理员修改防火墙策略为全通",
                     "event_type": alarm_type,
-                    "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "time": data.get("login_time", ""),
                     "involved_assets": asset_info.get("name", ""),
                     "involved_ip": control_ip,
                     "control_device_type": data.get("control_device_type", ""),

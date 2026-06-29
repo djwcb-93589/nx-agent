@@ -174,7 +174,8 @@ textarea {
 
 .source-list {
   min-height: 160px;
-  max-height: 38vh;
+  max-height: none;
+  flex: 1;
 }
 
 .source-tree-node {
@@ -188,6 +189,11 @@ textarea {
   margin-left: 10px;
   padding-left: 10px;
   border-left: 1px solid var(--line-soft);
+}
+
+.source-tree-children[hidden],
+.source-tree-children.is-hidden {
+  display: none !important;
 }
 
 .source-folder {
@@ -207,6 +213,15 @@ textarea {
 .source-folder:hover,
 .source-folder.has-active {
   background: #edf5f4;
+}
+
+.source-folder.empty-folder {
+  cursor: default;
+  color: var(--muted);
+}
+
+.source-folder.empty-folder:hover {
+  background: transparent;
 }
 
 .source-folder-caret {
@@ -362,9 +377,68 @@ textarea {
   padding: 18px;
 }
 
+.overview-with-run {
+  grid-template-columns: minmax(340px, 0.85fr) minmax(560px, 1.15fr);
+  align-items: start;
+}
+
 .overview-panel p {
   margin-top: 8px;
   font-size: 14px;
+}
+
+.overview-copy {
+  min-width: 0;
+}
+
+.overview-run {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 16px;
+}
+
+.overview-run .panel-head {
+  margin-bottom: 0;
+}
+
+.overview-run .collapsible-body {
+  display: grid;
+  gap: 12px;
+}
+
+.overview-run .collapsible-body[hidden] {
+  display: none !important;
+}
+
+.overview-run .progress-grid {
+  gap: 14px;
+}
+
+.overview-run .stage-flow {
+  grid-template-columns: repeat(6, minmax(128px, 1fr));
+  margin-top: 0;
+}
+
+.overview-run .stage-card {
+  min-height: 72px;
+  padding: 8px;
+}
+
+.overview-run .split-panels {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.overview-run .trace-list,
+.overview-run .timeline {
+  max-height: 150px;
+}
+
+.overview-run .run-log {
+  max-height: 150px;
 }
 
 .eyebrow {
@@ -409,7 +483,7 @@ textarea {
 
 .control-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 
@@ -487,6 +561,13 @@ textarea {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   margin-top: 10px;
+}
+
+.config-section-title {
+  margin: 12px 0 8px;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 900;
 }
 
 label span {
@@ -833,6 +914,10 @@ button:disabled {
   grid-column: 1 / -1;
 }
 
+.schema-grid > .panel:only-child {
+  grid-column: 1 / -1;
+}
+
 .log-preview {
   max-height: 330px;
   overflow: auto;
@@ -1119,6 +1204,7 @@ td {
   }
 
   .overview-panel,
+  .overview-with-run,
   .control-grid,
   .progress-grid,
   .split-panels,
@@ -1133,6 +1219,18 @@ td {
   .metric-strip,
   .summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .overview-run {
+    border-left: 0;
+    border-top: 1px solid var(--line-soft);
+    padding-left: 0;
+    padding-top: 16px;
+  }
+
+  .overview-run .stage-flow,
+  .overview-run .split-panels {
+    grid-template-columns: 1fr;
   }
 }
 

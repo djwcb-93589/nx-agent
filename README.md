@@ -60,21 +60,14 @@ customer_events_rejected.jsonl
 建议使用 Python 3.10 或更高版本。
 
 ```powershell
-cd "E:\6服务器\NINGXXXXIA-main"
+cd <repo>
 pip install -r requirements.txt
 ```
 
-首次运行前复制环境变量模板：
-
-```powershell
-Copy-Item .env.example .env
-```
-
-然后在 `.env` 中填写本地配置：
+DeepSeek API Key 不再从 `.env` 读取，需要在前端页面的 `DeepSeek API Key`
+输入框中填写。`.env` 只用于可选的模型默认值、DeepSeek base URL 和 Neo4j 连接：
 
 ```text
-DEEPSEEK_API_KEY=
-DS_TOKEN=${DEEPSEEK_API_KEY}
 DEEPSEEK_BASE_URL=https://api.deepseek.com
 DEEPSEEK_MODEL=deepseek-v4-flash
 DEEPSEEK_PARAM_MODEL=deepseek-chat
@@ -85,7 +78,8 @@ NEO4J_PASSWORD=
 NEO4J_DATABASE=neo4j
 ```
 
-`.env` 已加入 `.gitignore`，不要提交真实 API Key、Neo4j 用户名或密码。
+`.env` 已加入 `.gitignore`，不要提交真实 Neo4j 用户名或密码。DeepSeek API Key
+只通过前端请求传入后端运行时，不会写入 `.env`。
 
 ## 启动项目
 
@@ -94,14 +88,12 @@ NEO4J_DATABASE=neo4j
 终端 1：启动后端 API 服务：
 
 ```powershell
-cd "E:\6服务器\NINGXXXXIA-main"
 python -m backend.server --host 127.0.0.1 --port 8765
 ```
 
 终端 2：启动前端静态页面服务：
 
 ```powershell
-cd "E:\6服务器\NINGXXXXIA-main"
 python -m frontend.server --host 127.0.0.1 --port 5173
 ```
 
@@ -128,20 +120,35 @@ http://127.0.0.1:8765
 python -m frontend.server --host 127.0.0.1 --port 5173 --api_base http://127.0.0.1:8765
 ```
 
-需要让页面直接访问其他 API 地址时，也可在加载 `app.js` 前设置 `window.LOG_AGENT_API_BASE`。
+部署到其他服务器并从外部浏览器访问时，通常这样启动：
+
+```powershell
+python -m backend.server --host 0.0.0.0 --port 8765
+python -m frontend.server --host 0.0.0.0 --port 5173 --api_base http://127.0.0.1:8765
+```
+
+然后打开：
+
+```text
+http://<服务器IP或域名>:5173
+```
+
+`frontend.server` 会把浏览器发到 `/api/...` 的请求从服务器侧代理到
+`--api_base`，所以浏览器不会去访问自己电脑的 `127.0.0.1`。如果前后端不在同一台
+服务器，把 `--api_base` 改成后端 API 的可达地址。
 
 ## 命令行运行日志解析
 
 如果只需要在命令行运行日志解析：
 
 ```powershell
-python evaluation.py --project all --sample 3 --write_group_tree
+python evaluation.py --project all --sample 3 --write_group_tree --api_key <DeepSeek API Key>
 ```
 
 指定部分日志源：
 
 ```powershell
-python evaluation.py --project "auth,dnsmasq.log,intranet_server" --sample 3 --write_group_tree
+python evaluation.py --project "auth,dnsmasq.log,intranet_server" --sample 3 --write_group_tree --api_key <DeepSeek API Key>
 ```
 
 不调用 LLM 的本地冒烟测试：
@@ -159,6 +166,7 @@ python evaluation.py --input_dir .tmp_agent_dataset --output_dir .tmp_agent_resu
 --project            要处理的日志源，默认 all
 --sample             输出样本编号，默认 3
 --model              LLM 模型名
+--api_key            DeepSeek API Key，必须显式传入；不会从 .env 读取
 --mock_llm           使用本地模拟结果，不调用大模型
 --write_group_tree   输出分组树 JSON
 --disable_planner    关闭 LLM 计划器，使用默认执行计划
@@ -179,7 +187,8 @@ python evaluation.py --input_dir .tmp_agent_dataset --output_dir .tmp_agent_resu
 - 基于 Neo4j 执行自然语言图查询
 - 按确认文本清空 Neo4j 当前数据库
 
-如果要写入 Neo4j，需要先启动本地或远程 Neo4j，并在 `.env` 中配置连接信息。前端中 Neo4j 写入和清库操作都需要用户显式确认。
+如果要写入 Neo4j，需要先启动本地或远程 Neo4j，并在前端填写连接信息；也可以
+把 Neo4j 连接默认值放在 `.env` 中。前端中 Neo4j 写入和清库操作都需要用户显式确认。
 
 ## 输入与输出目录
 
