@@ -1374,7 +1374,14 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                 self._handle_kg_get(parsed)
                 return
             if parsed.path == "/api/alarm/list":
-                self._send_json(extra_api.get_alarm_list())
+                query = parse_qs(parsed.query)
+                try:
+                    page = int(query.get("page", ["1"])[0])
+                    page_size = int(query.get("page_size", ["10"])[0])
+                except ValueError:
+                    page = 1
+                    page_size = 10
+                self._send_json(extra_api.get_alarm_list(page, page_size))
                 return
             self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
         except Exception as exc:
