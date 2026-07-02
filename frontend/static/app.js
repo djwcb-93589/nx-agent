@@ -68,8 +68,6 @@ const els = {
   poiTable: document.getElementById("poiTable"),
   poiMeta: document.getElementById("poiMeta"),
   editPoiButton: document.getElementById("editPoiButton"),
-  relationTable: document.getElementById("relationTable"),
-  relationMeta: document.getElementById("relationMeta"),
   customerEventTable: document.getElementById("customerEventTable"),
   customerEventMeta: document.getElementById("customerEventMeta"),
   customerEventValidation: document.getElementById("customerEventValidation"),
@@ -129,7 +127,7 @@ const els = {
 const PARSE_STAGES = [
   { tool: "read_raw_logs", title: "读取日志", desc: "找到并读取原始 .log 文件。" },
   { tool: "preprocess_logs", title: "预处理", desc: "抽取时间戳，保留原始内容映射。" },
-  { tool: "ensure_schema", title: "准备字段库", desc: "匹配或生成 POI 字段库和 Relation 库。" },
+  { tool: "ensure_schema", title: "准备字段库", desc: "匹配或生成 POI 字段库和规则库。" },
   { tool: "build_deep_group_tree", title: "深度分组", desc: "把相似日志聚成事件组。" },
   { tool: "parse_groups_with_memory_reflection", title: "模板解析", desc: "记忆命中、采样、模型调用、反思修正。" },
   { tool: "write_outputs", title: "写出结果", desc: "生成 CSV、分组树和 schema 文件。" },
@@ -141,7 +139,7 @@ const TOOL_LABELS = {
   group_planner: "选择事件组策略",
   read_raw_logs: "读取原始日志",
   preprocess_logs: "时间戳预处理",
-  ensure_schema: "准备 POI/Relation",
+  ensure_schema: "准备字段库",
   build_deep_group_tree: "构建分组树",
   parse_groups_with_memory_reflection: "解析所有事件组",
   parse_group: "解析事件组",
@@ -681,9 +679,8 @@ function setLoading() {
     els.groupTable,
     els.treeTable,
     els.poiTable,
-    els.relationTable,
     els.customerEventTable,
-  ]) {
+  ].filter(Boolean)) {
     target.innerHTML = '<div class="empty">加载中</div>';
   }
 }
@@ -696,7 +693,6 @@ function showSourceError(err) {
   els.groupMeta.textContent = "加载失败";
   els.treeMeta.textContent = "加载失败";
   els.poiMeta.textContent = "加载失败";
-  els.relationMeta.textContent = "加载失败";
   els.customerEventMeta.textContent = "加载失败";
   els.customerEventValidation.textContent = "";
   const html = `<div class="empty">加载失败：${escapeHtml(message)}</div>`;
@@ -707,9 +703,8 @@ function showSourceError(err) {
     els.groupTable,
     els.treeTable,
     els.poiTable,
-    els.relationTable,
     els.customerEventTable,
-  ]) {
+  ].filter(Boolean)) {
     target.innerHTML = html;
   }
   showError(err);
@@ -747,8 +742,6 @@ function renderPayload(payload) {
   renderCsv(els.poiTable, payload.poi_schema);
   els.poiMeta.textContent = schemaMetaText(payload.schema_meta, payload.poi_schema);
   els.editPoiButton.disabled = !state.activeSource;
-  renderCsv(els.relationTable, payload.relation_schema);
-  els.relationMeta.textContent = schemaMetaText(payload.schema_meta, payload.relation_schema);
   renderFirewallPoiResult(payload);
   renderMetrics(payload);
 }
@@ -796,14 +789,12 @@ function renderMetrics(payload) {
   const resultRows = payload.result.available ? payload.result.rows.length : 0;
   const groupRows = payload.group.available ? payload.group.rows.length : 0;
   const poiRows = payload.poi_schema.available ? payload.poi_schema.rows.length : 0;
-  const relationRows = payload.relation_schema.available ? payload.relation_schema.rows.length : 0;
   const firewallRows = payload.poi_result?.available ? payload.poi_result.rows.length : 0;
   const metrics = [
     ["原始预览", payload.input.rows.length],
     ["解析结果", resultRows],
     ["日志分组", groupRows],
     ["POI 字段", poiRows || "无"],
-    ["关系规则", relationRows || "无"],
     ["防火墙日志", firewallRows || "无"],
     ["树中分组", tree.available ? tree.group_count : "无"],
   ];
@@ -1035,7 +1026,7 @@ function buildTraceDetail(trace) {
   }
   if (trace.tool === "ensure_schema") {
     const source = data.generated ? "模型新生成" : "命中已有库";
-    return `${source}：${data.schema_type || "schema"}，POI ${data.poi_count || 0} 个，Relation ${data.relation_count || 0} 条`;
+    return `${source}：${data.schema_type || "schema"}，POI ${data.poi_count || 0} 个`;
   }
   if (trace.tool === "build_deep_group_tree") {
     return `形成 ${data.group_count || 0} 个日志组，覆盖 ${data.line_count || 0} 行`;
