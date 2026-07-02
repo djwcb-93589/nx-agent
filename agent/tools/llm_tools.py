@@ -100,7 +100,7 @@ def generate_log_regex(template_engine, log_list, records=False, do_sample=False
         )
     except RuntimeError as exc:
         error_text = str(exc).lower()
-        if "deepseek request failed" not in error_text and "empty" not in error_text:
+        if "glm request failed" not in error_text and "empty" not in error_text:
             raise
         logs = [
             str(item.get("Content", "")) if isinstance(item, dict) else str(item)
@@ -115,7 +115,7 @@ def generate_log_regex(template_engine, log_list, records=False, do_sample=False
             template_engine.template_to_regex(template),
         )
         print(
-            f"DeepSeek template generation unavailable; deterministic fallback used: {exc}",
+            f"GLM template generation unavailable; deterministic fallback used: {exc}",
             flush=True,
         )
         return regex_pattern

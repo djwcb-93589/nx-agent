@@ -684,7 +684,11 @@ def build_arg_parser():
     parser.add_argument(
         "--model",
         type=str,
-        default=get_env("DEEPSEEK_MODEL", "deepseek-v4-flash"),
+        default=get_env(
+            "GLM_MODEL",
+            "glm-5.2",
+            aliases=("ZAI_MODEL", "LLM_MODEL"),
+        ),
     )
     parser.add_argument("--sample", type=int, default=3)
     parser.add_argument("--similarity", type=str, default="jaccard")
@@ -699,14 +703,14 @@ def build_arg_parser():
         "--api_base",
         type=str,
         default=get_env(
-            "DEEPSEEK_BASE_URL",
-            "https://api.deepseek.com",
-            aliases=("OPENAI_BASE_URL", "LLM_BASE_URL"),
+            "GLM_BASE_URL",
+            "https://api.z.ai/api/paas/v4/",
+            aliases=("ZAI_BASE_URL", "OPENAI_BASE_URL", "LLM_BASE_URL"),
         ),
     )
     parser.add_argument("--api_timeout", type=int, default=120)
     parser.add_argument("--api_retries", type=int, default=5)
-    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--temperature", type=float, default=0.1)
     parser.add_argument("--max_new_tokens", type=int, default=1024)
     parser.add_argument("--input_dir", type=str, default="full_dataset")
     parser.add_argument("--output_dir", type=str, default="result_deepseek")

@@ -36,7 +36,7 @@ schemas/                POI、relation 等 schema 资源
 artifacts/              字段 JSON、mapped JSON、参数 CSV、图谱 CSV
 log_kg_builder/         知识图谱构建工具
 log_kg_query_agent/     Neo4j 自然语言图查询实现
-edc/                    DeepSeek 字段语义与 schema 映射依赖
+edc/                    GLM 字段语义与 schema 映射依赖
 ```
 
 ## 运行产物约定

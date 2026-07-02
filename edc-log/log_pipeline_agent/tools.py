@@ -29,7 +29,14 @@ from env_utils import load_dotenv, resolve_env_value
 
 
 _EDC_LEGACY_IO_LOCK = threading.Lock()
-LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
+LLM_SECRET_ENV_KEYS = (
+    "ZAI_API_KEY",
+    "GLM_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "DS_TOKEN",
+    "OPENAI_API_KEY",
+    "OPENAI_KEY",
+)
 
 
 @dataclass
@@ -46,11 +53,12 @@ def _configure_runtime_api_key(api_key: str, *, required: bool) -> str:
     for secret_key in LLM_SECRET_ENV_KEYS:
         os.environ.pop(secret_key, None)
     if resolved:
-        os.environ["DEEPSEEK_API_KEY"] = resolved
+        os.environ["ZAI_API_KEY"] = resolved
+        os.environ["GLM_API_KEY"] = resolved
         os.environ["DS_TOKEN"] = resolved
         return resolved
     if required:
-        raise ValueError("DeepSeek API Key must be provided by the frontend; .env is not used for API keys.")
+        raise ValueError("GLM API Key must be provided by the frontend; .env is not used for API keys.")
     return ""
 
 
@@ -204,9 +212,9 @@ def _build_edc_config(
     spec: DatasetSpec,
     *,
     output_dir: Path,
-    oie_model: str = "deepseek-v4-flash",
-    schema_model: str = "deepseek-v4-flash",
-    canonicalization_model: str = "deepseek-v4-flash",
+    oie_model: str = "glm-5.2",
+    schema_model: str = "glm-5.2",
+    canonicalization_model: str = "glm-5.2",
 ) -> dict[str, Any]:
     return {
         "oie_llm": oie_model,
@@ -225,7 +233,7 @@ def _build_edc_config(
         "oie_refine_few_shot_example_file_path": str(
             PROJECT_ROOT / "few_shot_examples" / "example" / "oie_few_shot_refine_examples.txt"
         ),
-        "ee_llm": "deepseek-v4-flash",
+        "ee_llm": "glm-5.2",
         "ee_prompt_template_file_path": str(PROJECT_ROOT / "prompt_templates" / "ee_template.txt"),
         "ee_few_shot_example_file_path": str(
             PROJECT_ROOT / "few_shot_examples" / "example" / "ee_few_shot_examples.txt"

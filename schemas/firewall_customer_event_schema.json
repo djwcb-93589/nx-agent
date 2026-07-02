@@ -30,7 +30,11 @@
         "dst_ip",
         "dst_port",
         "login_account",
-        "login_time"
+        "login_time",
+        "subject",
+        "action",
+        "object",
+        "time"
       ]
     },
     "4": {
@@ -43,7 +47,10 @@
         "src_ip",
         "dst_ip",
         "login_account",
-        "login_time"
+        "login_time",
+        "subject",
+        "object",
+        "time"
       ]
     }
   }

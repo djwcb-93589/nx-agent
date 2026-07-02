@@ -14,7 +14,10 @@ if str(EDC_ROOT) not in sys.path:
 from agent.tools.schema_tools import infer_schema_type
 from agent.tools.llm_tools import generate_log_regex
 from log_pipeline_agent.config import AIT_ROOT, DATASET_PATTERNS, build_ait_output_tag
-from log_pipeline_agent.firewall_events import build_customer_events
+from log_pipeline_agent.firewall_events import (
+    build_customer_events,
+    enrich_param_rows_with_customer_defaults,
+)
 
 
 class FirewallCustomerEventTests(unittest.TestCase):
@@ -145,6 +148,53 @@ class FirewallCustomerEventTests(unittest.TestCase):
         self.assertEqual("22", data["dst_port"])
         self.assertEqual("root", data["login_account"])
 
+    def test_customer_defaults_are_merged_back_into_param_rows(self) -> None:
+        rows = [
+            {
+                "time": "2026/06/25 10:00:00",
+                "device_name": "themis",
+                "module": "cli",
+                "event_type": "",
+                "event_action": "",
+                "user": "",
+                "management_ip": "",
+                "src_addr": "",
+                "dst_addr": "",
+            }
+        ]
+        enriched = enrich_param_rows_with_customer_defaults(
+            rows,
+            assets={
+                "192.168.100.50": {
+                    "src_mac": "00:e0:4c:fe:ad:50",
+                    "default_user": "root",
+                }
+            },
+            devices={
+                "themis": {
+                    "device_name": "themis",
+                    "device_type": "firewall",
+                    "management_ip": "192.168.100.80",
+                    "protocol": "TCP",
+                    "cli_port": "22",
+                    "default_user": "root",
+                }
+            },
+            source_name="firewallexample/test",
+        )
+
+        row = enriched[0]
+        self.assertEqual("admin_session", row["event_type"])
+        self.assertEqual("login", row["event_action"])
+        self.assertEqual("root", row["user"])
+        self.assertEqual("192.168.100.50", row["management_ip"])
+        self.assertEqual("192.168.100.50", row["src_ip"])
+        self.assertEqual("00:e0:4c:fe:ad:50", row["src_mac"])
+        self.assertEqual("192.168.100.80", row["dst_ip"])
+        self.assertEqual("192.168.100.80", row["dst_addr"])
+        self.assertEqual("22", row["dst_port"])
+        self.assertEqual("root", row["login_account"])
+
     def test_firewall_example_keeps_non_login_cli_event(self) -> None:
         payload = build_customer_events(
             [
@@ -181,6 +231,53 @@ class FirewallCustomerEventTests(unittest.TestCase):
         self.assertEqual(1, payload["report"]["event_count"])
         self.assertEqual(0, payload["report"]["rejected_count"])
         self.assertEqual(3, payload["events"][0]["alarm_type"])
+        data = payload["events"][0]["data"]
+        self.assertEqual("192.168.100.50", data["subject"])
+        self.assertEqual("离开", data["action"])
+        self.assertEqual("192.168.100.50_root", data["object"])
+        self.assertEqual("2013/05/21 09:56:00", data["time"])
+
+    def test_firewall_webui_login_is_device_management_alarm_type_3(self) -> None:
+        payload = build_customer_events(
+            [
+                {
+                    "time": "2013/05/21 09:50:37",
+                    "device_name": "themis",
+                    "module": "webui",
+                    "event_type": "admin_session",
+                    "event_action": "logout",
+                    "management_ip": "192.168.100.50",
+                    "user": "root",
+                }
+            ],
+            schema=self.schema,
+            assets={
+                "192.168.100.50": {
+                    "src_mac": "00:e0:4c:fe:ad:50",
+                    "default_user": "root",
+                }
+            },
+            devices={
+                "themis": {
+                    "device_name": "themis",
+                    "device_type": "防火墙",
+                    "management_ip": "192.168.100.80",
+                    "protocol": "TCP",
+                    "web_port": "443",
+                    "default_user": "root",
+                }
+            },
+            source_name="firewallexample/防火墙登录退出日志.log",
+        )
+
+        self.assertEqual(0, payload["report"]["rejected_count"])
+        self.assertEqual(3, payload["events"][0]["alarm_type"])
+        data = payload["events"][0]["data"]
+        self.assertEqual("443", data["dst_port"])
+        self.assertEqual("退出", data["action"])
+        self.assertEqual("192.168.100.50", data["subject"])
+        self.assertEqual("192.168.100.50_root", data["object"])
+        self.assertEqual("2013/05/21 09:50:37", data["time"])
 
     def test_firewall_example_keeps_unknown_device_event_as_control_event(self) -> None:
         payload = build_customer_events(
@@ -219,6 +316,10 @@ class FirewallCustomerEventTests(unittest.TestCase):
         self.assertEqual(0, payload["report"]["rejected_count"])
         self.assertEqual(4, payload["events"][0]["alarm_type"])
         self.assertEqual("显示", payload["events"][0]["data"]["action"])
+        data = payload["events"][0]["data"]
+        self.assertEqual("192.168.100.80_root", data["subject"])
+        self.assertEqual("192.168.100.80", data["object"])
+        self.assertEqual("2013/05/21 09:56:00", data["time"])
 
     def test_firewall_folder_uses_existing_firewall_schema(self) -> None:
         schema_type = infer_schema_type(

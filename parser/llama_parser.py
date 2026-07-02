@@ -60,7 +60,7 @@ class LogParser:
             self,
             pipeline,
             regex_manager1,
-            model="deepseek-v4-flash",
+            model="glm-5.2",
             regex_sample=5,
             similarity="jaccard",
             do_self_reflection="True",

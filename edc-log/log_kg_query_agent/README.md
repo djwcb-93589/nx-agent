@@ -48,7 +48,7 @@ Set environment variables:
 $env:NEO4J_URI = "bolt://localhost:7687"
 $env:NEO4J_USER = "neo4j"
 $env:NEO4J_PASSWORD = "your_password"
-$env:DS_TOKEN = "your_deepseek_api_key"
+$env:ZAI_API_KEY = "your_glm_api_key"
 ```
 
 Then use `configs/query_agent_example.json`.

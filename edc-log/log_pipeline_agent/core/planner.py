@@ -80,7 +80,7 @@ class SmartPipelinePlanner:
             if not need_template and has_template:
                 decisions.append(f"{spec.name}: template2samples 已存在，计划跳过模板采样")
             if inferred["skip_llm_steps"]:
-                decisions.append(f"{spec.name}: pairs/schema 已存在或任务要求复用，计划跳过 DeepSeek 字段抽取和 POI 映射")
+                decisions.append(f"{spec.name}: pairs/schema 已存在或任务要求复用，计划跳过 GLM 字段抽取和 POI 映射")
             else:
                 if not need_pairs and has_pairs:
                     decisions.append(f"{spec.name}: pairs JSON 已存在，计划跳过字段语义抽取")
@@ -112,7 +112,7 @@ class SmartPipelinePlanner:
                         tool="extract_field_semantics",
                         dataset=spec.name,
                         deps=pairs_deps,
-                        reason="缺少可复用 pairs JSON，需要使用 DeepSeek 抽取字段及语义",
+                        reason="缺少可复用 pairs JSON，需要使用 GLM 抽取字段及语义",
                     )
                 )
             if need_schema:

@@ -9,7 +9,7 @@ from .config import LLMConfig
 
 
 class DeepSeekAPIError(RuntimeError):
-    """Raised when the DeepSeek API request fails."""
+    """Raised when the GLM-compatible API request fails."""
 
 
 class DeepSeekClient:
@@ -50,9 +50,9 @@ class DeepSeekClient:
                 return json.loads(response.read().decode("utf-8"))
         except HTTPError as exc:
             body = exc.read().decode("utf-8", errors="ignore")
-            raise DeepSeekAPIError(f"DeepSeek HTTP {exc.code}: {body}") from exc
+            raise DeepSeekAPIError(f"GLM HTTP {exc.code}: {body}") from exc
         except URLError as exc:
-            raise DeepSeekAPIError(f"DeepSeek network error: {exc}") from exc
+            raise DeepSeekAPIError(f"GLM network error: {exc}") from exc
 
     def chat_text(
         self,
@@ -74,10 +74,10 @@ class DeepSeekClient:
             message = response["choices"][0]["message"]
             content = message.get("content", "")
         except (KeyError, IndexError, TypeError) as exc:
-            raise DeepSeekAPIError(f"Unexpected DeepSeek response: {response}") from exc
+            raise DeepSeekAPIError(f"Unexpected GLM response: {response}") from exc
 
         if not isinstance(content, str):
-            raise DeepSeekAPIError(f"Unexpected content type from DeepSeek: {type(content).__name__}")
+            raise DeepSeekAPIError(f"Unexpected content type from GLM: {type(content).__name__}")
         return content.strip()
 
     def chat_json(
@@ -107,8 +107,7 @@ class DeepSeekClient:
         try:
             parsed = json.loads(text)
         except json.JSONDecodeError as exc:
-            raise DeepSeekAPIError(f"DeepSeek JSON parse failed: {text}") from exc
+            raise DeepSeekAPIError(f"GLM JSON parse failed: {text}") from exc
         if not isinstance(parsed, dict):
-            raise DeepSeekAPIError("DeepSeek JSON response must be an object")
+            raise DeepSeekAPIError("GLM JSON response must be an object")
         return parsed
-

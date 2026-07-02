@@ -118,7 +118,7 @@ class LogKgPipelineAgent:
                     {
                         "tool": "extract_field_semantics",
                         "dataset": spec.name,
-                        "message": "调用 DeepSeek 抽取字段及语义",
+                        "message": "调用 GLM 抽取字段及语义",
                     },
                 )
                 result = extract_field_semantics(
@@ -154,7 +154,7 @@ class LogKgPipelineAgent:
                     {
                         "tool": "llm_steps",
                         "dataset": spec.name,
-                        "message": "已跳过 DeepSeek 字段抽取和 POI 映射，使用现有 JSON",
+                        "message": "已跳过 GLM 字段抽取和 POI 映射，使用现有 JSON",
                     },
                 )
 

@@ -126,7 +126,12 @@ def generate_completion_transformers(
 
 
 def openai_chat_completion(model, system_prompt, history, temperature=0, max_tokens=512):
-    openai.api_key = get_env("OPENAI_KEY", aliases=("OPENAI_API_KEY", "DEEPSEEK_API_KEY", "DS_TOKEN"))
+    openai.api_key = get_env("ZAI_API_KEY", aliases=("GLM_API_KEY", "OPENAI_API_KEY", "OPENAI_KEY"))
+    openai.base_url = get_env(
+        "GLM_BASE_URL",
+        "https://api.z.ai/api/paas/v4/",
+        aliases=("ZAI_BASE_URL", "OPENAI_BASE_URL", "LLM_BASE_URL"),
+    )
     response = None
     if system_prompt is not None:
         messages = [{"role": "system", "content": system_prompt}] + history

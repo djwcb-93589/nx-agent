@@ -96,8 +96,8 @@ class LibreLogAgent:
         )
         self.trace.emit(
             "plan",
-            "deepseek_planner",
-            "DeepSeek 已生成本日志源的工具调度计划。",
+            "glm_planner",
+            "GLM 已生成本日志源的工具调度计划。",
             source=source,
             notes=plan.get("notes", ""),
             actions=plan.get("actions", []),
@@ -311,7 +311,7 @@ class LibreLogAgent:
                 self.trace.emit(
                     "dispatch",
                     "group_planner",
-                    "DeepSeek 已为事件组选择解析策略。",
+                    "GLM 已为事件组选择解析策略。",
                     source=context["source"],
                     event_id=event_id,
                     group_index=index,
@@ -392,7 +392,7 @@ def build_arg_parser():
     parser.add_argument("--api_retries", type=int, default=5)
     parser.add_argument("--reasoning_effort", type=str, default="high")
     parser.add_argument("--disable_thinking", action="store_true")
-    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--temperature", type=float, default=0.1)
     parser.add_argument("--max_new_tokens", type=int, default=1024)
     parser.add_argument("--input_dir", type=str, default="full_dataset")
     parser.add_argument("--output_dir", type=str, default="result_deepseek")

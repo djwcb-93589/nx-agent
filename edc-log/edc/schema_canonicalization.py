@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class SchemaCanonicalizer:
-    """Map extracted log fields to the current POI schema using DeepSeek only."""
+    """Map extracted log fields to the current POI schema using GLM."""
 
     def __init__(
         self,
@@ -25,7 +25,7 @@ class SchemaCanonicalizer:
         retry: int = 3,
     ) -> None:
         if verify_openai_client is None or not verify_openai_model_id:
-            raise ValueError("DeepSeek client and model id are required for schema mapping.")
+            raise ValueError("GLM client and model id are required for schema mapping.")
         self.schema_dict = target_schema_dict
         self.verifier_openai_client = verify_openai_client
         self.verifier_openai_model_id = verify_openai_model_id
@@ -58,11 +58,11 @@ class SchemaCanonicalizer:
                 "canonical_fields": canonical_fields_txt,
             }
         )
-        completion = self._deepseek_chat([{"role": "user", "content": prompt}])
+        completion = self._glm_chat([{"role": "user", "content": prompt}])
         mapping = parse_field_mapping(completion, source_fields, self.schema_dict.keys())
         return mapping, self.schema_dict
 
-    # Kept for existing callers. This method now performs the same DeepSeek-only
+    # Kept for existing callers. This method now performs the same GLM
     # semantic mapping as canonicalize_fields.
     def canonicalize1(
         self,
@@ -77,7 +77,7 @@ class SchemaCanonicalizer:
             verify_prompt_template,
         )
 
-    def _deepseek_chat(self, messages: list[dict[str, str]]) -> str:
+    def _glm_chat(self, messages: list[dict[str, str]]) -> str:
         last_err: Exception | None = None
         for attempt in range(self.retry):
             try:
@@ -99,7 +99,7 @@ def parse_field_mapping(
     source_fields: Iterable[str],
     canonical_fields: Iterable[str],
 ) -> dict[str, str | None]:
-    """Parse DeepSeek lines like `source_field -> canonical_field`."""
+    """Parse GLM lines like `source_field -> canonical_field`."""
     source_lookup = {field.casefold(): field for field in source_fields}
     canonical_lookup = {field.casefold(): field for field in canonical_fields}
     mapping: dict[str, str | None] = {field: None for field in source_lookup.values()}

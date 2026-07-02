@@ -64,13 +64,13 @@ cd <repo>
 pip install -r requirements.txt
 ```
 
-DeepSeek API Key 不再从 `.env` 读取，需要在前端页面的 `DeepSeek API Key`
-输入框中填写。`.env` 只用于可选的模型默认值、DeepSeek base URL 和 Neo4j 连接：
+GLM API Key 不再从 `.env` 读取，需要在前端页面的 `GLM API Key`
+输入框中填写。`.env` 只用于可选的模型默认值、GLM/Z.AI base URL 和 Neo4j 连接：
 
 ```text
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-DEEPSEEK_MODEL=deepseek-v4-flash
-DEEPSEEK_PARAM_MODEL=deepseek-v4-flash
+GLM_BASE_URL=https://api.z.ai/api/paas/v4/
+GLM_MODEL=glm-5.2
+GLM_PARAM_MODEL=glm-5.2
 
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
@@ -78,7 +78,7 @@ NEO4J_PASSWORD=
 NEO4J_DATABASE=neo4j
 ```
 
-`.env` 已加入 `.gitignore`，不要提交真实 Neo4j 用户名或密码。DeepSeek API Key
+`.env` 已加入 `.gitignore`，不要提交真实 Neo4j 用户名或密码。GLM API Key
 只通过前端请求传入后端运行时，不会写入 `.env`。
 
 ## 启动项目
@@ -142,13 +142,13 @@ http://<服务器IP或域名>:5173
 如果只需要在命令行运行日志解析：
 
 ```powershell
-python evaluation.py --project all --sample 3 --write_group_tree --api_key <DeepSeek API Key>
+python evaluation.py --project all --sample 3 --write_group_tree --api_key <GLM API Key>
 ```
 
 指定部分日志源：
 
 ```powershell
-python evaluation.py --project "auth,dnsmasq.log,intranet_server" --sample 3 --write_group_tree --api_key <DeepSeek API Key>
+python evaluation.py --project "auth,dnsmasq.log,intranet_server" --sample 3 --write_group_tree --api_key <GLM API Key>
 ```
 
 不调用 LLM 的本地冒烟测试：
@@ -166,7 +166,7 @@ python evaluation.py --input_dir .tmp_agent_dataset --output_dir .tmp_agent_resu
 --project            要处理的日志源，默认 all
 --sample             输出样本编号，默认 3
 --model              LLM 模型名
---api_key            DeepSeek API Key，必须显式传入；不会从 .env 读取
+--api_key            GLM API Key，必须显式传入；不会从 .env 读取
 --mock_llm           使用本地模拟结果，不调用大模型
 --write_group_tree   输出分组树 JSON
 --disable_planner    关闭 LLM 计划器，使用默认执行计划

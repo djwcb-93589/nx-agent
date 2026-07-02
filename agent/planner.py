@@ -100,7 +100,7 @@ class DeepSeekPlanner:
                 raise ValueError("Planner returned an invalid dependency order.")
             return {
                 "actions": actions,
-                "notes": str(payload.get("notes") or "DeepSeek planner generated the plan."),
+                "notes": str(payload.get("notes") or "GLM planner generated the plan."),
             }
         except Exception as exc:
             return {

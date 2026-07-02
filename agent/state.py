@@ -20,7 +20,7 @@ class AgentConfig:
     api_retries: int = 5
     reasoning_effort: str = "high"
     thinking_enabled: bool = True
-    temperature: float = 0.0
+    temperature: float = 0.1
     max_new_tokens: int = 1024
     input_dir: str = "full_dataset"
     output_dir: str = "result_deepseek"

@@ -136,7 +136,8 @@ const PARSE_STAGES = [
 ];
 
 const TOOL_LABELS = {
-  deepseek_planner: "DeepSeek 制定计划",
+  glm_planner: "GLM 制定计划",
+  deepseek_planner: "GLM 制定计划",
   group_planner: "选择事件组策略",
   read_raw_logs: "读取原始日志",
   preprocess_logs: "时间戳预处理",
@@ -281,9 +282,7 @@ async function bootstrap() {
   bindEvents();
   installCollapsiblePanels();
   installMaximizeButtons();
-  await Promise.allSettled([loadSources(), loadKgDatasets()]);
-  await checkKgHealth();
-  await refreshKgSummary();
+  await loadSources();
   await pollRunStatus();
   setInterval(() => pollRunStatus().catch(showError), 1000);
 }
@@ -750,28 +749,46 @@ function renderPayload(payload) {
   els.editPoiButton.disabled = !state.activeSource;
   renderCsv(els.relationTable, payload.relation_schema);
   els.relationMeta.textContent = schemaMetaText(payload.schema_meta, payload.relation_schema);
-  renderCustomerEvents(payload.customer_events);
+  renderFirewallPoiResult(payload);
   renderMetrics(payload);
 }
 
-function renderCustomerEvents(payload) {
-  renderCsv(els.customerEventTable, payload);
-  const validation = payload?.validation || {};
-  els.downloadCustomerEventsButton.disabled = !payload?.available;
-  if (!payload?.available) {
+function renderFirewallPoiResult(payload) {
+  const poiResult = payload.poi_result || {};
+  els.downloadCustomerEventsButton.disabled = true;
+  els.customerEventValidation.textContent = "";
+  els.customerEventValidation.className = "event-validation-summary";
+  if (!poiResult.available) {
     els.customerEventMeta.textContent = "缺失";
-    els.customerEventValidation.textContent = "运行防火墙图谱参数抽取后生成客户事件 JSON。";
-    els.customerEventValidation.className = "event-validation-summary";
+    els.customerEventTable.innerHTML = '<div class="empty">没有解析后的 POI 字段</div>';
     return;
   }
-  const eventCount = payload.event_count ?? payload.rows?.length ?? 0;
-  const rejected = validation.rejected_count || 0;
-  const warnings = validation.warning_count || 0;
-  els.customerEventMeta.textContent = `${eventCount} 条事件`;
-  els.customerEventValidation.textContent =
-    `校验：通过 ${eventCount} 条，拒绝 ${rejected} 条，警告 ${warnings} 条`;
-  els.customerEventValidation.className =
-    `event-validation-summary ${rejected ? "bad" : warnings ? "warn" : "ok"}`;
+  const schemaFields = (payload.poi_schema?.rows || [])
+    .map((row) => row.field)
+    .filter((field) => field && poiResult.columns.includes(field));
+  const candidateColumns = schemaFields;
+  const candidateRows = (poiResult.rows || []).map((row) =>
+    Object.fromEntries(candidateColumns.map((column) => [column, row[column] ?? ""])),
+  );
+  const columns = candidateColumns.filter((column) =>
+    candidateRows.some((row) => hasDisplayValue(row[column])),
+  );
+  if (!columns.length) {
+    els.customerEventMeta.textContent = "0 行 POI 字段";
+    els.customerEventTable.innerHTML = '<div class="empty">没有有值的 POI 字段</div>';
+    return;
+  }
+  const rows = candidateRows.map((row) =>
+    Object.fromEntries(columns.map((column) => [column, row[column] ?? ""])),
+  );
+  renderTable(els.customerEventTable, columns, rows);
+  els.customerEventMeta.textContent = poiResult.truncated
+    ? `${rows.length}+ 行 POI 字段`
+    : `${rows.length} 行 POI 字段`;
+}
+
+function hasDisplayValue(value) {
+  return String(value ?? "").trim() !== "";
 }
 
 function renderMetrics(payload) {
@@ -780,16 +797,14 @@ function renderMetrics(payload) {
   const groupRows = payload.group.available ? payload.group.rows.length : 0;
   const poiRows = payload.poi_schema.available ? payload.poi_schema.rows.length : 0;
   const relationRows = payload.relation_schema.available ? payload.relation_schema.rows.length : 0;
-  const customerEventRows = payload.customer_events?.available
-    ? payload.customer_events.event_count
-    : 0;
+  const firewallRows = payload.poi_result?.available ? payload.poi_result.rows.length : 0;
   const metrics = [
     ["原始预览", payload.input.rows.length],
     ["解析结果", resultRows],
     ["日志分组", groupRows],
     ["POI 字段", poiRows || "无"],
     ["关系规则", relationRows || "无"],
-    ["客户事件", customerEventRows || "无"],
+    ["防火墙日志", firewallRows || "无"],
     ["树中分组", tree.available ? tree.group_count : "无"],
   ];
   els.metricStrip.innerHTML = metrics
@@ -834,7 +849,7 @@ async function loadSummary() {
 async function startRun(options = {}) {
   const apiKey = els.kgApiKey.value.trim();
   if (!apiKey && !els.mockCheckbox.checked) {
-    throw new Error("DeepSeek API Key is required. Enter it in the frontend; .env is not used for parsing.");
+    throw new Error("GLM API Key is required. Enter it in the frontend; .env is not used for parsing.");
   }
   const selectedSources = selectedRunSources();
   if (selectedSources.length === 0) {
@@ -844,7 +859,7 @@ async function startRun(options = {}) {
   const payload = {
     project: els.projectInput.value.trim(),
     sample: Number(els.sampleInput.value || 3),
-    model: els.modelInput.value.trim() || "deepseek-v4-flash",
+    model: els.modelInput.value.trim() || "glm-5.2",
     similarity: els.similaritySelect.value,
     doSelfReflection: els.reflectionCheckbox.checked,
     writeGroupTree: els.treeCheckbox.checked,

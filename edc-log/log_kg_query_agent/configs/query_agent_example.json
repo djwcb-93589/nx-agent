@@ -6,10 +6,10 @@
     "database": "neo4j"
   },
   "llm": {
-    "api_key": "${DEEPSEEK_API_KEY}",
-    "base_url": "https://api.deepseek.com",
-    "cypher_model": "deepseek-v4-flash",
-    "answer_model": "deepseek-v4-flash",
+    "api_key": "${ZAI_API_KEY}",
+    "base_url": "https://api.z.ai/api/paas/v4/",
+    "cypher_model": "glm-5.2",
+    "answer_model": "glm-5.2",
     "temperature": 0.1,
     "max_tokens": 2000,
     "timeout_seconds": 120

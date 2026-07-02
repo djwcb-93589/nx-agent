@@ -21,7 +21,9 @@ import logging
 from env_utils import get_env, load_dotenv
 
 load_dotenv()
-os.environ.setdefault("DS_TOKEN", get_env("DEEPSEEK_API_KEY", aliases=("DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")))
+_runtime_llm_token = get_env("ZAI_API_KEY", aliases=("GLM_API_KEY", "OPENAI_API_KEY", "OPENAI_KEY"))
+if _runtime_llm_token:
+    os.environ.setdefault("DS_TOKEN", _runtime_llm_token)
 
 #os.environ['HTTP_PROXY'] = 'http://127.0.0.1:7897'
 #os.environ['HTTPS_PROXY'] = 'http://127.0.0.1:7897'
@@ -91,7 +93,7 @@ class EDC:
     ):
         # Load the HF model for OIE
         if free_model:
-            client = self.load_model(self.oie_llm_name, "deepseek")
+            client = self.load_model(self.oie_llm_name, "glm")
             extractor = Extractor(
                 openai_client=client,
                 openai_model_id=self.oie_llm_name,  # 注意：这里要包含 provider 后缀
@@ -154,7 +156,7 @@ class EDC:
         return oie_triples_list, entity_hint_list, relation_hint_list
 
     def load_model(self, model_name, model_type):
-        if model_type != "deepseek":
+        if model_type != "glm":
             raise ValueError(f"Unsupported model_type: {model_type}")
 
         cache_key = f"{model_type}:{model_name}"
@@ -164,11 +166,18 @@ class EDC:
 
         logger.info(f"Loading model {cache_key}")
 
-        if model_type == "deepseek":
-            ds_token = get_env("DS_TOKEN", aliases=("DEEPSEEK_API_KEY", "OPENAI_API_KEY", "OPENAI_KEY"))
+        if model_type == "glm":
+            api_token = get_env(
+                "ZAI_API_KEY",
+                aliases=("GLM_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY"),
+            )
             client = OpenAI(
-                api_key=ds_token,
-                base_url=get_env("DEEPSEEK_BASE_URL", "https://api.deepseek.com"))
+                api_key=api_token,
+                base_url=get_env(
+                    "GLM_BASE_URL",
+                    "https://api.z.ai/api/paas/v4/",
+                    aliases=("ZAI_BASE_URL", "OPENAI_BASE_URL", "LLM_BASE_URL"),
+                ))
             self.loaded_model_dict[cache_key] = client
 
         return self.loaded_model_dict[cache_key]
@@ -176,7 +185,7 @@ class EDC:
     def schema_definition(self, input_text_list: List[str], oie_triplets_list: List[List[str]], free_model=False):
         assert len(input_text_list) == len(oie_triplets_list)
         
-        client = self.load_model(self.sd_llm_name, "deepseek")
+        client = self.load_model(self.sd_llm_name, "glm")
 
         schema_definer = SchemaDefiner(
             openai_client=client,
@@ -221,7 +230,7 @@ class EDC:
 
         sc_prompt_template_str = open(self.sc_template_file_path, "r", encoding="utf-8").read()
 
-        sc_client = self.load_model(self.sc_llm_name, "deepseek")
+        sc_client = self.load_model(self.sc_llm_name, "glm")
         schema_canonicalizer = SchemaCanonicalizer(
             self.schema,
             verify_openai_client=sc_client,
@@ -272,7 +281,7 @@ class EDC:
         # === free_model：API 不需要释放 GPU，只可选删缓存引用 ===
         if free_model:
             logger.info(f"Freeing SC models as no longer needed (API mode: skip GPU free)")
-            for k in (f"deepseek:{self.sc_llm_name}",):
+            for k in (f"glm:{self.sc_llm_name}",):
                 if k in self.loaded_model_dict:
                     del self.loaded_model_dict[k]
 

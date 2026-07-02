@@ -66,7 +66,7 @@ class Extractor:
                 messages, self.model, self.tokenizer, answer_prepend="Triplets: "
             )
         else:
-            # DeepSeek OpenAI-compatible path.
+            # GLM OpenAI-compatible path.
             response = self.openai_client.chat.completions.create(
                 model=self.openai_model_id,
                 messages=messages,

@@ -28,8 +28,8 @@ from env_utils import get_env, load_dotenv
 
 DEFAULT_FUSED_GRAPH_DIR = GRAPH_FUSED_DIR
 DEFAULT_SOURCE_GRAPH_DIR = GRAPH_SOURCES_DIR
-LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
-RUNTIME_API_KEY_ENV = "LOG_PIPELINE_RUNTIME_DEEPSEEK_API_KEY"
+LLM_SECRET_ENV_KEYS = ("ZAI_API_KEY", "GLM_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
+RUNTIME_API_KEY_ENV = "LOG_PIPELINE_RUNTIME_GLM_API_KEY"
 load_dotenv(PROJECT_ROOT)
 for _secret_key in (*LLM_SECRET_ENV_KEYS, RUNTIME_API_KEY_ENV):
     os.environ.pop(_secret_key, None)
@@ -256,7 +256,8 @@ class ApiHandler(BaseHTTPRequestHandler):
                 _set_env_if_present("NEO4J_PASSWORD", payload.get("neo4j_password"))
                 api_key = str(payload.get("api_key") or "").strip()
                 if api_key:
-                    _set_env_if_present("DEEPSEEK_API_KEY", api_key)
+                    _set_env_if_present("ZAI_API_KEY", api_key)
+                    _set_env_if_present("GLM_API_KEY", api_key)
                     _set_env_if_present("DS_TOKEN", api_key)
                 else:
                     for secret_key in LLM_SECRET_ENV_KEYS:

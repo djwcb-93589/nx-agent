@@ -59,7 +59,7 @@ http://127.0.0.1:8787
 - `task`: 自然语言任务，planner 会据此选择数据集、判断是否复用已有产物。
 - `datasets`: 为空时默认选择全部数据集。
 - `skip_llm_steps`、`skip_param_extraction`、`skip_kg_build`: 外部项目通常不要传，交给 agent 根据 preflight 自动判断。
-- `max_workers`: DAG 并发数，建议 1 到 4；需要调用 DeepSeek 时可调低。
+- `max_workers`: DAG 并发数，建议 1 到 4；需要调用 GLM 时可调低。
 - `write_neo4j`: 为 `true` 时会把融合图谱写入 Neo4j。前端中这是唯一需要勾选确认的执行选项。
 
 创建运行：
@@ -167,5 +167,5 @@ POST /api/neo4j/clear
 - 外部项目只依赖 `backend` API，不要直接调用根目录旧脚本。
 - 长任务必须使用 SSE 监听进度，不建议同步等待 `POST /api/runs`。
 - 如果只是演示或联调，建议只设置较小 `limit_rows`，让 agent 自动复用已有产物。
-- 如果要重跑 DeepSeek 抽取，确保环境变量或请求体中提供 API key，并把 `max_workers` 调低。
+- 如果要重跑 GLM 抽取，确保环境变量或请求体中提供 API key，并把 `max_workers` 调低。
 - 运行结果以 `run_dir` 为准，可以把 `outcome.json`、`summary.md` 和 `validation_report.json` 作为跨项目交付物。

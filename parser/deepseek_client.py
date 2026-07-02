@@ -14,21 +14,25 @@ class DeepSeekClient:
         base_url=None,
         timeout=120,
         max_retries=5,
-        temperature=0.0,
+        temperature=0.1,
         reasoning_effort=None,
         thinking_enabled=False,
     ):
         load_dotenv()
-        model = model or get_env("DEEPSEEK_MODEL", "deepseek-v4-flash")
+        model = model or get_env(
+            "GLM_MODEL",
+            "glm-5.2",
+            aliases=("ZAI_MODEL", "LLM_MODEL"),
+        )
         base_url = base_url or get_env(
-            "DEEPSEEK_BASE_URL",
-            "https://api.deepseek.com",
-            aliases=("OPENAI_BASE_URL", "LLM_BASE_URL"),
+            "GLM_BASE_URL",
+            "https://api.z.ai/api/paas/v4/",
+            aliases=("ZAI_BASE_URL", "OPENAI_BASE_URL", "LLM_BASE_URL"),
         )
         resolved_api_key = api_key or (get_env(api_key_env) if api_key_env else "")
         if not resolved_api_key:
             raise ValueError(
-                "DeepSeek API key is missing. Enter it in the frontend or pass --api_key."
+                "GLM API key is missing. Enter it in the frontend or pass --api_key."
             )
 
         self.model = model
@@ -88,7 +92,7 @@ class DeepSeekClient:
                             text_parts.append(item.get("text", ""))
                     content = "".join(text_parts)
                 if not isinstance(content, str) or not content.strip():
-                    raise ValueError("DeepSeek returned an empty response.")
+                    raise ValueError("GLM returned an empty response.")
                 return content.strip()
             except Exception as exc:
                 last_error = exc
@@ -96,10 +100,10 @@ class DeepSeekClient:
                     break
                 wait_seconds = min(2 ** (attempt - 1), 8)
                 print(
-                    f"DeepSeek request failed on attempt {attempt}/{self.max_retries}: {exc}. "
+                    f"GLM request failed on attempt {attempt}/{self.max_retries}: {exc}. "
                     f"Retrying in {wait_seconds}s...",
                     flush=True,
                 )
                 time.sleep(wait_seconds)
 
-        raise RuntimeError(f"DeepSeek request failed after retries: {last_error}")
+        raise RuntimeError(f"GLM request failed after retries: {last_error}")

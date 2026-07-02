@@ -165,6 +165,125 @@ def build_customer_events(
     }
 
 
+def enrich_params_csv_with_customer_defaults(
+    *,
+    params_csv: Path,
+    asset_path: Path,
+    device_path: Path,
+    source_name: str,
+) -> dict[str, Any]:
+    rows, columns = _read_csv_with_columns(params_csv)
+    assets = _load_csv_index(asset_path, "src_ip")
+    devices = _load_csv_index(device_path, "device_name", casefold=True)
+    enriched_rows = enrich_param_rows_with_customer_defaults(
+        rows,
+        assets=assets,
+        devices=devices,
+        source_name=source_name,
+    )
+    extra_columns = [
+        column
+        for row in enriched_rows
+        for column in row
+        if column not in columns and not column.startswith("_")
+    ]
+    output_columns = [*columns, *dict.fromkeys(extra_columns)]
+    _write_csv(params_csv, enriched_rows, output_columns)
+    return {
+        "rows": len(enriched_rows),
+        "columns": output_columns,
+        "added_columns": [column for column in output_columns if column not in columns],
+    }
+
+
+def enrich_param_rows_with_customer_defaults(
+    rows: list[dict[str, str]],
+    *,
+    assets: dict[str, dict[str, str]],
+    devices: dict[str, dict[str, str]],
+    source_name: str,
+) -> list[dict[str, str]]:
+    indexed_rows = [
+        {
+            **row,
+            "_source_row": str(index),
+        }
+        for index, row in enumerate(rows)
+    ]
+    sorted_rows = sorted(
+        indexed_rows,
+        key=lambda row: (_parse_time(row.get("time", "")), int(row["_source_row"])),
+    )
+    rule_state: dict[tuple[str, str], dict[str, str]] = {}
+    enriched_by_index: dict[int, dict[str, str]] = {}
+    for row in sorted_rows:
+        alarm_type, classification_error = _classify_alarm_type(row, source_name=source_name)
+        enriched = dict(row)
+        if not classification_error:
+            event, _warnings = _build_event(
+                alarm_type,
+                row,
+                assets=assets,
+                devices=devices,
+                rule_state=rule_state,
+                source_name=source_name,
+            )
+            data = event.get("data") if isinstance(event, dict) else {}
+            if isinstance(data, dict):
+                _merge_customer_event_defaults(enriched, alarm_type, data)
+        enriched_by_index[int(row["_source_row"])] = {
+            key: value
+            for key, value in enriched.items()
+            if not key.startswith("_")
+        }
+    return [enriched_by_index[index] for index in range(len(rows))]
+
+
+def _merge_customer_event_defaults(row: dict[str, str], alarm_type: int, data: dict[str, Any]) -> None:
+    for key, value in data.items():
+        _fill(row, key, value)
+
+    _fill(row, "time", data.get("login_time"))
+    _fill(row, "device_name", data.get("control_name"))
+    _fill(row, "user", data.get("login_account"))
+    if alarm_type in {1, 2, 3}:
+        _fill(row, "event_type", "admin_session")
+        _fill(row, "event_action", "login")
+        _fill(row, "management_ip", data.get("src_ip"))
+        _fill(row, "dst_addr", data.get("dst_ip"))
+        _fill(row, "service", data.get("protocol"))
+    else:
+        _fill(row, "event_type", "policy_rule")
+        _fill(row, "event_action", _reverse_action_label(data.get("action", "")))
+        _fill(row, "src_addr", data.get("src_ip"))
+        _fill(row, "dst_addr", data.get("dst_ip"))
+        _fill(row, "policy_type", _reverse_policy_label(data.get("policy", "")))
+
+
+def _fill(row: dict[str, str], key: str, value: Any) -> None:
+    if str(row.get(key, "")).strip():
+        return
+    text = str(value or "").strip()
+    if text:
+        row[key] = text
+
+
+def _reverse_action_label(label: str) -> str:
+    text = str(label or "").strip()
+    for action, action_label in ACTION_LABELS.items():
+        if text == action_label:
+            return action
+    return text
+
+
+def _reverse_policy_label(label: str) -> str:
+    text = str(label or "").strip()
+    for policy_type, policy_label in POLICY_LABELS.items():
+        if text == policy_label:
+            return policy_type
+    return text
+
+
 def validate_event(event: dict[str, Any], schema: dict[str, Any]) -> tuple[list[str], list[str]]:
     errors = []
     warnings = []
@@ -211,6 +330,17 @@ def validate_event(event: dict[str, Any], schema: dict[str, Any]) -> tuple[list[
 
 def _classify_alarm_type(row: dict[str, str], *, source_name: str) -> tuple[int, str]:
     permissive = _is_firewall_source(source_name)
+    event_type = str(row.get("event_type", "")).strip().lower()
+    module = str(row.get("module", "")).strip().lower()
+    action = str(row.get("event_action", "")).strip().lower()
+    if permissive:
+        if event_type == "admin_session" or module in {"webui", "cli"}:
+            return 3, ""
+        if module == "terminal":
+            return 1, ""
+        if event_type in {"traffic", "flow", "flow_log", "network_flow"} or module in {"traffic", "flow"}:
+            return 2, ""
+
     explicit = str(row.get("alarm_type", "")).strip()
     if explicit:
         try:
@@ -221,17 +351,7 @@ def _classify_alarm_type(row: dict[str, str], *, source_name: str) -> tuple[int,
             return (4, "") if permissive else (0, f"不支持的 alarm_type: {alarm_type}")
         return alarm_type, ""
 
-    event_type = str(row.get("event_type", "")).strip().lower()
-    module = str(row.get("module", "")).strip().lower()
-    action = str(row.get("event_action", "")).strip().lower()
     if permissive:
-        if event_type == "admin_session" or module in {"terminal", "webui", "cli"}:
-            if module == "webui":
-                return 2, ""
-            if module == "cli":
-                return 3, ""
-            if module == "terminal":
-                return 1, ""
         return 4, ""
 
     if event_type == "policy_rule":
@@ -241,9 +361,7 @@ def _classify_alarm_type(row: dict[str, str], *, source_name: str) -> tuple[int,
     if event_type == "admin_session":
         if action != "login":
             return 0, f"客户协议只接收登录事件，当前动作: {action or '空'}"
-        if module == "webui":
-            return 2, ""
-        if module == "cli":
+        if module in {"webui", "cli"}:
             return 3, ""
         if module == "terminal":
             return 1, ""
@@ -285,12 +403,14 @@ def _build_event(
         device.get("default_user"),
     )
     login_time = _first(row.get("login_time"), row.get("time"))
+    raw_login_action = str(row.get("event_action") or row.get("action") or "").strip()
+    login_action = _first(ACTION_LABELS.get(raw_login_action.lower()), raw_login_action, "登录")
 
     if alarm_type in {1, 2, 3}:
         common = {
             "src_ip": source_ip,
             "dst_ip": _first(row.get("dst_ip"), device.get("management_ip")),
-            "dst_port": _first(row.get("dst_port"), _default_login_port(alarm_type, device)),
+            "dst_port": _first(row.get("dst_port"), _default_login_port(alarm_type, device, module)),
             "login_account": login_account,
             "login_time": login_time,
         }
@@ -327,6 +447,10 @@ def _build_event(
                 "dst_port": common["dst_port"],
                 "login_account": common["login_account"],
                 "login_time": common["login_time"],
+                "subject": common["src_ip"],
+                "action": login_action,
+                "object": _join_non_empty(common["src_ip"], common["login_account"]),
+                "time": common["login_time"],
             }
         return {"alarm_type": alarm_type, "data": data}, warnings
 
@@ -366,6 +490,13 @@ def _build_event(
         "login_account": login_account,
         "login_time": login_time,
     }
+    data.update(
+        {
+            "subject": _join_non_empty(data["control_ip"], data["login_account"]),
+            "object": data["control_ip"],
+            "time": data["login_time"],
+        }
+    )
 
     if rule_key[1]:
         if action == "del":
@@ -404,8 +535,8 @@ def _default_asset_for_module(
     return assets.get("192.168.100.50", {})
 
 
-def _default_login_port(alarm_type: int, device: dict[str, str]) -> str:
-    if alarm_type == 2:
+def _default_login_port(alarm_type: int, device: dict[str, str], module: str = "") -> str:
+    if alarm_type == 2 or module == "webui":
         return _first(device.get("web_port"), "443")
     return _first(device.get("cli_port"), device.get("terminal_port"), "22")
 
@@ -422,6 +553,10 @@ def _protocol_label(value: str) -> str:
 def _action_label(action: str) -> str:
     text = str(action or "").strip()
     return _first(ACTION_LABELS.get(text.lower()), text, "修改")
+
+
+def _join_non_empty(*values: Any) -> str:
+    return "_".join(str(value).strip() for value in values if str(value or "").strip())
 
 
 def _load_csv_index(path: Path, key: str, *, casefold: bool = False) -> dict[str, dict[str, str]]:
@@ -443,6 +578,25 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
             {str(key): str(value or "").strip() for key, value in row.items()}
             for row in csv.DictReader(file)
         ]
+
+
+def _read_csv_with_columns(path: Path) -> tuple[list[dict[str, str]], list[str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as file:
+        reader = csv.DictReader(file)
+        columns = list(reader.fieldnames or [])
+        rows = [
+            {str(key): str(value or "").strip() for key, value in row.items()}
+            for row in reader
+        ]
+    return rows, columns
+
+
+def _write_csv(path: Path, rows: list[dict[str, str]], columns: list[str]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=columns, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({column: row.get(column, "") for column in columns})
 
 
 def _load_json(path: Path) -> dict[str, Any]:

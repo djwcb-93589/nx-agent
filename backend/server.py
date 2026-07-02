@@ -34,7 +34,43 @@ EDC_ROOT = REPO_ROOT / "edc-log"
 EDC_AIT_ROOT = EDC_ROOT / "AIT"
 EDC_SCHEMAS_ROOT = EDC_ROOT / "schemas"
 MAX_RUN_LOG_LINES = 2000
-LLM_SECRET_ENV_KEYS = ("DEEPSEEK_API_KEY", "DS_TOKEN", "OPENAI_API_KEY", "OPENAI_KEY")
+DEFAULT_GLM_BASE_URL = "https://api.z.ai/api/paas/v4/"
+LLM_SECRET_ENV_KEYS = (
+    "ZAI_API_KEY",
+    "GLM_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "DS_TOKEN",
+    "OPENAI_API_KEY",
+    "OPENAI_KEY",
+)
+CUSTOMER_ACTION_TO_POI = {
+    "添加": "add",
+    "修改": "set",
+    "编辑": "set",
+    "删除": "del",
+    "显示": "show",
+    "清空": "clear",
+    "恢复": "startup",
+    "批量加载": "bulk_load",
+    "登录": "login",
+    "退出": "logout",
+    "离开": "leave",
+}
+CUSTOMER_POLICY_TO_POI = {
+    "允许": "permit",
+    "禁止": "deny",
+    "代理": "proxy",
+}
+CUSTOMER_EVENT_POI_ALIASES = {
+    "time": ("login_time",),
+    "device_name": ("control_name",),
+    "user": ("login_account",),
+    "management_ip": ("src_ip", "control_ip"),
+    "src_addr": ("src_ip",),
+    "dst_addr": ("dst_ip", "control_ip"),
+    "service": ("protocol", "dst_port"),
+    "policy_type": ("policy", "pcpolicy"),
+}
 
 load_dotenv(REPO_ROOT)
 for _secret_key in LLM_SECRET_ENV_KEYS:
@@ -45,7 +81,7 @@ try:
     from agent.defaults import DEFAULT_LLM_MODEL_ID
     from agent.trace import TRACE_PREFIX
 except ImportError:
-    DEFAULT_LLM_MODEL_ID = "deepseek-v4-flash"
+    DEFAULT_LLM_MODEL_ID = "glm-5.2"
     TRACE_PREFIX = "AGENT_TRACE "
 
 
@@ -283,6 +319,128 @@ def read_csv_preview(path: Path, limit: int) -> dict:
     }
 
 
+def read_firewall_poi_result_preview(output_root: Path, output_dir: Path, limit: int) -> dict:
+    poi_result = read_csv_preview(output_dir / "customer_event_params.csv", limit)
+    if not poi_result.get("available"):
+        return poi_result
+    customer_events = read_customer_event_preview(output_root, output_dir, limit)
+    return merge_customer_events_into_poi_preview(poi_result, customer_events)
+
+
+def merge_customer_events_into_poi_preview(poi_result: dict, customer_events: dict) -> dict:
+    if not customer_events.get("available"):
+        return poi_result
+
+    event_rows = [
+        row
+        for row in customer_events.get("rows", [])
+        if isinstance(row, dict)
+    ]
+    if not event_rows:
+        return poi_result
+
+    events_by_key: dict[tuple[str, ...], list[int]] = {}
+    for event_index, event_row in enumerate(event_rows):
+        for key in _customer_event_match_keys(event_row):
+            events_by_key.setdefault(key, []).append(event_index)
+
+    rows = []
+    used_event_indexes: set[int] = set()
+    for index, raw_row in enumerate(poi_result.get("rows", [])):
+        row = dict(raw_row)
+        event_index = None
+        for key in _poi_result_match_keys(row):
+            queue = events_by_key.get(key) or []
+            while queue and queue[0] in used_event_indexes:
+                queue.pop(0)
+            if queue:
+                event_index = queue.pop(0)
+                break
+        if event_index is None and index < len(event_rows) and index not in used_event_indexes:
+            event_index = index
+        if event_index is not None:
+            used_event_indexes.add(event_index)
+            _merge_customer_event_into_poi_row(row, event_rows[event_index])
+        rows.append(row)
+
+    return {
+        **poi_result,
+        "rows": rows,
+    }
+
+
+def _merge_customer_event_into_poi_row(row: dict, event_row: dict) -> None:
+    alarm_type = str(event_row.get("alarm_type") or "").strip()
+    if alarm_type in {"1", "2", "3"}:
+        _fill_display_value(row, "event_type", "admin_session")
+        _fill_display_value(row, "event_action", "login")
+    elif alarm_type == "4":
+        _fill_display_value(row, "event_type", "policy_rule")
+        _fill_display_value(row, "event_action", _canonical_action(event_row.get("action")))
+
+    for poi_field, event_fields in CUSTOMER_EVENT_POI_ALIASES.items():
+        value = _first_display_value(event_row, event_fields)
+        if poi_field == "policy_type":
+            value = _canonical_policy(value)
+        _fill_display_value(row, poi_field, value)
+
+
+def _first_display_value(row: dict, fields: tuple[str, ...]) -> str:
+    for field in fields:
+        value = str(row.get(field) or "").strip()
+        if value:
+            return value
+    return ""
+
+
+def _fill_display_value(row: dict, field: str, value) -> None:
+    if str(row.get(field) or "").strip():
+        return
+    text = str(value or "").strip()
+    if text:
+        row[field] = text
+
+
+def _canonical_action(value) -> str:
+    text = str(value or "").strip()
+    return CUSTOMER_ACTION_TO_POI.get(text, text)
+
+
+def _canonical_policy(value) -> str:
+    text = str(value or "").strip()
+    return CUSTOMER_POLICY_TO_POI.get(text, text)
+
+
+def _customer_event_match_keys(row: dict) -> tuple[tuple[str, ...], ...]:
+    return _unique_match_keys(
+        _compact_match_key(row.get("login_time"), row.get("control_name"), row.get("login_account")),
+        _compact_match_key(row.get("login_time"), row.get("login_account")),
+        _compact_match_key(row.get("login_time"), row.get("src_ip") or row.get("control_ip")),
+        _compact_match_key(row.get("login_time"), row.get("dst_ip") or row.get("control_ip")),
+        _compact_match_key(row.get("login_time")),
+    )
+
+
+def _poi_result_match_keys(row: dict) -> tuple[tuple[str, ...], ...]:
+    time_value = row.get("login_time") or row.get("time")
+    return _unique_match_keys(
+        _compact_match_key(time_value, row.get("control_name") or row.get("device_name"), row.get("login_account") or row.get("user")),
+        _compact_match_key(time_value, row.get("login_account") or row.get("user")),
+        _compact_match_key(time_value, row.get("src_ip") or row.get("management_ip") or row.get("src_addr")),
+        _compact_match_key(time_value, row.get("dst_ip") or row.get("dst_addr")),
+        _compact_match_key(time_value),
+    )
+
+
+def _compact_match_key(*values) -> tuple[str, ...]:
+    key = tuple(str(value or "").strip().casefold() for value in values)
+    return key if any(key) else ()
+
+
+def _unique_match_keys(*keys: tuple[str, ...]) -> tuple[tuple[str, ...], ...]:
+    return tuple(dict.fromkeys(key for key in keys if key))
+
+
 def read_poi_preview(path: Path, limit: int) -> dict:
     if not path.is_file():
         return {"available": False, "columns": [], "rows": [], "truncated": False}
@@ -341,6 +499,7 @@ def load_source_payload(input_root: Path, output_root: Path, source: str, sample
         "schema_meta": read_json_file(output_dir / "schema_meta.json"),
         "poi_schema": _read_schema_preview(output_dir, "poi_schema.csv", source, "poi", limit),
         "relation_schema": _read_schema_preview(output_dir, "relation_schema.csv", source, "relation", limit),
+        "poi_result": read_firewall_poi_result_preview(output_root, output_dir, limit),
         "customer_events": read_customer_event_preview(output_root, output_dir, limit),
     }
 
@@ -823,8 +982,17 @@ def _export_customer_events_from_params(
 ) -> dict[str, str]:
     if EDC_ROOT.is_dir() and str(EDC_ROOT) not in sys.path:
         sys.path.insert(0, str(EDC_ROOT))
-    from log_pipeline_agent.firewall_events import export_customer_events
+    from log_pipeline_agent.firewall_events import (
+        enrich_params_csv_with_customer_defaults,
+        export_customer_events,
+    )
 
+    enrich_params_csv_with_customer_defaults(
+        params_csv=params_csv,
+        asset_path=schemas_root / "firewall_assets.csv",
+        device_path=schemas_root / "firewall_devices.csv",
+        source_name=source_name,
+    )
     payload = export_customer_events(
         params_csv=params_csv,
         output_dirs=(output_dir,),
@@ -1044,7 +1212,7 @@ class RunManager:
             planner_enabled = bool(payload.get("plannerEnabled", True))
             api_key = str(payload.get("api_key") or "").strip()
             if not api_key and not mock_llm:
-                return False, "DeepSeek API Key 必须从前端输入，后端不再读取 .env。"
+                return False, "GLM API Key 必须从前端输入，后端不再读取 .env。"
             matched_sources = match_sources(self.input_root, self.output_root, project)
 
             command = [
@@ -1071,6 +1239,10 @@ class RunManager:
                 api_key,
                 "--api_key_env",
                 "",
+                "--api_base",
+                DEFAULT_GLM_BASE_URL,
+                "--temperature",
+                "0.1",
             ]
             if write_group_tree:
                 command.append("--write_group_tree")
@@ -1511,7 +1683,8 @@ class FrontendHandler(SimpleHTTPRequestHandler):
             kg_set_env_if_present("NEO4J_PASSWORD", payload.get("neo4j_password"))
             api_key = str(payload.get("api_key") or "").strip()
             if api_key:
-                kg_set_env_if_present("DEEPSEEK_API_KEY", api_key)
+                kg_set_env_if_present("ZAI_API_KEY", api_key)
+                kg_set_env_if_present("GLM_API_KEY", api_key)
                 kg_set_env_if_present("DS_TOKEN", api_key)
             else:
                 for secret_key in LLM_SECRET_ENV_KEYS:

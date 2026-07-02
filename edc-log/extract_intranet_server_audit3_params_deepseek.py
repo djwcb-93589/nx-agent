@@ -13,8 +13,16 @@ from run import _normalize_audit_line, _normalize_prefixed_template
 
 load_dotenv()
 
-DEFAULT_BASE_URL = get_env("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
-DEFAULT_MODEL = get_env("DEEPSEEK_PARAM_MODEL", "deepseek-v4-flash")
+DEFAULT_BASE_URL = get_env(
+    "GLM_BASE_URL",
+    "https://api.z.ai/api/paas/v4/",
+    aliases=("ZAI_BASE_URL", "OPENAI_BASE_URL", "LLM_BASE_URL"),
+)
+DEFAULT_MODEL = get_env(
+    "GLM_PARAM_MODEL",
+    "glm-5.2",
+    aliases=("GLM_MODEL", "ZAI_MODEL", "LLM_MODEL"),
+)
 DEFAULT_API_KEY = ""
 
 FIXED_COLUMNS = [
@@ -495,7 +503,7 @@ def run(args):
 
     api_key = resolve_api_key(args.api_key)
     if not api_key:
-        raise SystemExit("Missing DeepSeek API key.")
+        raise SystemExit("Missing GLM API key.")
 
     os.makedirs(os.path.dirname(args.output_csv) or ".", exist_ok=True)
 
@@ -609,7 +617,7 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Extract intranet_server audit 3.csv parameters with DeepSeek and save CSV."
+        description="Extract intranet_server audit 3.csv parameters with GLM and save CSV."
     )
     parser.add_argument("--input-csv", required=True)
     parser.add_argument("--pairs-json", required=True)

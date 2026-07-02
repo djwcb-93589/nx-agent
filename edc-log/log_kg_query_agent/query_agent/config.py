@@ -23,9 +23,9 @@ class Neo4jConfig:
 @dataclass(frozen=True)
 class LLMConfig:
     api_key: str
-    base_url: str = "https://api.deepseek.com"
-    cypher_model: str = "deepseek-v4-flash"
-    answer_model: str = "deepseek-v4-flash"
+    base_url: str = "https://api.z.ai/api/paas/v4/"
+    cypher_model: str = "glm-5.2"
+    answer_model: str = "glm-5.2"
     temperature: float = 0.1
     max_tokens: int = 2000
     timeout_seconds: int = 120
@@ -95,9 +95,9 @@ def load_query_agent_config(
 
     llm = LLMConfig(
         api_key=str(_resolve_env_value(llm_raw.get("api_key", ""))),
-        base_url=str(_resolve_env_value(llm_raw.get("base_url", "https://api.deepseek.com"))),
-        cypher_model=str(_resolve_env_value(llm_raw.get("cypher_model", "deepseek-v4-flash"))),
-        answer_model=str(_resolve_env_value(llm_raw.get("answer_model", "deepseek-v4-flash"))),
+        base_url=str(_resolve_env_value(llm_raw.get("base_url", "https://api.z.ai/api/paas/v4/"))),
+        cypher_model=str(_resolve_env_value(llm_raw.get("cypher_model", "glm-5.2"))),
+        answer_model=str(_resolve_env_value(llm_raw.get("answer_model", "glm-5.2"))),
         temperature=float(llm_raw.get("temperature", 0.1)),
         max_tokens=int(llm_raw.get("max_tokens", 2000)),
         timeout_seconds=int(llm_raw.get("timeout_seconds", 120)),

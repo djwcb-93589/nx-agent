@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>日志到知识图谱 Agent 工作台</title>
-    <link rel="stylesheet" href="/styles.css?v=20260629-run-scope-picker" />
+    <title>日志解析 Agent 工作台</title>
+    <link rel="stylesheet" href="/styles.css?v=20260701-firewall-log-poi" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="side-pane">
         <div class="brand-row">
           <div>
-            <h1>日志知识图谱</h1>
+            <h1>日志解析</h1>
             <p id="sourceCount">正在读取日志源</p>
           </div>
           <button id="refreshButton" class="icon-button" title="刷新数据">↻</button>
@@ -36,18 +36,18 @@
         <section class="overview-panel overview-with-run">
           <div class="overview-copy">
             <div class="eyebrow">完整 Agent 流程</div>
-            <h2>从原始日志到可查询知识图谱</h2>
+            <h2>从原始日志到结构化字段</h2>
             <p>
-              先把每一行日志解析成事件模板和字段库，再把解析结果转换成知识图谱输入，
-              最后生成节点、关系、融合图，并可选择写入 Neo4j。
+              先把每一行日志解析成事件模板和字段库，再把解析结果转换成可查看、
+              可下载、可核验的结构化字段表。
             </p>
           </div>
           <div class="flow-strip" id="flowStrip">
             <div><b>1</b><span>原始日志</span></div>
             <div><b>2</b><span>模板解析</span></div>
             <div><b>3</b><span>字段映射</span></div>
-            <div><b>4</b><span>构建图谱</span></div>
-            <div><b>5</b><span>查询分析</span></div>
+            <div><b>4</b><span>字段抽取</span></div>
+            <div><b>5</b><span>结果查看</span></div>
           </div>
           <div class="overview-run collapsible-panel" data-collapsible-panel>
             <div class="panel-head run-head">
@@ -67,7 +67,7 @@
                   <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
                   <div id="runMessage" class="run-message">等待任务。</div>
                 </div>
-                <div>
+                <div hidden>
                   <div class="progress-label"><span>知识图谱</span><b id="kgProgressText">0 / 0</b></div>
                   <div class="progress-track"><div id="kgProgressBar" class="progress-bar kg"></div></div>
                   <div id="kgRunMessage" class="run-message">等待 DAG 任务。</div>
@@ -79,7 +79,7 @@
                   <div class="subhead">解析调度记录</div>
                   <div id="traceList" class="trace-list"></div>
                 </div>
-                <div>
+                <div hidden>
                   <div class="subhead">图谱执行时间线</div>
                   <div id="kgTimeline" class="timeline"></div>
                 </div>
@@ -96,11 +96,11 @@
           <div class="control-panel collapsible-panel" data-collapsible-panel>
             <div class="panel-head compact">
               <div>
-                <h3>解析与图谱配置</h3>
-                <p>决定日志解析、DAG 构建、图谱融合和是否写入 Neo4j。</p>
+                <h3>解析配置</h3>
+                <p>决定日志解析范围、模型参数、字段抽取和输出方式。</p>
               </div>
               <div class="panel-head-actions">
-                <span id="kgApiState" class="status-pill">检测中</span>
+                <span id="kgApiState" class="status-pill" hidden>检测中</span>
                 <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
               </div>
             </div>
@@ -129,7 +129,11 @@
                 </label>
                 <label class="wide">
                   <span>模型</span>
-                  <input id="modelInput" value="deepseek-v4-flash" />
+                  <input id="modelInput" value="glm-5.2" />
+                </label>
+                <label class="wide">
+                  <span>GLM API Key</span>
+                  <input id="kgApiKey" type="password" autocomplete="off" placeholder="必填：仅使用前端输入" />
                 </label>
                 <label>
                   <span class="field-label-with-help">
@@ -149,7 +153,7 @@
                 </label>
                 <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
                 <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
-                <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> DeepSeek 调度</label>
+                <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> GLM 调度</label>
                 <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
                 <label class="check-line"><input id="mockCheckbox" type="checkbox" /> 离线烟测</label>
               </div>
@@ -157,10 +161,11 @@
                 <button id="startRunButton" class="primary-button" type="button">只运行日志解析</button>
                 <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
               </div>
+              <div hidden>
               <div class="config-section-title">图谱设置</div>
               <label class="wide">
                 <span>自然语言任务</span>
-                <textarea id="kgTaskText" rows="3">复用当前日志解析结果，构建并融合所有日志知识图谱</textarea>
+                <textarea id="kgTaskText" rows="3">复用当前日志解析结果</textarea>
               </label>
               <div class="form-grid">
                 <label>
@@ -170,10 +175,6 @@
                 <label>
                   <span>DAG 并发数</span>
                   <input id="kgMaxWorkers" type="number" min="1" max="8" value="3" />
-                </label>
-                <label class="wide">
-                  <span>DeepSeek API Key</span>
-                  <input id="kgApiKey" type="password" autocomplete="off" placeholder="必填：仅使用前端输入" />
                 </label>
                 <label class="wide">
                   <span>融合图谱目录</span>
@@ -197,6 +198,7 @@
                 <button id="planBtn" class="secondary-button" type="button">生成 DAG</button>
                 <button id="kgRunBtn" class="primary-button muted-primary" type="button">只运行图谱构建</button>
               </div>
+              </div>
             </div>
           </div>
 
@@ -206,11 +208,11 @@
           <div class="panel wide">
             <div class="panel-head">
               <div>
-                <h3>客户事件 JSON</h3>
+                <h3>防火墙日志</h3>
                 <span id="customerEventMeta"></span>
               </div>
               <div class="panel-head-actions">
-                <button id="downloadCustomerEventsButton" class="mini-button" type="button" disabled>下载 JSON</button>
+                <button id="downloadCustomerEventsButton" class="mini-button" type="button" disabled hidden>下载 JSON</button>
               </div>
             </div>
             <div id="customerEventValidation" class="event-validation-summary"></div>
@@ -274,7 +276,7 @@
           </div>
         </section>
 
-        <section class="kg-grid">
+        <section class="kg-grid" hidden>
           <div class="panel">
             <div class="panel-head"><h3>DAG 计划</h3><span id="planId">未生成</span></div>
             <div id="planList" class="plan-list"></div>
@@ -349,6 +351,6 @@
       </section>
     </div>
 
-    <script src="/app.js?v=20260629-run-scope-picker"></script>
+    <script src="/app.js?v=20260701-firewall-poi-display-merge"></script>
   </body>
 </html>
