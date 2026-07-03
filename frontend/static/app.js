@@ -197,7 +197,7 @@ const SOURCE_TAXONOMY = [
     children: [
       {
         label: "套件日志",
-        children: [{ label: "中孚套件" }, { label: "IE 套件" }],
+        children: [{ label: "中孚套件" }, { label: "IIE 套件" }],
       },
       {
         label: "主机审计日志",
