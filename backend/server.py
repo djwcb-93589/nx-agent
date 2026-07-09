@@ -10,7 +10,6 @@ import csv
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import threading
@@ -22,19 +21,13 @@ for _path in (REPO_ROOT, BACKEND_ROOT):
     if _path_text not in sys.path:
         sys.path.insert(0, _path_text)
 
-try:
-    from . import extra_api
-except ImportError:  # pragma: no cover - supports `python backend/server.py`.
-    import extra_api
-
 from env_utils import load_dotenv
 
 
 EDC_ROOT = REPO_ROOT / "edc-log"
 EDC_AIT_ROOT = EDC_ROOT / "AIT"
-EDC_SCHEMAS_ROOT = EDC_ROOT / "schemas"
 MAX_RUN_LOG_LINES = 2000
-DEFAULT_GLM_BASE_URL = "https://api.z.ai/api/paas/v4/"
+DEFAULT_GLM_BASE_URL = "https://open.bigmodel.cn/api/coding/paas/v4/"
 LLM_SECRET_ENV_KEYS = (
     "ZAI_API_KEY",
     "GLM_API_KEY",
@@ -72,6 +65,31 @@ CUSTOMER_EVENT_POI_ALIASES = {
     "policy_type": ("policy", "pcpolicy"),
 }
 
+SCHEMA_FAMILY_MARKERS = (
+    ("apache", ("apache", "httpd", "tomcat")),
+    ("openvpn", ("openvpn", "vpn")),
+    ("dns", ("dnsmasq", "dns")),
+    ("firewall", ("firewall", "firewallexamplae", "firewallexample", "防火墙")),
+    ("auth", ("auth.log", "/auth", "\\auth", "sshd", "sudo")),
+    ("audit", ("audit", "审计", "主审")),
+    (
+        "syslog",
+        (
+            "syslog",
+            "messages",
+            "kern.log",
+            "检测器",
+            "防病毒",
+            "入侵检测",
+            "应用系统",
+            "终端",
+            "套件",
+            "邮件",
+            "oa",
+        ),
+    ),
+)
+
 load_dotenv(REPO_ROOT)
 for _secret_key in LLM_SECRET_ENV_KEYS:
     os.environ.pop(_secret_key, None)
@@ -83,147 +101,6 @@ try:
 except ImportError:
     DEFAULT_LLM_MODEL_ID = "glm-5.2"
     TRACE_PREFIX = "AGENT_TRACE "
-
-
-KG_AVAILABLE = False
-KG_IMPORT_ERROR = ""
-try:
-    if EDC_ROOT.is_dir() and str(EDC_ROOT) not in sys.path:
-        sys.path.insert(0, str(EDC_ROOT))
-
-    from log_pipeline_agent.agent import LogKgPipelineAgent
-    from log_pipeline_agent.backend.server import (
-        JOB_STORE as KG_JOB_STORE,
-        _graph_summary as kg_graph_summary,
-        _planner_request as kg_planner_request,
-        _read_artifact as kg_read_artifact,
-        _run_legacy_job as kg_run_legacy_job,
-        _run_smart_job as kg_run_smart_job,
-        _safe_project_path as kg_safe_project_path,
-        _set_env_if_present as kg_set_env_if_present,
-        _tool_result_payload as kg_tool_result_payload,
-    )
-    from log_pipeline_agent.config import (
-        GRAPH_FUSED_DIR as KG_GRAPH_FUSED_DIR,
-        GRAPH_SOURCES_DIR as KG_GRAPH_SOURCES_DIR,
-        PROJECT_ROOT as KG_PROJECT_ROOT,
-        discover_dataset_specs as discover_kg_dataset_specs,
-    )
-    from log_pipeline_agent.core.neo4j_admin import clear_neo4j_database
-    from log_pipeline_agent.core.planner import SmartPipelinePlanner
-    from log_pipeline_agent.core.preflight import PreflightAnalyzer
-
-    KG_AVAILABLE = True
-except Exception as exc:  # pragma: no cover - surfaced through /api/kg/health.
-    KG_IMPORT_ERROR = str(exc)
-
-
-KG_INPUT_RULES = (
-    {
-        "fragment": Path("internal_share/logs/audit_internal_share/audit_internal_share/3.csv"),
-        "family": "audit",
-        "poi_targets": ("audit_POI.csv",),
-        "relation_targets": ("audit_relation.csv",),
-        "poi_sources": ("audit_POI.csv",),
-        "relation_sources": ("audit_relation.csv",),
-    },
-    {
-        "fragment": Path("intranet_server/logs/audit_internal_server/audit_internal_server/3.csv"),
-        "family": "audit",
-        "poi_targets": ("audit_POI.csv",),
-        "relation_targets": ("audit_relation.csv",),
-        "poi_sources": ("audit_POI.csv",),
-        "relation_sources": ("audit_relation.csv",),
-    },
-    {
-        "fragment": Path("intranet_server/logs/auth/3.csv"),
-        "family": "auth",
-        "poi_targets": ("auth_POI.csv",),
-        "relation_targets": ("auth_relation.csv",),
-        "poi_sources": ("auth_POI.csv",),
-        "relation_sources": ("auth_relation.csv",),
-    },
-    {
-        "fragment": Path("inet-firewall/logs-label/dnsmasq/3.csv"),
-        "family": "dns",
-        "poi_targets": ("dns_POI.csv",),
-        "relation_targets": ("dns_relation.csv",),
-        "poi_sources": ("dns_POI.csv",),
-        "relation_sources": ("dns_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/设备管理日志：管理登录&退出日志（webui）/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/设备管理日志：管理登录&退出日志 (CLI)/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/防火墙安全策略日志/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/设备管理日志：安全域创建&编辑/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/设备管理日志：添加&显示&删除&开机恢复黑名单/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("firewallexample/customer_event_simulated/3.csv"),
-        "family": "firewall",
-        "poi_targets": ("firewall_POI.csv",),
-        "relation_targets": ("firewall_relation.csv",),
-        "poi_sources": ("firewall_POI.csv",),
-        "relation_sources": ("firewall_relation.csv",),
-    },
-    {
-        "fragment": Path("vpn/logs/openvpn/3.csv"),
-        "family": "vpn",
-        "poi_targets": ("vpn_POI v2.csv",),
-        "relation_targets": ("vpn_relation_aligned_final.csv",),
-        "poi_sources": ("openvpn_POI.csv", "vpn_POI v2.csv"),
-        "relation_sources": ("openvpn_relation.csv", "vpn_relation_aligned_final.csv"),
-    },
-    {
-        "fragment": Path("intranet_server/logs/apache2/intranet.price.fox.org-access/3.csv"),
-        "family": "apache",
-        "poi_targets": ("apache_POI.csv",),
-        "relation_targets": ("apache_relation.csv",),
-        "poi_sources": ("apache_POI.csv",),
-        "relation_sources": ("apache_relation.csv",),
-    },
-    {
-        "fragment": Path("intranet_server/logs/apache2/intranet.price.fox.org-error/3.csv"),
-        "family": "apache",
-        "poi_targets": ("apache_POI.csv",),
-        "relation_targets": ("apache_relation.csv",),
-        "poi_sources": ("apache_POI.csv",),
-        "relation_sources": ("apache_relation.csv",),
-    },
-)
 
 
 def discover_sources(input_root: Path, output_root: Path) -> list[dict]:
@@ -257,6 +134,60 @@ def discover_sources(input_root: Path, output_root: Path) -> list[dict]:
             }
         )
     return sources
+
+
+def discover_source_folders(
+    input_root: Path,
+    output_root: Path,
+    schemas_root: Path,
+    limit: int = 80,
+) -> dict:
+    input_root = Path(input_root).resolve()
+    output_root = Path(output_root).resolve()
+    schemas_root = Path(schemas_root).resolve()
+    sources = discover_sources(input_root, output_root)
+    sources_by_folder: dict[str, list[dict]] = {}
+    for source in sources:
+        folder = Path(str(source.get("source") or "")).parent.as_posix()
+        if folder == ".":
+            folder = ""
+        sources_by_folder.setdefault(folder, []).append(source)
+
+    folders = []
+    for path in sorted(item for item in input_root.rglob("*") if item.is_dir()):
+        relative = path.relative_to(input_root).as_posix()
+        direct_sources = sources_by_folder.get(relative, [])
+        descendant_prefix = f"{relative}/"
+        descendant_sources = [
+            source
+            for source in sources
+            if str(source.get("source") or "").startswith(descendant_prefix)
+            and Path(str(source.get("source") or "")).parent.as_posix() != relative
+        ]
+        schema_type = _schema_family_for_text(relative)
+        poi_path = _schema_path_for_family(schema_type, "poi", schemas_root)
+        relation_path = _schema_path_for_family(schema_type, "relation", schemas_root)
+        folders.append(
+            {
+                "folder": relative,
+                "label": path.name,
+                "parent": "" if path.parent == input_root else path.parent.relative_to(input_root).as_posix(),
+                "direct_log_count": len(direct_sources),
+                "log_count": len(direct_sources) + len(descendant_sources),
+                "ready_count": sum(
+                    1
+                    for source in [*direct_sources, *descendant_sources]
+                    if source.get("output_available")
+                ),
+                "schema_type": schema_type or "",
+                "poi_schema_path": str(poi_path) if poi_path else "",
+                "relation_schema_path": str(relation_path) if relation_path else "",
+                "poi_schema": read_poi_preview(poi_path, limit)
+                if poi_path
+                else {"available": False, "columns": [], "rows": [], "truncated": False},
+            }
+        )
+    return {"available": True, "folders": folders}
 
 
 def match_sources(input_root: Path, output_root: Path, project: str) -> list[dict]:
@@ -517,27 +448,27 @@ def _read_schema_preview(output_dir: Path, filename: str, source: str, kind: str
 
 
 def _canonical_schema_path(source: str, kind: str) -> Path | None:
-    source_lower = source.lower()
-    if "openvpn" in source_lower or "vpn" in source_lower:
-        family = "openvpn"
-    elif "dnsmasq" in source_lower or "dns" in source_lower:
-        family = "dns"
-    elif "firewallexamplae" in source_lower or "firewallexample" in source_lower:
-        family = "firewall"
-    elif "auth" in source_lower:
-        family = "auth"
-    elif "apache" in source_lower:
-        family = "apache"
-    elif "audit" in source_lower:
-        family = "audit"
-    else:
+    family = _schema_family_for_text(source)
+    return _schema_path_for_family(family, kind, FrontendHandler.schemas_root)
+
+
+def _schema_family_for_text(text: str) -> str | None:
+    source_lower = str(text or "").replace("\\", "/").lower()
+    for family, markers in SCHEMA_FAMILY_MARKERS:
+        if any(marker.lower() in source_lower for marker in markers):
+            return family
+    return None
+
+
+def _schema_path_for_family(family: str | None, kind: str, schemas_root: Path) -> Path | None:
+    if not family:
         return None
     suffix = "POI.csv" if kind == "poi" else "relation.csv"
-    path = FrontendHandler.schemas_root / f"{family}_{suffix}"
+    path = Path(schemas_root) / f"{family}_{suffix}"
     if path.is_file():
         return path
     if family == "openvpn":
-        fallback = FrontendHandler.schemas_root / f"vpn_{suffix}"
+        fallback = Path(schemas_root) / f"vpn_{suffix}"
         if fallback.is_file():
             return fallback
     return None
@@ -723,9 +654,6 @@ def save_poi_schema(input_root: Path, output_root: Path, source: str, rows: list
     if not saved_paths:
         write_poi_rows(paths["local_path"], rows_to_write)
         saved_paths.append(str(paths["local_path"]))
-
-    if KG_AVAILABLE:
-        sync_parser_outputs_to_edc(output_root, FrontendHandler.schemas_root)
 
     return {
         "ok": True,
@@ -1004,153 +932,6 @@ def _export_customer_events_from_params(
     return payload["written"][-1]
 
 
-def sync_parser_outputs_to_edc(output_root: Path, schemas_root: Path) -> dict:
-    output_root = Path(output_root).resolve()
-    schemas_root = Path(schemas_root).resolve()
-    report = {
-        "available": KG_AVAILABLE,
-        "edc_root": str(EDC_ROOT),
-        "ait_root": str(EDC_AIT_ROOT),
-        "schemas_root": str(EDC_SCHEMAS_ROOT),
-        "copied_csv": 0,
-        "copied_schema": 0,
-        "unchanged": 0,
-        "missing_inputs": [],
-        "datasets": [],
-    }
-    if not KG_AVAILABLE:
-        report["error"] = KG_IMPORT_ERROR
-        return report
-
-    for rule in KG_INPUT_RULES:
-        fragment = rule["fragment"]
-        source_csv = _kg_source_csv(output_root, fragment)
-        target_csv = EDC_AIT_ROOT / fragment
-        dataset_report = {
-            "family": rule["family"],
-            "source_csv": str(source_csv),
-            "target_csv": str(target_csv),
-            "csv_copied": False,
-            "schemas": [],
-            "available": source_csv.is_file() or target_csv.is_file(),
-        }
-        if source_csv.is_file():
-            if _copy_if_changed(source_csv, target_csv):
-                report["copied_csv"] += 1
-                dataset_report["csv_copied"] = True
-            else:
-                report["unchanged"] += 1
-        elif not target_csv.is_file():
-            report["missing_inputs"].append(fragment.as_posix())
-
-        per_source_poi = source_csv.parent / "poi_schema.csv"
-        per_source_relation = source_csv.parent / "relation_schema.csv"
-        poi_source = per_source_poi if per_source_poi.is_file() else _first_existing(
-            schemas_root, rule["poi_sources"]
-        )
-        relation_source = (
-            per_source_relation
-            if per_source_relation.is_file()
-            else _first_existing(schemas_root, rule["relation_sources"])
-        )
-        for source_path, targets, kind in (
-            (poi_source, rule["poi_targets"], "poi"),
-            (relation_source, rule["relation_targets"], "relation"),
-        ):
-            if not source_path:
-                continue
-            for target_name in targets:
-                target_path = EDC_SCHEMAS_ROOT / target_name
-                copied = _copy_if_changed(source_path, target_path)
-                if copied:
-                    report["copied_schema"] += 1
-                else:
-                    report["unchanged"] += 1
-                dataset_report["schemas"].append(
-                    {
-                        "kind": kind,
-                        "source": str(source_path),
-                        "target": str(target_path),
-                        "copied": copied,
-                    }
-                )
-        report["datasets"].append(dataset_report)
-    return report
-
-
-def _kg_source_csv(output_root: Path, fragment: Path) -> Path:
-    primary = Path(output_root) / fragment
-    if primary.is_file() or "firewallexample" not in fragment.as_posix():
-        return primary
-    legacy_fragment = Path(fragment.as_posix().replace("firewallexample/", "firewallexamplae/", 1))
-    legacy = Path(output_root) / legacy_fragment
-    return legacy if legacy.is_file() else primary
-
-
-def kg_datasets_payload(output_root: Path | None = None, schemas_root: Path | None = None, sync: bool = True) -> dict:
-    if not KG_AVAILABLE:
-        return {"available": False, "error": KG_IMPORT_ERROR, "datasets": []}
-    sync_report = (
-        sync_parser_outputs_to_edc(output_root, schemas_root)
-        if sync and output_root and schemas_root
-        else {"available": True}
-    )
-    datasets = []
-    for spec in discover_kg_dataset_specs():
-        datasets.append(
-            {
-                "name": spec.name,
-                "family": spec.family,
-                "tag": spec.tag,
-                "csv_path": str(spec.csv_path),
-                "template2samples_path": str(spec.template2samples_path),
-                "pairs_path": str(spec.pairs_path),
-                "schema_path": str(spec.schema_path),
-                "mapped_pairs_path": str(spec.mapped_pairs_path),
-                "params_output_path": str(spec.params_output_path),
-                "relation_csv_path": str(spec.relation_csv_path),
-                "poi_schema_path": str(spec.poi_schema_path),
-            }
-        )
-    return {
-        "available": True,
-        "project_root": str(KG_PROJECT_ROOT),
-        "ait_root": str(EDC_AIT_ROOT),
-        "default_fused_graph_dir": str(KG_GRAPH_FUSED_DIR),
-        "default_source_graph_dir": str(KG_GRAPH_SOURCES_DIR),
-        "datasets": datasets,
-        "sync": sync_report,
-    }
-
-
-def _copy_if_changed(source: Path, target: Path) -> bool:
-    source = Path(source)
-    target = Path(target)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    if target.exists():
-        source_stat = source.stat()
-        target_stat = target.stat()
-        if (
-            source_stat.st_size == target_stat.st_size
-            and int(source_stat.st_mtime) <= int(target_stat.st_mtime)
-        ):
-            return False
-    shutil.copy2(source, target)
-    return True
-
-
-def _first_existing(root: Path, names: tuple[str, ...]) -> Path | None:
-    for name in names:
-        path = Path(root) / name
-        if path.is_file():
-            return path
-    for name in names:
-        path = EDC_SCHEMAS_ROOT / name
-        if path.is_file():
-            return path
-    return None
-
-
 def _latest_result_file(output_dir: Path) -> str | None:
     if not output_dir.is_dir():
         return None
@@ -1208,10 +989,9 @@ class RunManager:
             do_self_reflection = "True" if payload.get("doSelfReflection", True) else "False"
             write_group_tree = bool(payload.get("writeGroupTree", True))
             preserve_existing = bool(payload.get("preserveExisting", False))
-            mock_llm = bool(payload.get("mockLlm", False))
             planner_enabled = bool(payload.get("plannerEnabled", True))
             api_key = str(payload.get("api_key") or "").strip()
-            if not api_key and not mock_llm:
+            if not api_key:
                 return False, "GLM API Key 必须从前端输入，后端不再读取 .env。"
             matched_sources = match_sources(self.input_root, self.output_root, project)
 
@@ -1248,8 +1028,6 @@ class RunManager:
                 command.append("--write_group_tree")
             if preserve_existing:
                 command.append("--preserve_existing")
-            if mock_llm:
-                command.append("--mock_llm")
             if not planner_enabled:
                 command.append("--disable_planner")
 
@@ -1360,7 +1138,6 @@ class RunManager:
                     )
                 else:
                     self.state["message"] = "解析任务已完成。"
-                sync_parser_outputs_to_edc(self.output_root, self.schemas_root)
             else:
                 self.state["status"] = "failed"
                 self.state["message"] = f"解析任务失败，退出码 {returncode}。"
@@ -1499,6 +1276,17 @@ class FrontendHandler(SimpleHTTPRequestHandler):
             if parsed.path == "/api/sources":
                 self._send_json(discover_sources(self.input_root, self.output_root))
                 return
+            if parsed.path == "/api/source-folders":
+                query = parse_qs(parsed.query)
+                self._send_json(
+                    discover_source_folders(
+                        self.input_root,
+                        self.output_root,
+                        self.schemas_root,
+                        int(query.get("limit", ["80"])[0]),
+                    )
+                )
+                return
             if parsed.path == "/api/source":
                 query = parse_qs(parsed.query)
                 payload = load_source_payload(
@@ -1523,37 +1311,9 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                     )
                 )
                 return
-            if parsed.path == "/api/customer-events/download":
-                query = parse_qs(parsed.query)
-                source = query.get("source", [""])[0]
-                raw_path = _safe_join(self.input_root, source)
-                if not raw_path.is_file():
-                    raise FileNotFoundError(source)
-                relative = raw_path.relative_to(self.input_root)
-                output_dir = self.output_root / relative.with_suffix("")
-                event_path = _customer_event_artifact_path(
-                    self.output_root,
-                    output_dir,
-                    "customer_events.json",
-                )
-                self._send_download(event_path, "customer_events.json")
-                return
             if parsed.path == "/api/run/status":
                 query = parse_qs(parsed.query)
                 self._send_json(self.run_manager.status(tail=int(query.get("tail", ["300"])[0])))
-                return
-            if parsed.path.startswith("/api/kg/"):
-                self._handle_kg_get(parsed)
-                return
-            if parsed.path == "/api/alarm/list":
-                query = parse_qs(parsed.query)
-                try:
-                    page = int(query.get("page", ["1"])[0])
-                    page_size = int(query.get("page_size", ["10"])[0])
-                except ValueError:
-                    page = 1
-                    page_size = 10
-                self._send_json(extra_api.get_alarm_list(page, page_size))
                 return
             self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
         except Exception as exc:
@@ -1600,160 +1360,9 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                     status=HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST,
                 )
                 return
-            if parsed.path.startswith("/api/kg/"):
-                self._handle_kg_post(parsed)
-                return
             self.send_error(404)
         except Exception as exc:
             self._send_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
-
-    def _handle_kg_get(self, parsed) -> None:
-        if parsed.path == "/api/kg/health":
-            self._send_json({"available": KG_AVAILABLE, "error": KG_IMPORT_ERROR})
-            return
-        self._ensure_kg_available()
-        if parsed.path == "/api/kg/sync":
-            self._send_json(sync_parser_outputs_to_edc(self.output_root, self.schemas_root))
-            return
-        if parsed.path == "/api/kg/datasets":
-            query = parse_qs(parsed.query)
-            sync = query.get("sync", ["1"])[0] != "0"
-            self._send_json(kg_datasets_payload(self.output_root, self.schemas_root, sync=sync))
-            return
-        if parsed.path.startswith("/api/kg/runs/") and parsed.path.endswith("/events"):
-            self._serve_kg_events(parsed.path)
-            return
-        if parsed.path.startswith("/api/kg/runs/"):
-            self._send_json(self._kg_job_payload(parsed.path))
-            return
-        if parsed.path == "/api/kg/summary":
-            query = parse_qs(parsed.query)
-            graph_dir = Path(query.get("graph_dir", [str(KG_GRAPH_FUSED_DIR)])[0])
-            self._send_json(kg_graph_summary(graph_dir))
-            return
-        if parsed.path == "/api/kg/artifact":
-            query = parse_qs(parsed.query)
-            artifact_path = kg_safe_project_path(query.get("path", [""])[0])
-            self._send_json(kg_read_artifact(artifact_path))
-            return
-        self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
-
-    def _handle_kg_post(self, parsed) -> None:
-        self._ensure_kg_available()
-        payload = self._read_json_body()
-        sync_paths = {"/api/kg/sync", "/api/kg/preflight", "/api/kg/plan", "/api/kg/runs"}
-        if parsed.path in sync_paths and payload.get("sync_inputs", True):
-            sync_parser_outputs_to_edc(self.output_root, self.schemas_root)
-
-        if parsed.path == "/api/kg/sync":
-            self._send_json(sync_parser_outputs_to_edc(self.output_root, self.schemas_root))
-            return
-        if parsed.path == "/api/kg/preflight":
-            request = kg_planner_request(payload)
-            report = PreflightAnalyzer().run(request.datasets)
-            self._send_json(report.to_dict())
-            return
-        if parsed.path == "/api/kg/plan":
-            request = kg_planner_request(payload)
-            preflight = PreflightAnalyzer().run(request.datasets)
-            plan = SmartPipelinePlanner().build_plan(request, preflight=preflight)
-            self._send_json({"preflight": preflight.to_dict(), "plan": plan.to_dict()})
-            return
-        if parsed.path == "/api/kg/runs":
-            job = KG_JOB_STORE.create()
-            mode = str(payload.get("mode", "smart")).lower()
-            target = kg_run_legacy_job if mode == "legacy" else kg_run_smart_job
-            threading.Thread(target=target, args=(job, payload), daemon=True).start()
-            self._send_json(job.to_payload(), status=HTTPStatus.ACCEPTED)
-            return
-        if parsed.path == "/api/kg/query-artifacts":
-            agent = LogKgPipelineAgent()
-            result = agent.query_artifacts(
-                graph_dir=Path(payload.get("graph_dir") or KG_GRAPH_FUSED_DIR),
-                label=str(payload.get("label", "")).strip(),
-                predicate=str(payload.get("predicate", "")).strip(),
-                contains=str(payload.get("contains", "")).strip(),
-                limit=int(payload.get("limit", 20)),
-            )
-            self._send_json(kg_tool_result_payload(result))
-            return
-        if parsed.path == "/api/kg/query-neo4j":
-            kg_set_env_if_present("NEO4J_URI", payload.get("neo4j_uri"))
-            kg_set_env_if_present("NEO4J_USER", payload.get("neo4j_user"))
-            kg_set_env_if_present("NEO4J_PASSWORD", payload.get("neo4j_password"))
-            api_key = str(payload.get("api_key") or "").strip()
-            if api_key:
-                kg_set_env_if_present("ZAI_API_KEY", api_key)
-                kg_set_env_if_present("GLM_API_KEY", api_key)
-                kg_set_env_if_present("DS_TOKEN", api_key)
-            else:
-                for secret_key in LLM_SECRET_ENV_KEYS:
-                    os.environ.pop(secret_key, None)
-            config_path = Path(payload.get("config", ""))
-            if not config_path.is_absolute():
-                config_path = EDC_ROOT / config_path
-            agent = LogKgPipelineAgent()
-            result = agent.query_neo4j(
-                config_path=config_path,
-                question=str(payload.get("question", "")).strip(),
-                refresh_schema=_as_bool(payload.get("refresh_schema")),
-                max_result_rows=_as_optional_int(payload.get("max_result_rows")),
-                max_answer_rows=_as_optional_int(payload.get("max_answer_rows")),
-            )
-            self._send_json(kg_tool_result_payload(result))
-            return
-        if parsed.path == "/api/kg/neo4j/clear":
-            self._send_json(clear_neo4j_database(payload))
-            return
-        self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
-
-    def _serve_kg_events(self, path: str) -> None:
-        job_id = path.rstrip("/").split("/")[-2]
-        job = KG_JOB_STORE.get(job_id)
-        if job is None:
-            self._send_json({"error": f"Job not found: {job_id}"}, status=HTTPStatus.NOT_FOUND)
-            return
-
-        self.send_response(HTTPStatus.OK)
-        self._send_cors_headers()
-        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
-        self.send_header("Cache-Control", "no-cache")
-        self.send_header("Connection", "keep-alive")
-        self.end_headers()
-
-        index = 0
-        try:
-            while True:
-                with job.condition:
-                    if index >= len(job.events) and job.status == "running":
-                        job.condition.wait(timeout=15)
-                    pending = job.events[index:]
-                    index = len(job.events)
-                    finished = job.status != "running" and not pending
-                for event in pending:
-                    payload = json.dumps(event, ensure_ascii=False)
-                    self.wfile.write(f"id: {event['id']}\n".encode("utf-8"))
-                    self.wfile.write(f"event: {event['type']}\n".encode("utf-8"))
-                    self.wfile.write(f"data: {payload}\n\n".encode("utf-8"))
-                    self.wfile.flush()
-                if finished:
-                    break
-                if not pending:
-                    self.wfile.write(b": ping\n\n")
-                    self.wfile.flush()
-        except (BrokenPipeError, ConnectionResetError):
-            return
-        finally:
-            self.close_connection = True
-
-    def _kg_job_payload(self, path: str) -> dict:
-        job_id = path.rstrip("/").split("/")[-1]
-        job = KG_JOB_STORE.get(job_id)
-        if job is None:
-            raise FileNotFoundError(f"Job not found: {job_id}")
-        payload = job.to_payload()
-        payload["events"] = list(job.events)
-        return payload
 
     def _send_json(self, payload, status: HTTPStatus = HTTPStatus.OK) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -1767,19 +1376,6 @@ class FrontendHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _send_download(self, path: Path, filename: str) -> None:
-        if not path.is_file():
-            raise FileNotFoundError(path)
-        body = path.read_bytes()
-        self.send_response(HTTPStatus.OK)
-        self._send_cors_headers()
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.end_headers()
-        self.wfile.write(body)
-
     def _read_json_body(self) -> dict:
         length = int(self.headers.get("Content-Length", "0") or 0)
         if length <= 0:
@@ -1787,25 +1383,10 @@ class FrontendHandler(SimpleHTTPRequestHandler):
         body = self.rfile.read(length).decode("utf-8")
         return json.loads(body) if body.strip() else {}
 
-    @staticmethod
-    def _ensure_kg_available() -> None:
-        if not KG_AVAILABLE:
-            raise RuntimeError(f"知识图谱模块不可用: {KG_IMPORT_ERROR}")
-
     def _send_cors_headers(self) -> None:
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
-
-
-def _as_bool(raw) -> bool:
-    return bool(raw) if isinstance(raw, bool) else str(raw).lower() in {"1", "true", "yes", "on"}
-
-
-def _as_optional_int(raw) -> int | None:
-    if raw in (None, ""):
-        return None
-    return int(raw)
 
 
 def main(argv=None) -> None:
@@ -1825,8 +1406,6 @@ def main(argv=None) -> None:
         FrontendHandler.output_root,
         FrontendHandler.schemas_root,
     )
-    if KG_AVAILABLE:
-        sync_parser_outputs_to_edc(FrontendHandler.output_root, FrontendHandler.schemas_root)
     server = ThreadingHTTPServer((args.host, args.port), FrontendHandler)
     print(f"Backend API server: http://{args.host}:{args.port}", flush=True)
     server.serve_forever()

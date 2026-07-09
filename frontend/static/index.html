@@ -11,84 +11,22 @@
       <aside class="side-pane">
         <div class="brand-row">
           <div>
-            <h1>日志解析</h1>
+            <h1>多源日志智能接入与解析智能体</h1>
             <p id="sourceCount">正在读取日志源</p>
           </div>
           <button id="refreshButton" class="icon-button" title="刷新数据">↻</button>
         </div>
         <input id="sourceFilter" class="filter-input" placeholder="筛选日志名称或设备" />
         <div id="sourceList" class="source-list"></div>
-
-        <div class="side-block dataset-block" hidden>
-          <div class="side-title">
-            <span>图谱数据集</span>
-            <button id="syncKgButton" class="mini-button" type="button">同步</button>
-          </div>
-          <div class="dataset-tools">
-            <button id="selectAllKgBtn" class="mini-button" type="button">全选</button>
-            <button id="clearAllKgBtn" class="mini-button" type="button">清空</button>
-          </div>
-          <div id="kgDatasetList" class="kg-dataset-list"></div>
-        </div>
       </aside>
 
       <main class="workspace">
-        <section class="overview-panel overview-with-run">
+        <section class="overview-panel">
           <div class="overview-copy">
-            <div class="eyebrow">完整 Agent 流程</div>
             <h2>从原始日志到结构化字段</h2>
             <p>
-              先把每一行日志解析成事件模板和字段库，再把解析结果转换成可查看、
-              可下载、可核验的结构化字段表。
+              导入任意日志，通过大模型语义理解，智能生成日志解析模板，并将日志转化成可阅读、 可理解、可核验的结构化字段表。
             </p>
-          </div>
-          <div class="flow-strip" id="flowStrip">
-            <div><b>1</b><span>原始日志</span></div>
-            <div><b>2</b><span>模板解析</span></div>
-            <div><b>3</b><span>字段映射</span></div>
-            <div><b>4</b><span>字段抽取</span></div>
-            <div><b>5</b><span>结果查看</span></div>
-          </div>
-          <div class="overview-run collapsible-panel" data-collapsible-panel>
-            <div class="panel-head run-head">
-              <div>
-                <h3>运行观察</h3>
-                <p>这里展示 Agent 当前做到哪一步，以及每一步产出了什么。</p>
-              </div>
-              <div class="panel-head-actions">
-                <span id="runStatus" class="status-pill">空闲</span>
-                <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
-              </div>
-            </div>
-            <div class="collapsible-body">
-              <div class="progress-grid">
-                <div>
-                  <div class="progress-label"><span>日志解析</span><b id="parseProgressText">0%</b></div>
-                  <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
-                  <div id="runMessage" class="run-message">等待任务。</div>
-                </div>
-                <div hidden>
-                  <div class="progress-label"><span>知识图谱</span><b id="kgProgressText">0 / 0</b></div>
-                  <div class="progress-track"><div id="kgProgressBar" class="progress-bar kg"></div></div>
-                  <div id="kgRunMessage" class="run-message">等待 DAG 任务。</div>
-                </div>
-              </div>
-              <div id="stageFlow" class="stage-flow"></div>
-              <div class="split-panels">
-                <div>
-                  <div class="subhead">解析调度记录</div>
-                  <div id="traceList" class="trace-list"></div>
-                </div>
-                <div hidden>
-                  <div class="subhead">图谱执行时间线</div>
-                  <div id="kgTimeline" class="timeline"></div>
-                </div>
-              </div>
-              <details class="technical-log">
-                <summary>查看解析技术日志</summary>
-                <pre id="runLog" class="run-log"></pre>
-              </details>
-            </div>
           </div>
         </section>
 
@@ -100,7 +38,6 @@
                 <p>决定日志解析范围、模型参数、字段抽取和输出方式。</p>
               </div>
               <div class="panel-head-actions">
-                <span id="kgApiState" class="status-pill" hidden>检测中</span>
                 <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
               </div>
             </div>
@@ -110,7 +47,7 @@
                 <div class="wide run-scope-field">
                   <input id="projectInput" type="hidden" value="all" />
                   <div class="run-scope-head">
-                    <span>运行范围</span>
+                    <span>日志选择</span>
                     <div class="run-scope-actions">
                       <span id="parseSourceCount">0 / 0</span>
                       <button id="selectAllParseSourcesBtn" class="mini-button" type="button">全选</button>
@@ -133,7 +70,7 @@
                 </label>
                 <label class="wide">
                   <span>GLM API Key</span>
-                  <input id="kgApiKey" type="password" autocomplete="off" placeholder="必填：仅使用前端输入" />
+                  <input id="apiKeyInput" type="password" autocomplete="off" placeholder="必填：仅使用前端输入" />
                 </label>
                 <label>
                   <span class="field-label-with-help">
@@ -141,7 +78,7 @@
                     <button
                       class="help-dot"
                       type="button"
-                      title="选择日志分组和代表样本时使用的相似度计算方式。Jaccard 更适合按词集合比较，Cosine 更适合向量化文本比较，Random 只适合快速冒烟测试。"
+                      title="选择日志分组和代表样本时使用的相似度计算方式。Jaccard 更适合按词集合比较，Cosine 更适合向量化文本比较，Random 适合随机抽样对比。"
                       aria-label="相似度策略说明"
                     >?</button>
                   </span>
@@ -155,49 +92,10 @@
                 <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
                 <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> GLM 调度</label>
                 <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
-                <label class="check-line"><input id="mockCheckbox" type="checkbox" /> 离线烟测</label>
               </div>
               <div class="button-row">
-                <button id="startRunButton" class="primary-button" type="button">只运行日志解析</button>
+                <button id="startRunButton" class="primary-button" type="button">开始解析</button>
                 <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
-              </div>
-              <div hidden>
-              <div class="config-section-title">图谱设置</div>
-              <label class="wide">
-                <span>自然语言任务</span>
-                <textarea id="kgTaskText" rows="3">复用当前日志解析结果</textarea>
-              </label>
-              <div class="form-grid">
-                <label>
-                  <span>行数限制</span>
-                  <input id="kgLimitRows" type="number" min="1" placeholder="空为全部" />
-                </label>
-                <label>
-                  <span>DAG 并发数</span>
-                  <input id="kgMaxWorkers" type="number" min="1" max="8" value="3" />
-                </label>
-                <label class="wide">
-                  <span>融合图谱目录</span>
-                  <input id="fusedGraphDir" type="text" />
-                </label>
-                <label class="check-line wide"><input id="kgForceCheckbox" type="checkbox" /> 强制重建图谱中间产物</label>
-              </div>
-              <fieldset class="neo4j-box">
-                <legend>Neo4j 写入确认</legend>
-                <div class="form-grid">
-                  <label><span>URI</span><input id="neo4jUri" type="text" placeholder="bolt://localhost:7687" /></label>
-                  <label><span>用户</span><input id="neo4jUser" type="text" placeholder="neo4j" /></label>
-                  <label><span>密码</span><input id="neo4jPassword" type="password" autocomplete="off" /></label>
-                  <label><span>数据库</span><input id="neo4jDatabase" type="text" value="neo4j" /></label>
-                </div>
-                <label class="check-line"><input id="writeNeo4j" type="checkbox" /> 本次完成后写入 Neo4j</label>
-              </fieldset>
-              <div class="button-row">
-                <button id="fullRunButton" class="primary-button" type="button">运行完整流程</button>
-                <button id="preflightBtn" class="secondary-button" type="button">环境分析</button>
-                <button id="planBtn" class="secondary-button" type="button">生成 DAG</button>
-                <button id="kgRunBtn" class="primary-button muted-primary" type="button">只运行图谱构建</button>
-              </div>
               </div>
             </div>
           </div>
@@ -208,11 +106,8 @@
           <div class="panel wide">
             <div class="panel-head">
               <div>
-                <h3>防火墙日志</h3>
+                <h3>解析结果</h3>
                 <span id="customerEventMeta"></span>
-              </div>
-              <div class="panel-head-actions">
-                <button id="downloadCustomerEventsButton" class="mini-button" type="button" disabled hidden>下载 JSON</button>
               </div>
             </div>
             <div id="customerEventValidation" class="event-validation-summary"></div>
@@ -224,7 +119,7 @@
           <div class="panel poi-panel">
             <div class="panel-head">
               <div>
-                <h3>POI 字段库</h3>
+                <h3>POI 设置</h3>
                 <span id="poiMeta"></span>
               </div>
               <div class="panel-head-actions">
@@ -254,7 +149,7 @@
             <div id="preprocessedTable" class="table-wrap"></div>
           </div>
           <div class="panel">
-            <div class="panel-head"><h3>Agent 输出 3.csv</h3><span id="resultMeta"></span></div>
+            <div class="panel-head"><h3>日志模板</h3><span id="resultMeta"></span></div>
             <div id="resultTable" class="table-wrap"></div>
           </div>
           <div class="panel">
@@ -265,52 +160,41 @@
             <div class="panel-head"><h3>深度分组树</h3><span id="treeMeta"></span></div>
             <div id="treeTable" class="table-wrap"></div>
           </div>
+          <div class="panel wide overview-run collapsible-panel" data-collapsible-panel>
+            <div class="panel-head run-head">
+              <div>
+                <h3>运行观察</h3>
+                <p>这里展示 Agent 当前做到哪一步，以及每一步产出了什么。</p>
+              </div>
+              <div class="panel-head-actions">
+                <span id="runStatus" class="status-pill">空闲</span>
+                <button class="collapse-button" type="button" data-collapse-toggle aria-expanded="true">收起</button>
+              </div>
+            </div>
+            <div class="collapsible-body">
+              <div class="progress-grid">
+                <div>
+                  <div class="progress-label"><span>日志解析</span><b id="parseProgressText">0%</b></div>
+                  <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+                  <div id="runMessage" class="run-message">等待任务。</div>
+                </div>
+              </div>
+              <div id="stageFlow" class="stage-flow"></div>
+              <div class="split-panels">
+                <div>
+                  <div class="subhead">解析调度记录</div>
+                  <div id="traceList" class="trace-list"></div>
+                </div>
+              </div>
+              <details class="technical-log">
+                <summary>查看解析技术日志</summary>
+                <pre id="runLog" class="run-log"></pre>
+              </details>
+            </div>
+          </div>
           <div class="panel wide">
             <div class="panel-head"><h3>解析运行汇总</h3><span id="summaryMeta"></span></div>
             <div id="summaryTable" class="table-wrap"></div>
-          </div>
-        </section>
-
-        <section class="kg-grid" hidden>
-          <div class="panel">
-            <div class="panel-head"><h3>DAG 计划</h3><span id="planId">未生成</span></div>
-            <div id="planList" class="plan-list"></div>
-            <pre id="analysisOutput" class="output"></pre>
-          </div>
-          <div class="panel">
-            <div class="panel-head">
-              <h3>融合图谱概览</h3>
-              <button id="refreshSummaryBtn" class="mini-button" type="button">刷新</button>
-            </div>
-            <div id="kgSummaryGrid" class="summary-grid"></div>
-            <div id="kgResultList" class="result-list"></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>图查询</h3><span>本地产物或 Neo4j</span></div>
-            <div class="form-grid">
-              <label><span>节点标签</span><input id="queryLabel" type="text" placeholder="Program" /></label>
-              <label><span>关系类型</span><input id="queryPredicate" type="text" placeholder="INSTANCE_OF" /></label>
-              <label><span>包含文本</span><input id="queryContains" type="text" placeholder="dnsmasq" /></label>
-              <label><span>返回数量</span><input id="queryLimit" type="number" min="1" value="20" /></label>
-              <label class="wide"><span>Neo4j 自然语言问题</span><textarea id="neo4jQuestion" rows="3"></textarea></label>
-            </div>
-            <div class="button-row">
-              <button id="artifactQueryBtn" class="secondary-button" type="button">查询本地图谱</button>
-              <button id="neo4jQueryBtn" class="secondary-button" type="button">查询 Neo4j</button>
-            </div>
-            <pre id="queryOutput" class="output"></pre>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>Neo4j 清库</h3><span>危险操作</span></div>
-            <p class="danger-note">会删除目标数据库中的节点、关系、约束和普通索引。只有确认要重建库时才执行。</p>
-            <div class="form-grid">
-              <input id="clearNeo4jConfirm" class="wide" type="text" placeholder="输入：清空neo4j" />
-              <button id="clearNeo4jBtn" type="button" class="danger-button">清空 Neo4j</button>
-            </div>
-          </div>
-          <div class="panel wide">
-            <div class="panel-head"><h3>产物查看</h3><span id="artifactPath">未选择文件</span></div>
-            <pre id="artifactOutput" class="output artifact-output"></pre>
           </div>
         </section>
       </main>

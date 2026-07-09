@@ -1,34 +1,25 @@
 const state = {
   sources: [],
+  sourceFolders: [],
   filtered: [],
+  filteredFolders: [],
   activeSource: null,
   lastRunStatus: "idle",
   lastLiveRefreshAt: 0,
-  fullRunWaitingForKg: false,
-  kgDatasets: [],
-  kgPlan: null,
-  kgJob: null,
-  kgEventSource: null,
-  kgCompleted: 0,
-  kgTotal: 0,
-  defaultFusedGraphDir: "",
   poiEditorRows: [],
   poiValidationTimer: null,
   sourceTreeExpanded: new Set(),
   sourceTreeKnownRoots: new Set(),
+  activeFolderKey: "",
   runScopeSelection: new Set(),
   runScopeTouched: false,
 };
 
 const els = {
   refreshButton: document.getElementById("refreshButton"),
-  syncKgButton: document.getElementById("syncKgButton"),
   sourceFilter: document.getElementById("sourceFilter"),
   sourceList: document.getElementById("sourceList"),
   sourceCount: document.getElementById("sourceCount"),
-  kgDatasetList: document.getElementById("kgDatasetList"),
-  selectAllKgBtn: document.getElementById("selectAllKgBtn"),
-  clearAllKgBtn: document.getElementById("clearAllKgBtn"),
   activeSource: document.getElementById("activeSource"),
   sampleInput: document.getElementById("sampleInput"),
   limitInput: document.getElementById("limitInput"),
@@ -43,10 +34,8 @@ const els = {
   treeCheckbox: document.getElementById("treeCheckbox"),
   plannerCheckbox: document.getElementById("plannerCheckbox"),
   preserveCheckbox: document.getElementById("preserveCheckbox"),
-  mockCheckbox: document.getElementById("mockCheckbox"),
   startRunButton: document.getElementById("startRunButton"),
   stopRunButton: document.getElementById("stopRunButton"),
-  fullRunButton: document.getElementById("fullRunButton"),
   runStatus: document.getElementById("runStatus"),
   runMessage: document.getElementById("runMessage"),
   parseProgressText: document.getElementById("parseProgressText"),
@@ -71,46 +60,9 @@ const els = {
   customerEventTable: document.getElementById("customerEventTable"),
   customerEventMeta: document.getElementById("customerEventMeta"),
   customerEventValidation: document.getElementById("customerEventValidation"),
-  downloadCustomerEventsButton: document.getElementById("downloadCustomerEventsButton"),
   summaryTable: document.getElementById("summaryTable"),
   summaryMeta: document.getElementById("summaryMeta"),
-  kgApiState: document.getElementById("kgApiState"),
-  kgTaskText: document.getElementById("kgTaskText"),
-  kgLimitRows: document.getElementById("kgLimitRows"),
-  kgMaxWorkers: document.getElementById("kgMaxWorkers"),
-  kgApiKey: document.getElementById("kgApiKey"),
-  fusedGraphDir: document.getElementById("fusedGraphDir"),
-  kgForceCheckbox: document.getElementById("kgForceCheckbox"),
-  writeNeo4j: document.getElementById("writeNeo4j"),
-  neo4jUri: document.getElementById("neo4jUri"),
-  neo4jUser: document.getElementById("neo4jUser"),
-  neo4jPassword: document.getElementById("neo4jPassword"),
-  neo4jDatabase: document.getElementById("neo4jDatabase"),
-  preflightBtn: document.getElementById("preflightBtn"),
-  planBtn: document.getElementById("planBtn"),
-  kgRunBtn: document.getElementById("kgRunBtn"),
-  kgProgressText: document.getElementById("kgProgressText"),
-  kgProgressBar: document.getElementById("kgProgressBar"),
-  kgRunMessage: document.getElementById("kgRunMessage"),
-  kgTimeline: document.getElementById("kgTimeline"),
-  planId: document.getElementById("planId"),
-  planList: document.getElementById("planList"),
-  analysisOutput: document.getElementById("analysisOutput"),
-  refreshSummaryBtn: document.getElementById("refreshSummaryBtn"),
-  kgSummaryGrid: document.getElementById("kgSummaryGrid"),
-  kgResultList: document.getElementById("kgResultList"),
-  queryLabel: document.getElementById("queryLabel"),
-  queryPredicate: document.getElementById("queryPredicate"),
-  queryContains: document.getElementById("queryContains"),
-  queryLimit: document.getElementById("queryLimit"),
-  neo4jQuestion: document.getElementById("neo4jQuestion"),
-  artifactQueryBtn: document.getElementById("artifactQueryBtn"),
-  neo4jQueryBtn: document.getElementById("neo4jQueryBtn"),
-  queryOutput: document.getElementById("queryOutput"),
-  clearNeo4jConfirm: document.getElementById("clearNeo4jConfirm"),
-  clearNeo4jBtn: document.getElementById("clearNeo4jBtn"),
-  artifactPath: document.getElementById("artifactPath"),
-  artifactOutput: document.getElementById("artifactOutput"),
+  apiKeyInput: document.getElementById("apiKeyInput"),
   poiEditorModal: document.getElementById("poiEditorModal"),
   closePoiEditorButton: document.getElementById("closePoiEditorButton"),
   poiEditorPath: document.getElementById("poiEditorPath"),
@@ -146,79 +98,6 @@ const TOOL_LABELS = {
   write_outputs: "写出解析结果",
   source_run: "日志源完成",
 };
-
-const KG_TOOL_LABELS = {
-  generate_template2samples: "生成模板样本",
-  extract_field_semantics: "抽取字段语义",
-  map_fields_to_poi_schema: "映射到 POI",
-  merge_pairs_with_schema_mapping: "合并字段映射",
-  extract_params_from_logs: "抽取参数 CSV",
-  build_graph_for_dataset: "构建单源图谱",
-  fuse_graph_results: "融合多源图谱",
-  write_graph_to_neo4j: "写入 Neo4j",
-};
-
-const EVENT_LABELS = {
-  preflight_finished: "环境分析",
-  plan_created: "计划生成",
-  plan_started: "计划启动",
-  node_started: "节点开始",
-  node_finished: "节点完成",
-  node_failed: "节点失败",
-  plan_finished: "计划完成",
-  job_completed: "任务完成",
-  job_failed: "任务失败",
-};
-
-const SOURCE_BUCKET_PATH = ["安全保密产品", "防火墙日志", "数据所防火墙"];
-const SOURCE_TAXONOMY = [
-  {
-    label: "安全保密产品",
-    children: [
-      {
-        label: "防火墙日志",
-        children: [
-          { label: "数据所防火墙", bucket: "firewall-datasuo" },
-          { label: "天融信防火墙" },
-          { label: "......" },
-        ],
-      },
-      {
-        label: "检测器日志",
-        children: [{ label: "数据所检测器" }, { label: "......" }],
-      },
-      { label: "防病毒日志" },
-      { label: "入侵检测日志" },
-      { label: "......" },
-    ],
-  },
-  {
-    label: "终端",
-    children: [
-      {
-        label: "套件日志",
-        children: [{ label: "中孚套件" }, { label: "IIE 套件" }],
-      },
-      {
-        label: "主机审计日志",
-        children: [{ label: "北信源主审" }, { label: "......" }],
-      },
-    ],
-  },
-  {
-    label: "服务器",
-    children: [
-      {
-        label: "主机审计日志",
-        children: [{ label: "北信源主审" }, { label: "......" }],
-      },
-    ],
-  },
-  {
-    label: "应用系统",
-    children: [{ label: "邮件" }, { label: "OA" }, { label: "协同" }, { label: "......" }],
-  },
-];
 
 const API_BASE = resolveApiBase();
 
@@ -285,65 +164,57 @@ async function bootstrap() {
   setInterval(() => pollRunStatus().catch(showError), 1000);
 }
 
-async function checkKgHealth() {
-  try {
-    const payload = await fetchJson("/api/kg/health");
-    if (payload.available) {
-      els.kgApiState.textContent = "已连接";
-      els.kgApiState.className = "status-pill ok";
-    } else {
-      els.kgApiState.textContent = "不可用";
-      els.kgApiState.className = "status-pill bad";
-      els.analysisOutput.textContent = payload.error || "知识图谱模块不可用";
-    }
-  } catch (err) {
-    els.kgApiState.textContent = "不可用";
-    els.kgApiState.className = "status-pill bad";
-    throw err;
-  }
-}
-
 async function loadSources(options = {}) {
   const { reloadActive = false, silent = false } = options;
-  state.sources = await fetchJson("/api/sources");
+  const limit = encodeURIComponent(els.limitInput.value || "80");
+  const [sources, folderPayload] = await Promise.all([
+    fetchJson("/api/sources"),
+    fetchJson(`/api/source-folders?limit=${limit}`),
+  ]);
+  state.sources = sources;
+  state.sourceFolders = folderPayload.folders || [];
   seedSourceTreeExpansion();
+  ensureActiveFolder();
   syncRunScopeWithSources();
   applyFilter();
   renderRunScopePicker();
   await loadSummary();
-  if (state.activeSource && reloadActive) {
+  if (state.activeSource && reloadActive && selectedRunSources().includes(state.activeSource)) {
     await selectSource(state.activeSource, false, { silent }).catch(showSourceError);
-  } else if (!state.activeSource && state.sources.length > 0) {
-    await selectSource(state.sources[0].source, false, { silent }).catch(showSourceError);
+  } else if (!state.activeSource || !selectedRunSources().includes(state.activeSource)) {
+    await refreshDisplayedSourceFromSelection({ silent }).catch(showSourceError);
   }
 }
 
 function applyFilter() {
   const query = els.sourceFilter.value.trim().toLowerCase();
   state.filtered = state.sources.filter((item) => sourceMatchesQuery(item, query));
+  state.filteredFolders = state.sourceFolders.filter((folder) =>
+    folderMatchesQuery(folder, query),
+  );
   renderSources();
 }
 
 function renderSources() {
-  els.sourceCount.textContent = `${state.filtered.length} 个日志源`;
+  els.sourceCount.textContent = `${state.sourceFolders.length} 个目录，${state.sources.length} 个日志源`;
   els.sourceList.innerHTML = "";
-  if (state.filtered.length === 0) {
-    els.sourceList.innerHTML = '<div class="empty compact-empty">没有匹配的日志源</div>';
+  if (state.filteredFolders.length === 0) {
+    els.sourceList.innerHTML = '<div class="empty compact-empty">没有匹配的日志目录</div>';
     return;
   }
-  const query = els.sourceFilter.value.trim().toLowerCase();
-  const tree = buildSourceTree(state.filtered);
+  const tree = buildSourceTree(state.filteredFolders, state.filtered);
   const fragment = document.createDocumentFragment();
   for (const child of tree.children.values()) {
-    fragment.appendChild(renderSourceNode(child, 0, query));
+    fragment.appendChild(renderSourceNode(child, 0));
   }
   els.sourceList.appendChild(fragment);
 }
 
 function syncRunScopeWithSources() {
   const available = new Set(state.sources.map((item) => item.source));
+  const candidates = currentRunScopeCandidates();
   if (!state.runScopeTouched) {
-    state.runScopeSelection = new Set(available);
+    state.runScopeSelection = new Set(defaultRunScopeSelection(candidates));
     syncProjectInputFromRunScope();
     return;
   }
@@ -364,9 +235,12 @@ function renderRunScopePicker() {
     return;
   }
   const fragment = document.createDocumentFragment();
-  const sortedSources = [...state.sources].sort((a, b) =>
-    sourceDisplayName(a.source).localeCompare(sourceDisplayName(b.source), "zh-CN"),
-  );
+  const sortedSources = currentRunScopeCandidates();
+  if (sortedSources.length === 0) {
+    els.parseSourceList.innerHTML = '<div class="empty compact-empty">当前文件夹下没有日志文件</div>';
+    updateRunScopeCount();
+    return;
+  }
   for (const item of sortedSources) {
     const label = document.createElement("label");
     label.className = "run-source-item";
@@ -389,6 +263,7 @@ function renderRunScopePicker() {
       }
       syncProjectInputFromRunScope();
       updateRunScopeCount();
+      refreshDisplayedSourceFromSelection().catch(showSourceError);
     });
     fragment.appendChild(label);
   }
@@ -401,10 +276,11 @@ function setRunScopeSelection(sources) {
   state.runScopeSelection = new Set(sources);
   syncProjectInputFromRunScope();
   renderRunScopePicker();
+  refreshDisplayedSourceFromSelection().catch(showSourceError);
 }
 
 function selectAllRunSources() {
-  setRunScopeSelection(state.sources.map((item) => item.source));
+  setRunScopeSelection(currentRunScopeCandidates().map((item) => item.source));
 }
 
 function clearRunSources() {
@@ -416,39 +292,39 @@ function selectSingleRunSource(source) {
 }
 
 function selectedRunSources() {
-  return [...state.runScopeSelection].filter((source) =>
-    state.sources.some((item) => item.source === source),
-  );
+  const selected = state.runScopeSelection;
+  return currentRunScopeCandidates()
+    .map((item) => item.source)
+    .filter((source) => selected.has(source));
 }
 
 function syncProjectInputFromRunScope() {
   const selected = selectedRunSources();
-  const allSelected = state.sources.length > 0 && selected.length === state.sources.length;
-  els.projectInput.value = allSelected ? "all" : selected.join(",");
+  els.projectInput.value = selected.join(",");
 }
 
 function updateRunScopeCount() {
   if (!els.parseSourceCount) {
     return;
   }
-  const selected = selectedRunSources().length;
-  els.parseSourceCount.textContent = `${selected} / ${state.sources.length}`;
+  const candidates = currentRunScopeCandidates();
+  const candidateSet = new Set(candidates.map((item) => item.source));
+  const selected = selectedRunSources().filter((source) => candidateSet.has(source)).length;
+  els.parseSourceCount.textContent = `${selected} / ${candidates.length}`;
 }
 
 function seedSourceTreeExpansion() {
-  const seed = (nodes, prefix = "root") => {
-    for (const node of nodes) {
-      const key = `${prefix}/${node.label}`;
+  for (const folder of state.sourceFolders) {
+    const segments = folderSegments(folder.folder);
+    let key = "root";
+    for (const segment of segments) {
+      key = `${key}/${segment}`;
       if (!state.sourceTreeKnownRoots.has(key)) {
         state.sourceTreeKnownRoots.add(key);
         state.sourceTreeExpanded.add(key);
       }
-      if (node.children?.length) {
-        seed(node.children, key);
-      }
     }
-  };
-  seed(SOURCE_TAXONOMY);
+  }
 }
 
 function sourceMatchesQuery(item, query) {
@@ -462,21 +338,49 @@ function sourceMatchesQuery(item, query) {
   ].some((value) => String(value || "").toLowerCase().includes(query));
 }
 
-function buildSourceTree(items) {
-  const root = createSourceTreeNode("root", "root");
-  appendTaxonomyNodes(root, SOURCE_TAXONOMY);
-  const bucket = findSourceNode(root, SOURCE_BUCKET_PATH);
-  const sortedItems = [...items].sort((a, b) =>
-    sourceDisplayName(a.source).localeCompare(sourceDisplayName(b.source), "zh-CN"),
+function folderMatchesQuery(folder, query) {
+  if (!query) {
+    return true;
+  }
+  const folderKey = folderKeyFromFolder(folder.folder);
+  const hasMatchingSource = state.filtered.some((item) =>
+    sourceFolderKey(item.source).startsWith(folderKey),
   );
+  return hasMatchingSource || [
+    folder.folder,
+    folder.label,
+    folder.schema_type,
+  ].some((value) => String(value || "").toLowerCase().includes(query));
+}
+
+function buildSourceTree(folders, items) {
+  const root = createSourceTreeNode("root", "root");
+  const sortedFolders = [...folders].sort((a, b) =>
+    a.folder.localeCompare(b.folder, "zh-CN"),
+  );
+  const sortedItems = [...items].sort((a, b) => a.source.localeCompare(b.source, "zh-CN"));
+  const nodesByKey = new Map([["root", root]]);
+  for (const folder of sortedFolders) {
+    let node = root;
+    for (const segment of folderSegments(folder.folder)) {
+      const key = `${node.key}/${segment}`;
+      if (!node.children.has(segment)) {
+        node.children.set(segment, createSourceTreeNode(segment, key));
+      }
+      node = node.children.get(segment);
+      nodesByKey.set(key, node);
+    }
+    node.folder = folder;
+  }
   for (const item of sortedItems) {
-    const label = sourceDisplayName(item.source);
-    const key = `${bucket.key}/source:${item.source}`;
-    const node = createSourceTreeNode(label, key);
-    node.item = item;
-    bucket.children.set(key, node);
+    const key = sourceFolderKey(item.source);
+    const node = nodesByKey.get(key);
+    if (node) {
+      node.directSources.push(item);
+    }
   }
   updateSourceNodeCounts(root);
+  markSourceLeafFolders(root);
   return root;
 }
 
@@ -485,42 +389,17 @@ function createSourceTreeNode(label, key) {
     label,
     key,
     children: new Map(),
-    item: null,
+    folder: null,
+    directSources: [],
+    isLeafFolder: false,
     total: 0,
     ready: 0,
   };
 }
 
-function appendTaxonomyNodes(parent, definitions) {
-  for (const definition of definitions) {
-    const key = `${parent.key}/${definition.label}`;
-    const node = createSourceTreeNode(definition.label, key);
-    parent.children.set(definition.label, node);
-    if (definition.children?.length) {
-      appendTaxonomyNodes(node, definition.children);
-    }
-  }
-}
-
-function findSourceNode(root, labels) {
-  let node = root;
-  for (const label of labels) {
-    node = node.children.get(label);
-    if (!node) {
-      throw new Error(`Missing source taxonomy node: ${labels.join("/")}`);
-    }
-  }
-  return node;
-}
-
 function updateSourceNodeCounts(node) {
-  if (node.item) {
-    node.total = 1;
-    node.ready = node.item.output_available ? 1 : 0;
-    return { total: node.total, ready: node.ready };
-  }
-  let total = 0;
-  let ready = 0;
+  let total = node.directSources.length;
+  let ready = node.directSources.filter((item) => item.output_available).length;
   for (const child of node.children.values()) {
     const counts = updateSourceNodeCounts(child);
     total += counts.total;
@@ -531,12 +410,17 @@ function updateSourceNodeCounts(node) {
   return { total, ready };
 }
 
-function renderSourceNode(node, depth, query) {
-  if (node.item && node.children.size === 0) {
-    return renderSourceLeaf(node, depth);
+function markSourceLeafFolders(node) {
+  node.isLeafFolder = Boolean(node.folder && node.children.size === 0);
+  for (const child of node.children.values()) {
+    markSourceLeafFolders(child);
   }
+}
+
+function renderSourceNode(node, depth) {
   const active = nodeHasActiveSource(node);
   const hasChildren = node.children.size > 0;
+  const isSelectableFolder = node.isLeafFolder;
   const expanded = hasChildren && state.sourceTreeExpanded.has(node.key);
   const wrapper = document.createElement("div");
   wrapper.className = `source-tree-node depth-${Math.min(depth, 4)}`;
@@ -547,6 +431,7 @@ function renderSourceNode(node, depth, query) {
     "source-folder" +
     (expanded ? " expanded" : "") +
     (active ? " has-active" : "") +
+    (isSelectableFolder ? " selectable-folder" : "") +
     (!hasChildren ? " empty-folder" : "");
   button.innerHTML = `
     <span class="source-folder-caret">${hasChildren ? (expanded ? "▾" : "▸") : ""}</span>
@@ -563,7 +448,7 @@ function renderSourceNode(node, depth, query) {
     children.hidden = !expanded;
     children.classList.toggle("is-hidden", !expanded);
     for (const child of node.children.values()) {
-      children.appendChild(renderSourceNode(child, depth + 1, query));
+      children.appendChild(renderSourceNode(child, depth + 1));
     }
     wrapper.appendChild(children);
 
@@ -583,35 +468,22 @@ function renderSourceNode(node, depth, query) {
       children.hidden = !nextExpanded;
       children.classList.toggle("is-hidden", !nextExpanded);
     });
+  } else if (isSelectableFolder) {
+    button.addEventListener("click", () => selectSourceFolder(node.key).catch(showSourceError));
   }
   return wrapper;
 }
 
-function renderSourceLeaf(node, depth) {
-  const item = node.item;
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className =
-    "source-item source-leaf" +
-    (item.source === state.activeSource ? " active" : "");
-  button.style.setProperty("--source-depth", Math.min(depth, 5));
-  button.innerHTML = `
-    <div class="source-title">${escapeHtml(node.label)}</div>
-    <div class="source-path">${escapeHtml(sourceSegments(item.source).join(" / "))}</div>
-    <div class="source-meta">
-      <span class="badge">${formatBytes(item.size_bytes)}</span>
-      <span class="badge ${item.output_available ? "ready" : "missing"}">
-        ${item.output_available ? "已有解析输出" : "未解析"}
-      </span>
-      <span class="badge">${item.result_files.length} 个结果文件</span>
-    </div>
-  `;
-  button.addEventListener("click", () => selectSource(item.source, true).catch(showSourceError));
-  return button;
-}
-
 function sourceSegments(source) {
-  return [...SOURCE_BUCKET_PATH, sourceDisplayName(source)];
+  const parts = String(source || "")
+    .replaceAll("\\", "/")
+    .split("/")
+    .filter(Boolean);
+  if (!parts.length) {
+    return [];
+  }
+  const fileName = parts.at(-1).replace(/\.log$/i, "");
+  return [...parts.slice(0, -1), fileName];
 }
 
 function sourceDisplayName(source) {
@@ -624,19 +496,11 @@ function sourceDisplayName(source) {
 }
 
 function expandSourcePath(source) {
-  const segments = sourceSegments(source);
-  let key = "root";
-  for (const segment of segments.slice(0, -1)) {
-    key = `${key}/${segment}`;
-    state.sourceTreeExpanded.add(key);
-  }
+  expandFolderKey(sourceFolderKey(source));
 }
 
 function nodeHasActiveSource(node) {
-  if (!state.activeSource) {
-    return false;
-  }
-  if (node.item?.source === state.activeSource) {
+  if (node.key === state.activeFolderKey) {
     return true;
   }
   for (const child of node.children.values()) {
@@ -647,16 +511,165 @@ function nodeHasActiveSource(node) {
   return false;
 }
 
+function sourceFolderSegments(source) {
+  const parts = String(source || "")
+    .replaceAll("\\", "/")
+    .split("/")
+    .filter(Boolean);
+  const folders = parts.slice(0, -1);
+  return folders.length ? folders : ["根目录"];
+}
+
+function folderSegments(folder) {
+  const parts = String(folder || "")
+    .replaceAll("\\", "/")
+    .split("/")
+    .filter(Boolean);
+  return parts.length ? parts : ["根目录"];
+}
+
+function sourceFolderKey(source) {
+  return folderKeyFromSegments(sourceFolderSegments(source));
+}
+
+function folderKeyFromFolder(folder) {
+  return folderKeyFromSegments(folderSegments(folder));
+}
+
+function folderKeyFromSegments(segments) {
+  return `root/${segments.join("/")}`;
+}
+
+function expandFolderKey(folderKey) {
+  const parts = String(folderKey || "").split("/").filter(Boolean);
+  let key = parts.shift() || "root";
+  for (const part of parts) {
+    key = `${key}/${part}`;
+    state.sourceTreeExpanded.add(key);
+  }
+}
+
+function currentRunScopeCandidates() {
+  if (!state.activeFolderKey) {
+    return sortSourcesForPicker(state.sources);
+  }
+  return sortSourcesForPicker(
+    state.sources.filter((item) => sourceFolderKey(item.source) === state.activeFolderKey),
+  );
+}
+
+function sortSourcesForPicker(items) {
+  return [...items].sort((a, b) =>
+    sourceDisplayName(a.source).localeCompare(sourceDisplayName(b.source), "zh-CN"),
+  );
+}
+
+function defaultRunScopeSelection(candidates = currentRunScopeCandidates()) {
+  const preferred = candidates.find((item) => item.output_available) || candidates[0];
+  return preferred ? [preferred.source] : [];
+}
+
+function currentFolderInfo() {
+  return state.sourceFolders.find(
+    (folder) => folderKeyFromFolder(folder.folder) === state.activeFolderKey,
+  );
+}
+
+function ensureActiveFolder() {
+  const folderKeys = new Set(state.sourceFolders.map((folder) => folderKeyFromFolder(folder.folder)));
+  if (state.activeSource && folderKeys.has(sourceFolderKey(state.activeSource))) {
+    state.activeFolderKey = sourceFolderKey(state.activeSource);
+    expandFolderKey(state.activeFolderKey);
+    return;
+  }
+  if (state.activeFolderKey && folderKeys.has(state.activeFolderKey)) {
+    expandFolderKey(state.activeFolderKey);
+    return;
+  }
+  const firstFolderWithLogs = state.sourceFolders.find((folder) => folder.direct_log_count > 0);
+  const firstLeafFolder = state.sourceFolders.find((folder) => folder.log_count === folder.direct_log_count);
+  const fallbackFolder = firstFolderWithLogs || firstLeafFolder || state.sourceFolders[0];
+  state.activeFolderKey = fallbackFolder ? folderKeyFromFolder(fallbackFolder.folder) : "";
+  if (state.activeFolderKey) {
+    expandFolderKey(state.activeFolderKey);
+  }
+}
+
+async function selectSourceFolder(folderKey) {
+  if (state.activeFolderKey !== folderKey) {
+    state.activeFolderKey = folderKey;
+    state.runScopeTouched = false;
+  }
+  expandFolderKey(folderKey);
+  const folderSources = currentRunScopeCandidates();
+  state.runScopeSelection = new Set(defaultRunScopeSelection(folderSources));
+  syncProjectInputFromRunScope();
+  renderRunScopePicker();
+  renderSources();
+  if (!folderSources.length) {
+    state.activeSource = null;
+    renderEmptyFolderPayload();
+    return;
+  }
+  await refreshDisplayedSourceFromSelection();
+}
+
+async function refreshDisplayedSourceFromSelection(options = {}) {
+  const selected = selectedRunSources();
+  if (!selected.length) {
+    state.activeSource = null;
+    renderSources();
+    renderEmptyFolderPayload();
+    return;
+  }
+  await selectSource(selected[0], false, options);
+}
+
+function renderEmptyFolderPayload() {
+  const folder = currentFolderInfo();
+  const poiSchema = folder?.poi_schema || {
+    available: false,
+    columns: [],
+    rows: [],
+    truncated: false,
+  };
+  const schemaMeta = {
+    available: Boolean(folder?.schema_type),
+    schema_type: folder?.schema_type || "",
+    generated: false,
+  };
+  const emptyCsv = { available: false, columns: [], rows: [], truncated: false };
+  const label = folder?.label || "未选择日志目录";
+  els.activeSource.textContent = label;
+  renderPayload({
+    source: folder?.folder || "",
+    input: { path: "", rows: [], truncated: false },
+    output_dir: "",
+    preprocessed: emptyCsv,
+    group: emptyCsv,
+    result: emptyCsv,
+    result_file: "",
+    group_tree: { available: false },
+    schema_meta: schemaMeta,
+    poi_schema: poiSchema,
+    relation_schema: emptyCsv,
+    poi_result: emptyCsv,
+    customer_events: emptyCsv,
+  });
+}
+
 async function selectSource(source, syncRunScope, options = {}) {
   const { silent = false } = options;
   const sourceChanged = state.activeSource !== source;
   state.activeSource = source;
+  state.activeFolderKey = sourceFolderKey(source);
   if (sourceChanged) {
     expandSourcePath(source);
   }
   if (syncRunScope) {
     selectSingleRunSource(source);
   }
+  renderRunScopePicker();
   renderSources();
   els.activeSource.textContent = sourceDisplayName(source);
   if (!silent) {
@@ -730,7 +743,7 @@ function renderPayload(payload) {
   renderCsv(els.preprocessedTable, payload.preprocessed);
   els.preMeta.textContent = metaText(payload.preprocessed);
 
-  renderCsv(els.resultTable, payload.result);
+  renderLogTemplateCsv(els.resultTable, payload.result);
   els.resultMeta.textContent = payload.result.available
     ? `${payload.result_file} | ${metaText(payload.result)}`
     : "缺失";
@@ -748,7 +761,6 @@ function renderPayload(payload) {
 
 function renderFirewallPoiResult(payload) {
   const poiResult = payload.poi_result || {};
-  els.downloadCustomerEventsButton.disabled = true;
   els.customerEventValidation.textContent = "";
   els.customerEventValidation.className = "event-validation-summary";
   if (!poiResult.available) {
@@ -787,16 +799,12 @@ function hasDisplayValue(value) {
 function renderMetrics(payload) {
   const tree = payload.group_tree || {};
   const resultRows = payload.result.available ? payload.result.rows.length : 0;
-  const groupRows = payload.group.available ? payload.group.rows.length : 0;
   const poiRows = payload.poi_schema.available ? payload.poi_schema.rows.length : 0;
-  const firewallRows = payload.poi_result?.available ? payload.poi_result.rows.length : 0;
   const metrics = [
     ["原始预览", payload.input.rows.length],
     ["解析结果", resultRows],
-    ["日志分组", groupRows],
     ["POI 字段", poiRows || "无"],
-    ["防火墙日志", firewallRows || "无"],
-    ["树中分组", tree.available ? tree.group_count : "无"],
+    ["日志分组", tree.available ? tree.group_count : "无"],
   ];
   els.metricStrip.innerHTML = metrics
     .map(
@@ -837,9 +845,9 @@ async function loadSummary() {
   renderCsv(els.summaryTable, first);
 }
 
-async function startRun(options = {}) {
-  const apiKey = els.kgApiKey.value.trim();
-  if (!apiKey && !els.mockCheckbox.checked) {
+async function startRun() {
+  const apiKey = els.apiKeyInput.value.trim();
+  if (!apiKey) {
     throw new Error("GLM API Key is required. Enter it in the frontend; .env is not used for parsing.");
   }
   const selectedSources = selectedRunSources();
@@ -856,16 +864,10 @@ async function startRun(options = {}) {
     writeGroupTree: els.treeCheckbox.checked,
     plannerEnabled: els.plannerCheckbox.checked,
     preserveExisting: els.preserveCheckbox.checked,
-    mockLlm: els.mockCheckbox.checked,
     api_key: apiKey,
   };
   const data = await postJson("/api/run/start", payload);
   renderRunStatus(data.status);
-  if (data.ok && options.full) {
-    state.fullRunWaitingForKg = true;
-    els.kgForceCheckbox.checked = true;
-    els.kgRunMessage.textContent = "完整流程已启动：等待日志解析完成后自动构建图谱。";
-  }
   state.lastLiveRefreshAt = 0;
   await loadSources({ reloadActive: true, silent: true });
 }
@@ -874,7 +876,6 @@ async function stopRun() {
   const data = await postJson("/api/run/stop", {});
   renderRunStatus(data.status);
   els.runMessage.textContent = data.message;
-  state.fullRunWaitingForKg = false;
 }
 
 async function pollRunStatus() {
@@ -893,20 +894,6 @@ async function pollRunStatus() {
   ) {
     await loadSources({ reloadActive: true, silent: true });
   }
-  if (
-    state.fullRunWaitingForKg &&
-    state.lastRunStatus === "running" &&
-    status.status === "succeeded"
-  ) {
-    state.fullRunWaitingForKg = false;
-    await syncKgInputs();
-    await loadKgDatasets();
-    await startKgRun();
-  }
-  if (state.fullRunWaitingForKg && ["failed", "stopped"].includes(status.status)) {
-    state.fullRunWaitingForKg = false;
-    els.kgRunMessage.textContent = "日志解析没有成功完成，图谱构建未启动。";
-  }
   state.lastRunStatus = status.status;
 }
 
@@ -924,7 +911,6 @@ function renderRunStatus(status) {
     "status-pill" + (status.status === "failed" ? " bad" : status.status === "succeeded" ? " ok" : "");
   els.runMessage.textContent = buildRunMessage(status);
   els.startRunButton.disabled = status.running;
-  els.fullRunButton.disabled = status.running;
   els.stopRunButton.disabled = !status.running;
   const progress = status.total_sources
     ? Math.min(100, Math.round((status.completed_sources / status.total_sources) * 100))
@@ -1202,7 +1188,7 @@ function installMaximizeButtons() {
       return;
     }
     const hasDisplayContent = panel.querySelector(
-      ".table-wrap, .log-preview, .output, .trace-list, .timeline, .plan-list, .result-list, .summary-grid",
+      ".table-wrap, .log-preview, .trace-list",
     );
     const head = panel.querySelector(".panel-head");
     if (!hasDisplayContent || !head) {
@@ -1247,277 +1233,41 @@ function closeViewer() {
   els.viewerBody.innerHTML = "";
 }
 
-async function syncKgInputs() {
-  const payload = await postJson("/api/kg/sync", {});
-  els.analysisOutput.textContent = JSON.stringify(payload, null, 2);
-  return payload;
-}
-
-async function loadKgDatasets() {
-  const payload = await fetchJson("/api/kg/datasets");
-  if (!payload.available) {
-    els.kgDatasetList.innerHTML = `<div class="empty">${escapeHtml(payload.error || "知识图谱模块不可用")}</div>`;
+function renderLogTemplateCsv(target, payload) {
+  if (!payload || !payload.available) {
+    target.innerHTML = '<div class="empty">没有文件</div>';
     return;
   }
-  state.kgDatasets = payload.datasets || [];
-  state.defaultFusedGraphDir = payload.default_fused_graph_dir || "";
-  if (!els.fusedGraphDir.value && state.defaultFusedGraphDir) {
-    els.fusedGraphDir.value = state.defaultFusedGraphDir;
-  }
-  renderKgDatasets();
-}
-
-function renderKgDatasets() {
-  els.kgDatasetList.innerHTML = "";
-  for (const dataset of state.kgDatasets) {
-    const label = document.createElement("label");
-    label.className = "dataset-item";
-    label.innerHTML = `
-      <input class="kg-dataset-check" type="checkbox" value="${escapeHtml(dataset.name)}" checked />
-      <span>${escapeHtml(dataset.name)}<small>${escapeHtml(dataset.family)} | ${escapeHtml(shortPath(dataset.csv_path))}</small></span>
-    `;
-    els.kgDatasetList.appendChild(label);
-  }
-}
-
-function selectedKgDatasets() {
-  return [...document.querySelectorAll(".kg-dataset-check:checked")].map((item) => item.value);
-}
-
-function kgRequestPayload() {
-  return {
-    task: els.kgTaskText.value.trim(),
-    datasets: selectedKgDatasets(),
-    api_key: els.kgApiKey.value.trim(),
-    limit_rows: els.kgLimitRows.value.trim(),
-    max_workers: els.kgMaxWorkers.value.trim() || 1,
-    fused_graph_dir: els.fusedGraphDir.value.trim(),
-    write_neo4j: els.writeNeo4j.checked,
-    neo4j_uri: els.neo4jUri.value.trim(),
-    neo4j_user: els.neo4jUser.value.trim(),
-    neo4j_password: els.neo4jPassword.value,
-    neo4j_database: els.neo4jDatabase.value.trim() || "neo4j",
-    force: els.kgForceCheckbox.checked,
-    sync_inputs: true,
-    mode: "smart",
-  };
-}
-
-async function runPreflight() {
-  const payload = await postJson("/api/kg/preflight", kgRequestPayload());
-  els.analysisOutput.textContent = JSON.stringify(payload, null, 2);
-}
-
-async function createKgPlan() {
-  const payload = await postJson("/api/kg/plan", kgRequestPayload());
-  state.kgPlan = payload.plan;
-  els.analysisOutput.textContent = JSON.stringify(payload.preflight, null, 2);
-  renderKgPlan(payload.plan);
-}
-
-async function startKgRun() {
-  const payload = kgRequestPayload();
-  if (payload.datasets.length === 0) {
-    els.analysisOutput.textContent = "至少选择一个图谱数据集。";
-    return;
-  }
-  if (payload.write_neo4j && (!payload.neo4j_uri || !payload.neo4j_user || !payload.neo4j_password)) {
-    els.analysisOutput.textContent = "已勾选写入 Neo4j；表单为空的连接项将从 .env 读取。";
-  }
-  clearKgRunView();
-  const job = await postJson("/api/kg/runs", payload);
-  state.kgJob = job;
-  els.kgRunMessage.textContent = `图谱任务 ${job.job_id} 已启动。`;
-  connectKgEvents(job.job_id);
-}
-
-function clearKgRunView() {
-  if (state.kgEventSource) {
-    state.kgEventSource.close();
-    state.kgEventSource = null;
-  }
-  els.kgTimeline.innerHTML = "";
-  els.kgResultList.innerHTML = "";
-  state.kgCompleted = 0;
-  state.kgTotal = state.kgPlan ? state.kgPlan.nodes.length : 0;
-  updateKgProgress();
-}
-
-function connectKgEvents(jobId) {
-  const source = new EventSource(apiUrl(`/api/kg/runs/${jobId}/events`));
-  state.kgEventSource = source;
-  for (const eventName of Object.keys(EVENT_LABELS)) {
-    source.addEventListener(eventName, (evt) => {
-      const event = JSON.parse(evt.data);
-      handleKgEvent(event);
-    });
-  }
-  source.onerror = () => source.close();
-}
-
-function handleKgEvent(event) {
-  appendKgTimeline(event);
-  if (event.type === "plan_created") {
-    state.kgPlan = event.payload;
-    state.kgTotal = (state.kgPlan.nodes || []).length;
-    renderKgPlan(state.kgPlan);
-    updateKgProgress();
-  }
-  if (event.type === "node_finished") {
-    state.kgCompleted += 1;
-    updateKgProgress();
-    renderKgResult(event.payload.result);
-  }
-  if (event.type === "node_failed") {
-    els.analysisOutput.textContent = JSON.stringify(event.payload, null, 2);
-    els.kgRunMessage.textContent = "图谱 DAG 节点失败。";
-  }
-  if (event.type === "job_completed") {
-    state.kgCompleted = state.kgTotal;
-    updateKgProgress();
-    els.analysisOutput.textContent = JSON.stringify(event.payload.evaluation || event.payload, null, 2);
-    els.kgRunMessage.textContent = "知识图谱构建完成。";
-    refreshKgSummary().catch(showError);
-    if (state.kgEventSource) state.kgEventSource.close();
-  }
-  if (event.type === "job_failed") {
-    els.analysisOutput.textContent = event.payload.traceback || event.payload.message || "图谱任务失败";
-    els.kgRunMessage.textContent = "知识图谱构建失败。";
-    if (state.kgEventSource) state.kgEventSource.close();
-  }
-}
-
-function appendKgTimeline(event) {
-  const item = document.createElement("div");
-  item.className = "timeline-row";
-  const payload = event.payload || {};
-  const node = payload.node || {};
-  const tool = KG_TOOL_LABELS[node.tool] || node.tool || payload.tool || "";
-  item.innerHTML = `
-    <span>${escapeHtml((event.time || "").split("T").pop())}</span>
-    <b>${escapeHtml(EVENT_LABELS[event.type] || event.type)}</b>
-    <span>${escapeHtml(node.dataset ? `${node.dataset} | ${tool}` : payload.message || payload.goal || event.type)}</span>
-  `;
-  els.kgTimeline.appendChild(item);
-  els.kgTimeline.scrollTop = els.kgTimeline.scrollHeight;
-}
-
-function updateKgProgress() {
-  const total = Math.max(0, state.kgTotal);
-  const done = Math.min(state.kgCompleted, total || state.kgCompleted);
-  const percent = total ? Math.round((done / total) * 100) : 0;
-  els.kgProgressText.textContent = `${done} / ${total}`;
-  els.kgProgressBar.style.width = `${percent}%`;
-}
-
-function renderKgPlan(plan) {
-  if (!plan) return;
-  els.planId.textContent = `计划 ${plan.plan_id || ""}`;
-  els.planList.innerHTML = "";
-  for (const node of plan.nodes || []) {
-    const item = document.createElement("div");
-    item.className = "plan-node";
-    item.innerHTML = `
-      <b>${escapeHtml(node.id)}</b>
-      <span>${escapeHtml(KG_TOOL_LABELS[node.tool] || node.tool)} | ${escapeHtml(node.dataset)}</span><br />
-      <span>依赖：${escapeHtml((node.deps || []).join(", ") || "无")}</span>
-    `;
-    els.planList.appendChild(item);
-  }
-}
-
-function renderKgResult(result) {
-  if (!result) return;
-  const item = document.createElement("div");
-  item.className = "result-item";
-  item.innerHTML = `<b>${escapeHtml(KG_TOOL_LABELS[result.tool] || result.tool)}</b><span>${escapeHtml(result.message || "")}</span>`;
-  const actions = document.createElement("div");
-  actions.className = "artifact-actions";
-  for (const [name, path] of Object.entries(result.outputs || {})) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = `查看 ${name}`;
-    btn.addEventListener("click", () => viewArtifact(path));
-    actions.appendChild(btn);
-  }
-  item.appendChild(actions);
-  els.kgResultList.prepend(item);
-}
-
-async function refreshKgSummary() {
-  const graphDir = els.fusedGraphDir.value.trim() || state.defaultFusedGraphDir;
-  if (!graphDir) return;
-  const summary = await fetchJson(`/api/kg/summary?graph_dir=${encodeURIComponent(graphDir)}`);
-  const cards = [
-    ["节点数", summary.node_count || 0],
-    ["关系数", summary.edge_count || 0],
-    ["节点类型", Object.keys(summary.labels || {}).length],
-    ["关系类型", Object.keys(summary.predicates || {}).length],
+  const columnMap = new Map((payload.columns || []).map((column) => [column.toLowerCase(), column]));
+  const templateColumns = [
+    { label: "LineId", aliases: ["lineid", "line_id"] },
+    { label: "OriginalContent", aliases: ["originalcontent", "original_content"] },
+    { label: "EventId", aliases: ["eventid", "event_id"] },
+    {
+      label: "LogTemplate",
+      aliases: [
+        "logtemplate",
+        "log_template",
+        "regextemplate",
+        "regex_template",
+        "eventtemplate",
+        "event_template",
+      ],
+    },
+    { label: "RegexPattern", aliases: ["regexpattern", "regex_pattern"] },
   ];
-  els.kgSummaryGrid.innerHTML = cards
-    .map(([label, value]) => `<div class="summary-card"><b>${value}</b><span>${label}</span></div>`)
-    .join("");
-}
-
-async function viewArtifact(path) {
-  els.artifactPath.textContent = path;
-  const payload = await fetchJson(`/api/kg/artifact?path=${encodeURIComponent(path)}`);
-  if (payload.kind === "directory") {
-    els.artifactOutput.textContent = JSON.stringify(payload.entries, null, 2);
-  } else {
-    els.artifactOutput.textContent = payload.content || "";
-  }
-}
-
-async function queryArtifacts() {
-  const result = await postJson("/api/kg/query-artifacts", {
-    graph_dir: els.fusedGraphDir.value.trim() || state.defaultFusedGraphDir,
-    label: els.queryLabel.value.trim(),
-    predicate: els.queryPredicate.value.trim(),
-    contains: els.queryContains.value.trim(),
-    limit: els.queryLimit.value.trim() || 20,
-  });
-  els.queryOutput.textContent = result.message;
-}
-
-async function queryNeo4j() {
-  const result = await postJson("/api/kg/query-neo4j", {
-    config: "log_kg_query_agent/configs/query_agent_example.json",
-    question: els.neo4jQuestion.value.trim(),
-    refresh_schema: true,
-    api_key: els.kgApiKey.value.trim(),
-    neo4j_uri: els.neo4jUri.value.trim(),
-    neo4j_user: els.neo4jUser.value.trim(),
-    neo4j_password: els.neo4jPassword.value,
-  });
-  els.queryOutput.textContent = `${result.message}\n\n${result.metrics?.cypher || ""}`;
-}
-
-async function clearNeo4j() {
-  const confirmation = els.clearNeo4jConfirm.value.trim();
-  if (confirmation !== "清空neo4j") {
-    els.queryOutput.textContent = "确认文本不正确。";
-    return;
-  }
-  const result = await postJson("/api/kg/neo4j/clear", {
-    neo4j_uri: els.neo4jUri.value.trim(),
-    neo4j_user: els.neo4jUser.value.trim(),
-    neo4j_password: els.neo4jPassword.value,
-    neo4j_database: els.neo4jDatabase.value.trim() || "neo4j",
-    confirmation,
-    drop_schema: true,
-  });
-  els.queryOutput.textContent = JSON.stringify(result, null, 2);
-  els.clearNeo4jConfirm.value = "";
-}
-
-function downloadCustomerEvents() {
-  if (!state.activeSource || els.downloadCustomerEventsButton.disabled) {
-    return;
-  }
-  window.location.href = apiUrl(
-    `/api/customer-events/download?source=${encodeURIComponent(state.activeSource)}`,
+  const visibleColumns = templateColumns.filter((column) =>
+    column.aliases.some((alias) => columnMap.has(alias)),
   );
+  const rows = (payload.rows || []).map((row) => {
+    const next = {};
+    for (const column of visibleColumns) {
+      const source = column.aliases.map((alias) => columnMap.get(alias)).find(Boolean);
+      next[column.label] = source ? (row[source] ?? "") : "";
+    }
+    return next;
+  });
+  renderTable(target, visibleColumns.map((column) => column.label), rows);
 }
 
 function renderCsv(target, payload) {
@@ -1603,9 +1353,7 @@ function escapeHtml(value) {
 
 function showError(err) {
   const message = err.stack || err.message || String(err);
-  if (els.analysisOutput) {
-    els.analysisOutput.textContent = message;
-  }
+  els.runMessage.textContent = message;
   console.error(err);
 }
 
@@ -1613,19 +1361,12 @@ function bindEvents() {
   els.refreshButton.addEventListener("click", () =>
     loadSources({ reloadActive: true, silent: false }).catch(showError),
   );
-  els.syncKgButton.addEventListener("click", async () => {
-    await syncKgInputs();
-    await loadKgDatasets();
-    await refreshKgSummary();
-  });
   els.sourceFilter.addEventListener("input", applyFilter);
   els.selectAllParseSourcesBtn.addEventListener("click", selectAllRunSources);
   els.clearParseSourcesBtn.addEventListener("click", clearRunSources);
   els.startRunButton.addEventListener("click", () => startRun().catch(showError));
   els.stopRunButton.addEventListener("click", () => stopRun().catch(showError));
-  els.fullRunButton.addEventListener("click", () => startRun({ full: true }).catch(showError));
   els.editPoiButton.addEventListener("click", () => openPoiEditor().catch(showError));
-  els.downloadCustomerEventsButton.addEventListener("click", downloadCustomerEvents);
   els.closePoiEditorButton.addEventListener("click", closePoiEditor);
   els.addPoiRowButton.addEventListener("click", addPoiRow);
   els.savePoiButton.addEventListener("click", () => savePoiEditor().catch(showError));
@@ -1649,19 +1390,6 @@ function bindEvents() {
   els.limitInput.addEventListener("change", () => {
     if (state.activeSource) selectSource(state.activeSource, false).catch(showSourceError);
   });
-  els.selectAllKgBtn.addEventListener("click", () =>
-    document.querySelectorAll(".kg-dataset-check").forEach((item) => (item.checked = true)),
-  );
-  els.clearAllKgBtn.addEventListener("click", () =>
-    document.querySelectorAll(".kg-dataset-check").forEach((item) => (item.checked = false)),
-  );
-  els.preflightBtn.addEventListener("click", () => runPreflight().catch(showError));
-  els.planBtn.addEventListener("click", () => createKgPlan().catch(showError));
-  els.kgRunBtn.addEventListener("click", () => startKgRun().catch(showError));
-  els.refreshSummaryBtn.addEventListener("click", () => refreshKgSummary().catch(showError));
-  els.artifactQueryBtn.addEventListener("click", () => queryArtifacts().catch(showError));
-  els.neo4jQueryBtn.addEventListener("click", () => queryNeo4j().catch(showError));
-  els.clearNeo4jBtn.addEventListener("click", () => clearNeo4j().catch(showError));
 }
 
 bootstrap().catch(showError);
