@@ -1,0 +1,8 @@
+{
+  "source": "firewallexample/apache-error.log",
+  "schema_type": "apache",
+  "generated": false,
+  "poi_count": 17,
+  "relation_count": 12,
+  "alignment_notes": "Loaded from existing schema files."
+}

@@ -8,7 +8,6 @@ __pycache__/
 .mypy_cache/
 
 # Large generated datasets / pipeline outputs
-result_deepseek/
 edc-log/AIT/
 edc-log/artifacts/
 AIT/

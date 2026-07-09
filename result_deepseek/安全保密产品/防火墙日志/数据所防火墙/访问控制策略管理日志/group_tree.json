@@ -1,0 +1,47 @@
+{
+  "depth": 0,
+  "token": null,
+  "children": [
+    {
+      "edge": "32",
+      "depth": 1,
+      "token": 32,
+      "children": [
+        {
+          "edge": "Themis",
+          "depth": 2,
+          "token": "Themis",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "ea0bc987",
+                "event_template": "Themis rule: devid=0 date=\"2026<*> <*>\" dname=Themis logtype=9 pri=5 ver=<*> from=<*> mod=策略 act=添加 <*> <*> <*> <*> iif=eth1 oif=eth2 <*> time=none dcf=0 avpolicy=0, ipspolicy=0, pcpolicy=0, eimpolicy=0 username= log=关闭 active-开启 user=\"root\" dsp_msg=\"添加了类型为允许的包过滤规则\" result=成功 fwlog=0",
+                "line_ids": [
+                  1,
+                  2,
+                  3
+                ],
+                "count": 3
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "event_id": "ea0bc987",
+      "event_template": "Themis rule: devid=0 date=\"2026<*> <*>\" dname=Themis logtype=9 pri=5 ver=<*> from=<*> mod=策略 act=添加 <*> <*> <*> <*> iif=eth1 oif=eth2 <*> time=none dcf=0 avpolicy=0, ipspolicy=0, pcpolicy=0, eimpolicy=0 username= log=关闭 active-开启 user=\"root\" dsp_msg=\"添加了类型为允许的包过滤规则\" result=成功 fwlog=0",
+      "line_ids": [
+        1,
+        2,
+        3
+      ],
+      "count": 3
+    }
+  ],
+  "group_count": 1,
+  "line_count": 3
+}

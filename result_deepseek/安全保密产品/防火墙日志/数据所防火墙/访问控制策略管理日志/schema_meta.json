@@ -1,0 +1,8 @@
+{
+  "source": "firewallexample/防火墙添加策略.log",
+  "schema_type": "firewall",
+  "generated": false,
+  "poi_count": 28,
+  "relation_count": 19,
+  "alignment_notes": "Loaded from existing schema files."
+}

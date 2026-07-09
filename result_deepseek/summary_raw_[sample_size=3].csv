@@ -1,0 +1,2 @@
+Source,Total_time,LLaMA_parsing_time,Drain_parsing_time,Regex_parsing_time,Event_count
+firewallexample/apache-error.log,0:06:22.548924,57.44798399999999,0.192017,0.001247000000000003,14

@@ -1,0 +1,76 @@
+{
+  "depth": 0,
+  "token": null,
+  "children": [
+    {
+      "edge": "18",
+      "depth": 1,
+      "token": 18,
+      "children": [
+        {
+          "edge": "<*>",
+          "depth": 2,
+          "token": "<*>",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "20675596",
+                "event_template": "devid=0 date=\"2026<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=webui from=<*> agent=\"Mozilla<*> \" admin=root act=登录 result=0 msg=\"成功\" dsp_msg=\"root 登录\" fwlog=0",
+                "line_ids": [
+                  1
+                ],
+                "count": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "edge": "20",
+      "depth": 1,
+      "token": 20,
+      "children": [
+        {
+          "edge": "<*>",
+          "depth": 2,
+          "token": "<*>",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "6a71412d",
+                "event_template": "devid=0 date=\"2026<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=webui from=<*> agent=\"Mozilla<*> \" admin=root act=退出 result=0 msg=\"成功，总共在线时间 330 秒\" dsp_msg=\"root 退出\" fwlog=0",
+                "line_ids": [
+                  2
+                ],
+                "count": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "event_id": "20675596",
+      "event_template": "devid=0 date=\"2026<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=webui from=<*> agent=\"Mozilla<*> \" admin=root act=登录 result=0 msg=\"成功\" dsp_msg=\"root 登录\" fwlog=0",
+      "line_ids": [
+        1
+      ],
+      "count": 1
+    },
+    {
+      "event_id": "6a71412d",
+      "event_template": "devid=0 date=\"2026<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=webui from=<*> agent=\"Mozilla<*> \" admin=root act=退出 result=0 msg=\"成功，总共在线时间 330 秒\" dsp_msg=\"root 退出\" fwlog=0",
+      "line_ids": [
+        2
+      ],
+      "count": 1
+    }
+  ],
+  "group_count": 2,
+  "line_count": 2
+}
