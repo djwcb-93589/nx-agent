@@ -1,0 +1,8 @@
+{
+  "source": "安全保密产品/防火墙日志/数据所防火墙/登录&退出日志 (CLI).log",
+  "schema_type": "firewall",
+  "generated": false,
+  "poi_count": 28,
+  "relation_count": 19,
+  "alignment_notes": "Loaded from existing schema files."
+}

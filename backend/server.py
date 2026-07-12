@@ -845,6 +845,8 @@ def _customer_event_report_item(
 
 
 def _is_firewall_parser_output(output_dir: Path, source_name: str) -> bool:
+    text = f"{source_name} {output_dir.as_posix()}".casefold()
+    path_is_firewall = "firewall" in text or "防火墙" in text
     meta_path = output_dir / "schema_meta.json"
     if meta_path.is_file():
         try:
@@ -852,11 +854,10 @@ def _is_firewall_parser_output(output_dir: Path, source_name: str) -> bool:
                 meta = json.load(file)
             schema_type = str(meta.get("schema_type") or "").strip().casefold()
             if schema_type:
-                return schema_type == "firewall"
+                return schema_type == "firewall" or path_is_firewall
         except Exception:
             pass
-    text = f"{source_name} {output_dir.as_posix()}".casefold()
-    return "firewall" in text or "防火墙" in source_name or "防火墙" in output_dir.as_posix()
+    return path_is_firewall
 
 
 def _latest_result_csv_path(output_dir: Path) -> Path | None:

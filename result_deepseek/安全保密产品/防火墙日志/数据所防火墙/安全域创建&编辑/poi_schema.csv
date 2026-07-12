@@ -1,0 +1,28 @@
+time,Event timestamp from the embedded device date field or syslog prefix. 事件时间戳，来自设备 date 字段或 syslog 前缀。
+device_name,Firewall device name or host that emitted the event. 产生该事件的防火墙设备名或主机名。
+module,Firewall management module such as policy zone blacklist webui cli or flow control. 防火墙管理模块，例如策略、安全域、黑名单、webui、cli 或流量控制。
+event_type,Canonical firewall event category such as policy_rule zone_config blacklist admin_session or flow_control. 规范化后的防火墙事件类别，例如策略规则、安全域配置、黑名单、管理员会话或流量控制。
+event_action,Normalized action requested by the administrator such as add set del login logout show or clear. 规范化后的操作动作，例如添加、修改、删除、登录、退出、显示或清空。
+user,Administrator or operator account referenced by the event. 事件中涉及的管理员或操作员账号。
+management_ip,Management client IP address from the from field. 管理客户端 IP，通常来自日志中的 from 字段。
+outcome,Normalized result such as success failure or unknown. 规范化后的执行结果，例如成功、失败或未知。
+src_addr,Policy source address object or literal address from sa. 策略源地址对象或 sa 字段中的源地址。
+dst_addr,Policy destination address object or literal address from da. 策略目的地址对象或 da 字段中的目的地址。
+interface_in,Inbound interface referenced by a firewall rule. 防火墙规则引用的入接口。
+interface_out,Outbound interface referenced by a firewall rule. 防火墙规则引用的出接口。
+src_zone,Inbound security zone referenced by a firewall rule. 防火墙规则引用的源安全域或入方向安全域。
+dst_zone,Outbound security zone referenced by a firewall rule. 防火墙规则引用的目的安全域或出方向安全域。
+service,Firewall service or protocol object referenced by a rule. 规则引用的防火墙服务或协议对象。
+policy_id,Firewall policy identifier from policy. 来自 policy 字段的防火墙策略标识。
+rule_id,Firewall rule identifier from id. 来自 id 字段的防火墙规则标识。
+rule_key,Stable composed identifier for a firewall rule. 用于唯一标识防火墙规则的稳定组合键。
+policy_type,Normalized policy type such as permit deny nat proxy port_map ip_map or antiddos. 规范化后的策略类型，例如允许、拒绝、NAT、代理、端口映射、IP 映射或抗 DDoS。
+rule_state,Rule enabled state such as enabled disabled on or off. 规则启用状态，例如启用、禁用、开启或关闭。
+log_enabled,Whether logging is enabled for the rule. 该规则是否开启日志记录。
+translated_src,Translated source address for NAT policies. NAT 策略中的转换后源地址。
+public_ip,Public mapped address for IP or port mapping policies. IP 映射或端口映射策略中的公网映射地址。
+internal_addr,Internal address or object used by mapping policies. 映射策略中的内网地址或内网对象。
+public_service,Public mapped service or port. 公网侧映射服务或端口。
+internal_service,Internal mapped service or port. 内网侧映射服务或端口。
+zone_name,Security zone name extracted from zone configuration events. 从安全域配置事件中提取的安全域名称。
+blacklist_ip,IP address added removed shown or cleared by blacklist events. 黑名单事件中添加、删除、显示或清空的 IP 地址。

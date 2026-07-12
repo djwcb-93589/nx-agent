@@ -1,0 +1,20 @@
+subject_type,subject_id_source,predicate,object_type,object_id_source,edge_properties,condition
+User,user,OPERATES,Device,device_name,"module,event_type,event_action,outcome,management_ip,time",user not null AND device_name not null
+User,user,FROM_IP,IP,management_ip,"event_type,event_action,outcome,time",user not null AND management_ip not null
+IP,management_ip,ACCESSES,Device,device_name,"module,event_type,event_action,outcome,time",management_ip not null AND device_name not null
+Device,device_name,HAS_RULE,FirewallRule,rule_key,"policy_id,rule_id,policy_type,rule_state,log_enabled,interface_in,interface_out,event_action,outcome,time",device_name not null AND rule_key not null
+User,user,MODIFIES_RULE,FirewallRule,rule_key,"policy_id,rule_id,policy_type,event_action,outcome,time",user not null AND rule_key not null
+FirewallRule,rule_key,FROM_OBJECT,Object,src_addr,"policy_type,event_action,outcome,time",rule_key not null AND src_addr not null
+FirewallRule,rule_key,TO_OBJECT,Object,dst_addr,"policy_type,event_action,outcome,time",rule_key not null AND dst_addr not null
+FirewallRule,rule_key,USES_SERVICE,Service,service,"policy_type,event_action,outcome,time",rule_key not null AND service not null
+FirewallRule,rule_key,FROM_ZONE,SecurityZone,src_zone,"policy_type,event_action,outcome,time",rule_key not null AND src_zone not null
+FirewallRule,rule_key,TO_ZONE,SecurityZone,dst_zone,"policy_type,event_action,outcome,time",rule_key not null AND dst_zone not null
+FirewallRule,rule_key,TRANSLATES_SOURCE_TO,Object,translated_src,"policy_type,event_action,outcome,time",rule_key not null AND translated_src not null
+FirewallRule,rule_key,MAPS_PUBLIC_IP,IP,public_ip,"policy_type,event_action,outcome,time",rule_key not null AND public_ip not null
+FirewallRule,rule_key,MAPS_INTERNAL_TO,Object,internal_addr,"policy_type,event_action,outcome,time",rule_key not null AND internal_addr not null
+FirewallRule,rule_key,MAPS_PUBLIC_SERVICE,Service,public_service,"policy_type,event_action,outcome,time",rule_key not null AND public_service not null
+FirewallRule,rule_key,MAPS_INTERNAL_SERVICE,Service,internal_service,"policy_type,event_action,outcome,time",rule_key not null AND internal_service not null
+Device,device_name,HAS_ZONE,SecurityZone,zone_name,"module,event_action,outcome,time",device_name not null AND zone_name not null
+User,user,CONFIGURES_ZONE,SecurityZone,zone_name,"event_action,outcome,time",user not null AND zone_name not null
+User,user,UPDATES_BLACKLIST,IP,blacklist_ip,"event_action,outcome,time",user not null AND blacklist_ip not null
+Device,device_name,HAS_BLACKLIST_IP,IP,blacklist_ip,"event_action,outcome,time",device_name not null AND blacklist_ip not null

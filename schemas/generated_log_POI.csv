@@ -1,0 +1,9 @@
+time,事件时间戳，来自 date 字段，用于时间线分析。
+device_name,防火墙设备名称，来自 dname 字段，用于跨设备关联。
+module,防火墙管理模块，来自 mod 字段（如 zone），用于模块级别的关联。
+event_type,规范化后的防火墙事件类别。由于日志主要涉及安全域管理，设为 zone_config。
+event_action,"管理员请求的操作动作，来自 act 字段（如 add, edit, del, set），用于行为对齐。"
+user,管理员或操作员账号，来自 user 字段，用于跨日志溯源。
+management_ip,管理客户端 IP 地址，来自 from 字段，用于定位操作来源。
+outcome,规范化后的执行结果，来自 result 字段（如 0 表示 success）。
+zone_name,安全域名称，从 dsp_msg 文本中提取，作为被操作的主要对象。

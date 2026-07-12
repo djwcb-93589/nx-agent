@@ -1,0 +1,3 @@
+Content,EventId,EventTemplate,Count
+"devid=0 date=""2013/05/21 09:56:00"" dname=themis logtype=9 pri=6 ver=0.3.0 mod=cli from=192.168.100.50 admin=root act=离开 dsp_msg=""ac 终端输出"" result=成功 fwlog=0",7b22bc91,"devid=0 date=""2013<*> <*>"" dname=themis logtype=9 pri=6 ver=<*> mod=cli from=<*> admin=root <*> dsp_msg=""ac 终端输出"" result=成功 fwlog=0",1
+"devid=0 date=""2013/05/21 09:59:19"" dname=themis logtype=9 pri=6 ver=0.3.0 mod=cli from=192.168.100.50 admin=root act=登录 dsp_msg=""ac 终端输出"" result=成功 fwlog=0",7b22bc91,"devid=0 date=""2013<*> <*>"" dname=themis logtype=9 pri=6 ver=<*> mod=cli from=<*> admin=root <*> dsp_msg=""ac 终端输出"" result=成功 fwlog=0",1

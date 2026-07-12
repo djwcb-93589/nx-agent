@@ -50,10 +50,6 @@ const els = {
   preMeta: document.getElementById("preMeta"),
   resultTable: document.getElementById("resultTable"),
   resultMeta: document.getElementById("resultMeta"),
-  groupTable: document.getElementById("groupTable"),
-  groupMeta: document.getElementById("groupMeta"),
-  treeTable: document.getElementById("treeTable"),
-  treeMeta: document.getElementById("treeMeta"),
   poiTable: document.getElementById("poiTable"),
   poiMeta: document.getElementById("poiMeta"),
   editPoiButton: document.getElementById("editPoiButton"),
@@ -689,8 +685,6 @@ function setLoading() {
   for (const target of [
     els.preprocessedTable,
     els.resultTable,
-    els.groupTable,
-    els.treeTable,
     els.poiTable,
     els.customerEventTable,
   ].filter(Boolean)) {
@@ -703,8 +697,6 @@ function showSourceError(err) {
   els.rawMeta.textContent = "加载失败";
   els.preMeta.textContent = "加载失败";
   els.resultMeta.textContent = "加载失败";
-  els.groupMeta.textContent = "加载失败";
-  els.treeMeta.textContent = "加载失败";
   els.poiMeta.textContent = "加载失败";
   els.customerEventMeta.textContent = "加载失败";
   els.customerEventValidation.textContent = "";
@@ -713,8 +705,6 @@ function showSourceError(err) {
   for (const target of [
     els.preprocessedTable,
     els.resultTable,
-    els.groupTable,
-    els.treeTable,
     els.poiTable,
     els.customerEventTable,
   ].filter(Boolean)) {
@@ -748,10 +738,6 @@ function renderPayload(payload) {
     ? `${payload.result_file} | ${metaText(payload.result)}`
     : "缺失";
 
-  renderCsv(els.groupTable, payload.group);
-  els.groupMeta.textContent = metaText(payload.group);
-
-  renderTree(payload.group_tree);
   renderCsv(els.poiTable, payload.poi_schema);
   els.poiMeta.textContent = schemaMetaText(payload.schema_meta, payload.poi_schema);
   els.editPoiButton.disabled = !state.activeSource;
@@ -797,14 +783,12 @@ function hasDisplayValue(value) {
 }
 
 function renderMetrics(payload) {
-  const tree = payload.group_tree || {};
   const resultRows = payload.result.available ? payload.result.rows.length : 0;
   const poiRows = payload.poi_schema.available ? payload.poi_schema.rows.length : 0;
   const metrics = [
     ["原始预览", payload.input.rows.length],
     ["解析结果", resultRows],
     ["POI 字段", poiRows || "无"],
-    ["日志分组", tree.available ? tree.group_count : "无"],
   ];
   els.metricStrip.innerHTML = metrics
     .map(
@@ -815,22 +799,6 @@ function renderMetrics(payload) {
       </div>`,
     )
     .join("");
-}
-
-function renderTree(tree) {
-  if (!tree || !tree.available) {
-    els.treeMeta.textContent = "缺失";
-    els.treeTable.innerHTML = '<div class="empty">没有 group_tree.json</div>';
-    return;
-  }
-  els.treeMeta.textContent = `${tree.group_count} 个分组`;
-  const rows = tree.clusters.map((cluster) => ({
-    EventId: cluster.event_id,
-    Count: cluster.count,
-    EventTemplate: cluster.event_template,
-    LineIds: (cluster.line_ids || []).slice(0, 12).join(", "),
-  }));
-  renderTable(els.treeTable, ["EventId", "Count", "EventTemplate", "LineIds"], rows);
 }
 
 async function loadSummary() {
@@ -1172,10 +1140,16 @@ function installCollapsiblePanels() {
     if (!body || !button) {
       return;
     }
+    const collapsedLabel = button.dataset.collapsedLabel || "展开";
+    const expandedLabel = button.dataset.expandedLabel || "收起";
+    const initiallyCollapsed = panel.classList.contains("is-collapsed");
+    body.hidden = initiallyCollapsed;
+    button.textContent = initiallyCollapsed ? collapsedLabel : expandedLabel;
+    button.setAttribute("aria-expanded", String(!initiallyCollapsed));
     button.addEventListener("click", () => {
       const collapsed = panel.classList.toggle("is-collapsed");
       body.hidden = collapsed;
-      button.textContent = collapsed ? "展开" : "收起";
+      button.textContent = collapsed ? collapsedLabel : expandedLabel;
       button.setAttribute("aria-expanded", String(!collapsed));
     });
     panel.dataset.collapseInstalled = "1";

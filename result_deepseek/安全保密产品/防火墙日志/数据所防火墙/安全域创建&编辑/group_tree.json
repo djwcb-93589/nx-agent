@@ -1,0 +1,115 @@
+{
+  "depth": 0,
+  "token": null,
+  "children": [
+    {
+      "edge": "19",
+      "depth": 1,
+      "token": 19,
+      "children": [
+        {
+          "edge": "themis",
+          "depth": 2,
+          "token": "themis",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "dc662b6f",
+                "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone <*> result=0 <*> user=root <*> <*> <*> fwlog=0",
+                "line_ids": [
+                  1,
+                  6
+                ],
+                "count": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "edge": "20",
+      "depth": 1,
+      "token": 20,
+      "children": [
+        {
+          "edge": "themis",
+          "depth": 2,
+          "token": "themis",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "5fe8fc34",
+                "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone act=add result=0 cmd=add_seczone user=root dsp_msg=\"seczone name zone ifset\" fwlog=0",
+                "line_ids": [
+                  2
+                ],
+                "count": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "edge": "18",
+      "depth": 1,
+      "token": 18,
+      "children": [
+        {
+          "edge": "themis",
+          "depth": 2,
+          "token": "themis",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "2249e437",
+                "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone <*> result=0 <*> user=root <*> <*> fwlog=0",
+                "line_ids": [
+                  3,
+                  4,
+                  5
+                ],
+                "count": 3
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "event_id": "dc662b6f",
+      "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone <*> result=0 <*> user=root <*> <*> <*> fwlog=0",
+      "line_ids": [
+        1,
+        6
+      ],
+      "count": 2
+    },
+    {
+      "event_id": "5fe8fc34",
+      "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone act=add result=0 cmd=add_seczone user=root dsp_msg=\"seczone name zone ifset\" fwlog=0",
+      "line_ids": [
+        2
+      ],
+      "count": 1
+    },
+    {
+      "event_id": "2249e437",
+      "event_template": "themis zone: devid=0 date=\"2017<*> <*>\" dname=themis logtype=9 pri=5 ver=<*> from=<*> mod=zone <*> result=0 <*> user=root <*> <*> fwlog=0",
+      "line_ids": [
+        3,
+        4,
+        5
+      ],
+      "count": 3
+    }
+  ],
+  "group_count": 3,
+  "line_count": 6
+}

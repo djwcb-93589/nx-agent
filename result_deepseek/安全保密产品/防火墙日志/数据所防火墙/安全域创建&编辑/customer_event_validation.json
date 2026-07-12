@@ -1,0 +1,49 @@
+{
+  "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+  "input_rows": 6,
+  "event_count": 6,
+  "rejected_count": 0,
+  "warning_count": 6,
+  "alarm_type_counts": {
+    "4": 6
+  },
+  "warnings": [
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 5,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    },
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 7,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    },
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 2,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    },
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 3,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    },
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 4,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    },
+    {
+      "source": "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+      "source_row": 6,
+      "alarm_type": 4,
+      "message": "策略日志没有 rule_id/rule_key，无法进行修改和删除状态关联"
+    }
+  ],
+  "ok": true
+}

@@ -1,0 +1,45 @@
+{
+  "depth": 0,
+  "token": null,
+  "children": [
+    {
+      "edge": "15",
+      "depth": 1,
+      "token": 15,
+      "children": [
+        {
+          "edge": "<*>",
+          "depth": 2,
+          "token": "<*>",
+          "children": [
+            {
+              "edge": "cluster",
+              "cluster": {
+                "event_id": "7b22bc91",
+                "event_template": "devid=0 date=\"2013<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=cli from=<*> admin=root <*> dsp_msg=\"ac 终端输出\" result=成功 fwlog=0",
+                "line_ids": [
+                  1,
+                  2
+                ],
+                "count": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "event_id": "7b22bc91",
+      "event_template": "devid=0 date=\"2013<*> <*>\" dname=themis logtype=9 pri=6 ver=<*> mod=cli from=<*> admin=root <*> dsp_msg=\"ac 终端输出\" result=成功 fwlog=0",
+      "line_ids": [
+        1,
+        2
+      ],
+      "count": 2
+    }
+  ],
+  "group_count": 1,
+  "line_count": 2
+}

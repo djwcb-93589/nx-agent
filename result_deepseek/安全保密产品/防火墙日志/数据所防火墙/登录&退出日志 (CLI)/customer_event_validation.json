@@ -1,0 +1,12 @@
+{
+  "source": "安全保密产品/防火墙日志/数据所防火墙/登录&退出日志 (CLI).log",
+  "input_rows": 2,
+  "event_count": 2,
+  "rejected_count": 0,
+  "warning_count": 0,
+  "alarm_type_counts": {
+    "3": 2
+  },
+  "warnings": [],
+  "ok": true
+}

@@ -74,7 +74,7 @@ def infer_schema_type(source_name, schemas_dir):
         "audit": ["audit"],
         "auth": ["auth.log", "/auth", "\\auth", "sshd", "sudo"],
         "dns": ["dnsmasq", "dns"],
-        "firewall": ["firewallexample", "firewallexamplae", "firewall"],
+        "firewall": ["firewallexample", "firewallexamplae", "firewall", "防火墙"],
         "syslog": ["syslog", "messages", "kern.log"],
     }
     for schema_type, markers in candidates.items():

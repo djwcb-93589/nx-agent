@@ -12,6 +12,7 @@ if str(EDC_ROOT) not in sys.path:
     sys.path.insert(0, str(EDC_ROOT))
 
 from agent.tools.schema_tools import infer_schema_type
+from backend.server import _is_firewall_parser_output
 from agent.tools.llm_tools import generate_log_regex
 from log_pipeline_agent.config import AIT_ROOT, DATASET_PATTERNS, build_ait_output_tag
 from log_pipeline_agent.firewall_events import (
@@ -327,6 +328,22 @@ class FirewallCustomerEventTests(unittest.TestCase):
             REPO_ROOT / "schemas",
         )
         self.assertEqual("firewall", schema_type)
+
+    def test_chinese_firewall_folder_uses_existing_firewall_schema(self) -> None:
+        schema_type = infer_schema_type(
+            "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+            REPO_ROOT / "schemas",
+        )
+        self.assertEqual("firewall", schema_type)
+
+    def test_chinese_firewall_output_overrides_stale_generated_schema_type(self) -> None:
+        output_dir = REPO_ROOT / "result_deepseek" / "安全保密产品" / "防火墙日志"
+        self.assertTrue(
+            _is_firewall_parser_output(
+                output_dir,
+                "安全保密产品/防火墙日志/数据所防火墙/安全域创建&编辑.log",
+            )
+        )
 
     def test_pipeline_registers_current_firewall_folder_and_simulated_source(self) -> None:
         firewall_patterns = [

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>日志解析 Agent 工作台</title>
-    <link rel="stylesheet" href="/styles.css?v=20260701-firewall-log-poi" />
+    <link rel="stylesheet" href="/styles.css?v=20260710-compact-config" />
   </head>
   <body>
     <div class="app-shell">
@@ -42,8 +42,7 @@
               </div>
             </div>
             <div class="collapsible-body">
-              <div class="config-section-title">解析设置</div>
-              <div class="form-grid">
+              <div class="form-grid compact-config-grid">
                 <div class="wide run-scope-field">
                   <input id="projectInput" type="hidden" value="all" />
                   <div class="run-scope-head">
@@ -56,23 +55,23 @@
                   </div>
                   <div id="parseSourceList" class="run-source-list"></div>
                 </div>
-                <label>
+                <label class="config-field config-field-number">
                   <span>样本数</span>
                   <input id="sampleInput" type="number" value="3" min="1" max="20" />
                 </label>
-                <label>
+                <label class="config-field config-field-number">
                   <span>展示行数</span>
                   <input id="limitInput" type="number" value="80" min="10" max="500" />
                 </label>
-                <label class="wide">
+                <label class="config-field config-field-model">
                   <span>模型</span>
                   <input id="modelInput" value="glm-5.2" />
                 </label>
-                <label class="wide">
+                <label class="config-field config-field-key">
                   <span>GLM API Key</span>
                   <input id="apiKeyInput" type="password" autocomplete="off" placeholder="必填：仅使用前端输入" />
                 </label>
-                <label>
+                <label class="config-field config-field-similarity">
                   <span class="field-label-with-help">
                     相似度策略
                     <button
@@ -88,31 +87,22 @@
                     <option value="random">Random</option>
                   </select>
                 </label>
-                <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
-                <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
-                <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> GLM 调度</label>
-                <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
-              </div>
-              <div class="button-row">
-                <button id="startRunButton" class="primary-button" type="button">开始解析</button>
-                <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
+                <div class="config-actions-row wide">
+                  <div class="config-checks">
+                    <label class="check-line"><input id="reflectionCheckbox" type="checkbox" checked /> 启用反思修正</label>
+                    <label class="check-line"><input id="treeCheckbox" type="checkbox" checked /> 写入分组树</label>
+                    <label class="check-line"><input id="plannerCheckbox" type="checkbox" checked /> GLM 调度</label>
+                    <label class="check-line"><input id="preserveCheckbox" type="checkbox" /> 保留旧结果</label>
+                  </div>
+                  <div class="button-row compact-button-row">
+                    <button id="startRunButton" class="primary-button" type="button">开始解析</button>
+                    <button id="stopRunButton" class="secondary-button danger-text" type="button">停止解析</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-        </section>
-
-        <section class="customer-event-section">
-          <div class="panel wide">
-            <div class="panel-head">
-              <div>
-                <h3>解析结果</h3>
-                <span id="customerEventMeta"></span>
-              </div>
-            </div>
-            <div id="customerEventValidation" class="event-validation-summary"></div>
-            <div id="customerEventTable" class="table-wrap"></div>
-          </div>
         </section>
 
         <section class="schema-grid">
@@ -130,6 +120,19 @@
           </div>
         </section>
 
+        <section class="customer-event-section">
+          <div class="panel wide">
+            <div class="panel-head">
+              <div>
+                <h3>解析结果</h3>
+                <span id="customerEventMeta"></span>
+              </div>
+            </div>
+            <div id="customerEventValidation" class="event-validation-summary"></div>
+            <div id="customerEventTable" class="table-wrap"></div>
+          </div>
+        </section>
+
         <section class="metric-strip" id="metricStrip"></section>
 
         <section class="panel-grid">
@@ -144,21 +147,27 @@
             <div id="rawInput" class="log-preview"></div>
           </div>
 
-          <div class="panel">
-            <div class="panel-head"><h3>预处理结果</h3><span id="preMeta"></span></div>
-            <div id="preprocessedTable" class="table-wrap"></div>
+          <div class="panel wide collapsible-panel compact-result-panel is-collapsed" data-collapsible-panel>
+            <div class="panel-head">
+              <div><h3>预处理结果</h3><span id="preMeta" class="result-meta"></span></div>
+              <div class="panel-head-actions">
+                <button class="collapse-button" type="button" data-collapse-toggle data-collapsed-label="查看" data-expanded-label="收起" aria-expanded="false">查看</button>
+              </div>
+            </div>
+            <div class="collapsible-body" hidden>
+              <div id="preprocessedTable" class="table-wrap"></div>
+            </div>
           </div>
-          <div class="panel">
-            <div class="panel-head"><h3>日志模板</h3><span id="resultMeta"></span></div>
-            <div id="resultTable" class="table-wrap"></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>分组结果</h3><span id="groupMeta"></span></div>
-            <div id="groupTable" class="table-wrap"></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h3>深度分组树</h3><span id="treeMeta"></span></div>
-            <div id="treeTable" class="table-wrap"></div>
+          <div class="panel wide collapsible-panel compact-result-panel is-collapsed" data-collapsible-panel>
+            <div class="panel-head">
+              <div><h3>日志模板</h3><span id="resultMeta" class="result-meta"></span></div>
+              <div class="panel-head-actions">
+                <button class="collapse-button" type="button" data-collapse-toggle data-collapsed-label="查看" data-expanded-label="收起" aria-expanded="false">查看</button>
+              </div>
+            </div>
+            <div class="collapsible-body" hidden>
+              <div id="resultTable" class="table-wrap"></div>
+            </div>
           </div>
           <div class="panel wide overview-run collapsible-panel" data-collapsible-panel>
             <div class="panel-head run-head">
@@ -230,6 +239,6 @@
       </section>
     </div>
 
-    <script src="/app.js?v=20260702-poi-wide-no-relation"></script>
+    <script src="/app.js?v=20260710-compact-config"></script>
   </body>
 </html>

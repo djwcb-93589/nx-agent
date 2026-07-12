@@ -1,0 +1,5 @@
+subject_type,subject_id_source,predicate,object_type,object_id_source,edge_properties,condition
+AdminUser,user,CONFIGURES_ZONE,SecurityZone,zone_name,"time,device_name,management_ip,event_action,outcome",user not null AND zone_name not null
+AdminUser,user,FROM_IP,IPAddress,management_ip,"time,device_name,event_action,outcome",user not null AND management_ip not null
+FirewallDevice,device_name,HAS_ZONE,SecurityZone,zone_name,"time,event_action,outcome",device_name not null AND zone_name not null
+AdminUser,user,OPERATES,FirewallDevice,device_name,"time,module,event_action,outcome",user not null AND device_name not null
