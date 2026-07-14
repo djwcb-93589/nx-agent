@@ -21,6 +21,11 @@ for _path in (REPO_ROOT, BACKEND_ROOT):
     if _path_text not in sys.path:
         sys.path.insert(0, _path_text)
 
+try:
+    from . import extra_api
+except ImportError:  # pragma: no cover - supports `python backend/server.py`.
+    import extra_api
+
 from env_utils import load_dotenv
 
 
@@ -1260,6 +1265,26 @@ def _display_command(command: list[str]) -> str:
     return " ".join(redacted)
 
 
+def _alarm_list_payload(query: dict) -> dict:
+    try:
+        page = max(1, int(query.get("page", ["1"])[0]))
+        page_size = max(1, int(query.get("page_size", ["10"])[0]))
+    except (TypeError, ValueError):
+        page = 1
+        page_size = 10
+
+    event_list = extra_api.get_alarm_list()
+    total = len(event_list)
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "data": event_list[start_idx:end_idx],
+    }
+
+
 class FrontendHandler(SimpleHTTPRequestHandler):
     input_root = REPO_ROOT / "full_dataset"
     output_root = REPO_ROOT / "result_deepseek"
@@ -1316,6 +1341,10 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                 query = parse_qs(parsed.query)
                 self._send_json(self.run_manager.status(tail=int(query.get("tail", ["300"])[0])))
                 return
+            if parsed.path == "/api/alarm/list":
+                query = parse_qs(parsed.query)
+                self._send_json(_alarm_list_payload(query))
+                return
             self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
         except Exception as exc:
             self._send_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
@@ -1361,7 +1390,11 @@ class FrontendHandler(SimpleHTTPRequestHandler):
                     status=HTTPStatus.OK if result.get("ok") else HTTPStatus.BAD_REQUEST,
                 )
                 return
-            self.send_error(404)
+            
+            if parsed.path == "/api/alarm/list":
+                self._send_json(_alarm_list_payload(parse_qs(parsed.query)))
+                return
+            self._send_json({"error": "Not found"}, status=HTTPStatus.NOT_FOUND)
         except Exception as exc:
             self._send_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
 

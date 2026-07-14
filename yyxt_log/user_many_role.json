@@ -1,0 +1,75 @@
+[
+    {
+    "_index": "logs_yyxt-2025.07",
+    "_id": "EnkoAJ0BGJwfJiPfH_ra",
+    "_score": 1.0,
+    "_ignored": [
+        "event.original.keyword",
+        "msg_json.keyword"
+    ],
+    "_source": {
+        "log_id": "a49c33b8-96a9-45ec-85c3-329d0014fbf5",
+        "behaviour_type": "一般行为",
+        "@timestamp": "2026-07-13T08:34:40.835Z",
+        "app_info": "{\"app_name\":\"OA系统\",\"app_id\":\"0800020003004588\",\"app_ip\":\"192.168.100.30\"}",
+        "subject": "{\"node_ip\":\"192.168.100.30\",\"node_id\":\"-\",\"user\":\"root\",\"user_role\":\"系统管理员\",\"user_name\":\"张三\",\"unit_name\":\"某某研究所\",\"department\":\"某部门\",\"security_level\":\"秘密\",\"facility\":\"-\"}",
+        "valid": true,
+        "level": "6-信息",
+        "source": "应用系统日志",
+        "entry_stamp": 1783931680835,
+        "tags": [
+            "beats_input_codec_plain_applied"
+        ],
+        "details": "{\"info_security_level\":\"秘密\",\"visit_page_type\":\"1\",\"visit_url\":\"/zzgl/militaryApply/getInfo\"}",
+        "log_type_name": "3-一般行为",
+        "op_type": "页面访问",
+        "object": "{\"object_ip\":\"192.168.100.30\",\"object_id\":\"-\",\"object_name\":\"port1\",\"object_security_level\":\"秘密\"}",
+        "result": "成功",
+        "log_type": "其他日志",
+        "sourceType": "统一应用系统平台",
+        "SYSTEM_ID": "0800020003004588",
+        "@version": "1",
+        "event": {
+            "original": "{\"app_info\":\"{\\\"app_name\\\":\\\"OA系统\\\",\\\"app_id\\\":\\\"0800020003004588\\\",\\\"app_ip\\\":\\\"192.168.100.30\\\"}\",\"behaviour_type\":\"一般行为\",\"details\":\"{\\\"info_security_level\\\":\\\"秘密\\\",\\\"visit_page_type\\\":\\\"1\\\",\\\"visit_url\\\":\\\"/zzgl/militaryApply/getInfo\\\"}\",\"entry_stamp\":1783931680835,\"level\":\"6-信息\",\"log_id\":\"a49c33b8-96a9-45ec-85c3-329d0014fbf5\",\"log_type\":\"其他日志\",\"object\":\"{\\\"object_ip\\\":\\\"192.168.100.30\\\",\\\"object_id\\\":\\\"-\\\",\\\"object_name\\\":\\\"port1\\\",\\\"object_security_level\\\":\\\"秘密\\\"}\",\"op_type\":\"页面访问\",\"result\":\"成功\",\"subject\":\"{\\\"node_ip\\\":\\\"192.168.100.30\\\",\\\"node_id\\\":\\\"-\\\",\\\"user\\\":\\\"root\\\",\\\"user_role\\\":\\\"系统管理员\\\",\\\"user_name\\\":\\\"张三\\\",\\\"unit_name\\\":\\\"某某研究所\\\",\\\"department\\\":\\\"某部门\\\",\\\"security_level\\\":\\\"秘密\\\",\\\"facility\\\":\\\"-\\\"}\",\"system_id\":\"0800020003004588\"}"
+        },
+        "msg_json": "{\"app_info\":\"{\\\"app_name\\\":\\\"OA系统\\\",\\\"app_id\\\":\\\"0800020003004588\\\",\\\"app_ip\\\":\\\"192.168.100.30\\\"}\",\"behaviour_type\":\"一般行为\",\"details\":\"{\\\"info_security_level\\\":\\\"秘密\\\",\\\"visit_page_type\\\":\\\"1\\\",\\\"visit_url\\\":\\\"/zzgl/militaryApply/getInfo\\\"}\",\"entry_stamp\":1783931680835,\"level\":\"6-信息\",\"log_id\":\"a49c33b8-96a9-45ec-85c3-329d0014fbf5\",\"log_type\":\"其他日志\",\"object\":\"{\\\"object_ip\\\":\\\"192.168.100.30\\\",\\\"object_id\\\":\\\"-\\\",\\\"object_name\\\":\\\"port1\\\",\\\"object_security_level\\\":\\\"秘密\\\"}\",\"op_type\":\"页面访问\",\"result\":\"成功\",\"subject\":\"{\\\"node_ip\\\":\\\"192.168.100.30\\\",\\\"node_id\\\":\\\"-\\\",\\\"user\\\":\\\"root\\\",\\\"user_role\\\":\\\"系统管理员\\\",\\\"user_name\\\":\\\"张三\\\",\\\"unit_name\\\":\\\"某某研究所\\\",\\\"department\\\":\\\"某部门\\\",\\\"security_level\\\":\\\"秘密\\\",\\\"facility\\\":\\\"-\\\"}\",\"system_id\":\"0800020003004588\"}"
+    }
+},
+
+{
+    "_index": "logs_yyxt-2025.07",
+    "_id": "EnkoAJ0BGJwfJiPfH_ra",
+    "_score": 1.0,
+    "_ignored": [
+        "event.original.keyword",
+        "msg_json.keyword"
+    ],
+    "_source": {
+        "log_id": "a49c33b8-96a9-45ec-85c3-329d0014fbf5",
+        "behaviour_type": "一般行为",
+        "@timestamp": "2026-07-13T08:34:40.835Z",
+        "app_info": "{\"app_name\":\"OA系统\",\"app_id\":\"0800020003004588\",\"app_ip\":\"192.168.100.30\"}",
+        "subject": "{\"node_ip\":\"192.168.100.30\",\"node_id\":\"-\",\"user\":\"root\",\"user_role\":\"审计管理员\",\"user_name\":\"张三\",\"unit_name\":\"某某研究所\",\"department\":\"某部门\",\"security_level\":\"秘密\",\"facility\":\"-\"}",
+        "valid": true,
+        "level": "6-信息",
+        "source": "应用系统日志",
+        "entry_stamp": 1783931680835,
+        "tags": [
+            "beats_input_codec_plain_applied"
+        ],
+        "details": "{\"info_security_level\":\"秘密\",\"visit_page_type\":\"1\",\"visit_url\":\"/zzgl/militaryApply/getInfo\"}",
+        "log_type_name": "3-一般行为",
+        "op_type": "页面访问",
+        "object": "{\"object_ip\":\"192.168.100.30\",\"object_id\":\"-\",\"object_name\":\"port1\",\"object_security_level\":\"秘密\"}",
+        "result": "成功",
+        "log_type": "其他日志",
+        "sourceType": "统一应用系统平台",
+        "SYSTEM_ID": "0800020003004588",
+        "@version": "1",
+        "event": {
+            "original": "{\"app_info\":\"{\\\"app_name\\\":\\\"OA系统\\\",\\\"app_id\\\":\\\"0800020003004588\\\",\\\"app_ip\\\":\\\"192.168.100.30\\\"}\",\"behaviour_type\":\"一般行为\",\"details\":\"{\\\"info_security_level\\\":\\\"秘密\\\",\\\"visit_page_type\\\":\\\"1\\\",\\\"visit_url\\\":\\\"/zzgl/militaryApply/getInfo\\\"}\",\"entry_stamp\":1783931680835,\"level\":\"6-信息\",\"log_id\":\"a49c33b8-96a9-45ec-85c3-329d0014fbf5\",\"log_type\":\"其他日志\",\"object\":\"{\\\"object_ip\\\":\\\"192.168.100.30\\\",\\\"object_id\\\":\\\"-\\\",\\\"object_name\\\":\\\"port1\\\",\\\"object_security_level\\\":\\\"秘密\\\"}\",\"op_type\":\"页面访问\",\"result\":\"成功\",\"subject\":\"{\\\"node_ip\\\":\\\"192.168.100.30\\\",\\\"node_id\\\":\\\"-\\\",\\\"user\\\":\\\"root\\\",\\\"user_role\\\":\\\"审计管理员\\\",\\\"user_name\\\":\\\"张三\\\",\\\"unit_name\\\":\\\"某某研究所\\\",\\\"department\\\":\\\"某部门\\\",\\\"security_level\\\":\\\"秘密\\\",\\\"facility\\\":\\\"-\\\"}\",\"system_id\":\"0800020003004588\"}"
+        },
+        "msg_json": "{\"app_info\":\"{\\\"app_name\\\":\\\"OA系统\\\",\\\"app_id\\\":\\\"0800020003004588\\\",\\\"app_ip\\\":\\\"192.168.100.30\\\"}\",\"behaviour_type\":\"一般行为\",\"details\":\"{\\\"info_security_level\\\":\\\"秘密\\\",\\\"visit_page_type\\\":\\\"1\\\",\\\"visit_url\\\":\\\"/zzgl/militaryApply/getInfo\\\"}\",\"entry_stamp\":1783931680835,\"level\":\"6-信息\",\"log_id\":\"a49c33b8-96a9-45ec-85c3-329d0014fbf5\",\"log_type\":\"其他日志\",\"object\":\"{\\\"object_ip\\\":\\\"192.168.100.30\\\",\\\"object_id\\\":\\\"-\\\",\\\"object_name\\\":\\\"port1\\\",\\\"object_security_level\\\":\\\"秘密\\\"}\",\"op_type\":\"页面访问\",\"result\":\"成功\",\"subject\":\"{\\\"node_ip\\\":\\\"192.168.100.30\\\",\\\"node_id\\\":\\\"-\\\",\\\"user\\\":\\\"root\\\",\\\"user_role\\\":\\\"审计管理员\\\",\\\"user_name\\\":\\\"张三\\\",\\\"unit_name\\\":\\\"某某研究所\\\",\\\"department\\\":\\\"某部门\\\",\\\"security_level\\\":\\\"秘密\\\",\\\"facility\\\":\\\"-\\\"}\",\"system_id\":\"0800020003004588\"}"
+    }
+}
+]
